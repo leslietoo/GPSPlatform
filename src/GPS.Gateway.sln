@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2018
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B32F8347-9FEC-4B20-8694-7E5B79B63BD6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JT808.Protocol", "..\..\JT808\src\JT808.Protocol\JT808.Protocol.csproj", "{0047CA84-014C-4707-8AE3-54EB5908CE81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPS.Gateway.JT808SuperSocketServer", "GPS.Gateway.JT808SuperSocketServer\GPS.Gateway.JT808SuperSocketServer.csproj", "{3E4277B0-BE82-4E82-9323-9D7AD9D9C2DA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JT808.Protocol.Test", "..\..\JT808\src\JT808.Protocol.Test\JT808.Protocol.Test.csproj", "{C701EB7D-C795-4B52-990D-3A5897083D42}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protocol.Common", "..\..\Protocol.Common\src\Protocol.Common\Protocol.Common.csproj", "{FF634083-ADF8-4F2C-836A-5F09774579BD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0047CA84-014C-4707-8AE3-54EB5908CE81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0047CA84-014C-4707-8AE3-54EB5908CE81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0047CA84-014C-4707-8AE3-54EB5908CE81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0047CA84-014C-4707-8AE3-54EB5908CE81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E4277B0-BE82-4E82-9323-9D7AD9D9C2DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E4277B0-BE82-4E82-9323-9D7AD9D9C2DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E4277B0-BE82-4E82-9323-9D7AD9D9C2DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E4277B0-BE82-4E82-9323-9D7AD9D9C2DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C701EB7D-C795-4B52-990D-3A5897083D42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C701EB7D-C795-4B52-990D-3A5897083D42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C701EB7D-C795-4B52-990D-3A5897083D42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C701EB7D-C795-4B52-990D-3A5897083D42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF634083-ADF8-4F2C-836A-5F09774579BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF634083-ADF8-4F2C-836A-5F09774579BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF634083-ADF8-4F2C-836A-5F09774579BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF634083-ADF8-4F2C-836A-5F09774579BD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0047CA84-014C-4707-8AE3-54EB5908CE81} = {B32F8347-9FEC-4B20-8694-7E5B79B63BD6}
+		{C701EB7D-C795-4B52-990D-3A5897083D42} = {B32F8347-9FEC-4B20-8694-7E5B79B63BD6}
+		{FF634083-ADF8-4F2C-836A-5F09774579BD} = {B32F8347-9FEC-4B20-8694-7E5B79B63BD6}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {674FDCF4-E328-4682-90DC-B72901077006}
+	EndGlobalSection
+EndGlobal
