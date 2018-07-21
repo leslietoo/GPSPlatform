@@ -15,11 +15,14 @@ namespace JT808.Protocol
     {
         public JT808Package(Memory<byte> buf) : base(buf)
         {
+            OriginalBuffer = buf.IsEmpty ? null : buf.ToArray();
         }
 
         public JT808Package() : base()
         {
         }
+
+        public byte[] OriginalBuffer { get; }
 
         /// <summary>
         /// 起始符
@@ -52,23 +55,9 @@ namespace JT808.Protocol
             // 1.起始符
             span.WriteLittle(BeginFlag, 0);
             // 2.头数据 下发不需要分包处理
-            try
-            {
-                span.WriteLittle(Header.Buffer.Span, 1);
-            }
-            catch (Exception ex)
-            {
-                throw new JT808Exception($"{nameof(Header)}.{nameof(WriteBuffer)}",ex);
-            }
+            span.WriteLittle(Header.Buffer.Span, 1);
             // 3.数据体
-            try
-            {
-                span.WriteLittle(Bodies.Buffer.Span, Header.Buffer.Span.Length);
-            }
-            catch (Exception ex)
-            {
-                throw new JT808Exception($"{nameof(Bodies)}.{nameof(WriteBuffer)}", ex);
-            }
+            span.WriteLittle(Bodies.Buffer.Span, Header.Buffer.Span.Length);
             // 4.校验码
             CheckCode = span.ToXor(1, Header.Buffer.Length + Bodies.Buffer.Length);
             span.WriteLittle(CheckCode, span.Length - 2);
@@ -207,7 +196,6 @@ namespace JT808.Protocol
         /// <returns></returns>
         public static Span<byte> JT808Escape(Span<byte> buf)
         {
-            Span<byte> span = new byte[buf.Length + buf.Length / 10];
             List<byte> bytes = new List<byte>();
             int n = 0;
             bytes.Add(buf[0]);

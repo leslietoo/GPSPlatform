@@ -1,10 +1,11 @@
 ﻿using System;
-using System.IO;
+using System.Runtime.Serialization;
 
 namespace JT808.Protocol
 {
     public abstract class JT808BufferedEntityBase
     {
+        [IgnoreDataMember]
         public Memory<byte> Buffer { get; protected set; }
 
         protected JT808BufferedEntityBase(Memory<byte> buffer)
