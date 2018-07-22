@@ -11,6 +11,8 @@ using JT808.Protocol.JT808PackageImpl.Reply;
 using Protocol.Common.Extensions;
 using Newtonsoft.Json;
 using JT808.Protocol.Exceptions;
+using Confluent.Kafka;
+using Confluent.Kafka.Serialization;
 
 namespace GPS.Gateway.JT808SuperSocketServer
 {
@@ -23,9 +25,9 @@ namespace GPS.Gateway.JT808SuperSocketServer
 
         public static readonly JT808GlobalConfigs JT808GlobalConfigs = new JT808GlobalConfigs();
 
-        private static int _SNumId;
+        private int _SNumId;
 
-        public static int sNumId
+        public int sNumId
         {
             get
             {
@@ -34,8 +36,23 @@ namespace GPS.Gateway.JT808SuperSocketServer
             }
         }
 
+        public JT808Command()
+        {
+
+        }
+
+        private Producer<string, string> MQProducer;
+
+        private Dictionary<string, object> MQConfig = new Dictionary<string, object>
+        {
+            {"bootstrap.servers", "127.0.0.1:9092" }
+        };
+
+        private Func<JT808RequestInfo, Action, IJT808Package> HandlerFunc;
+
         public override void ExecuteCommand(JT808Session<JT808RequestInfo> session, JT808RequestInfo requestInfo)
         {
+            
             try
             {
                 session.Logger.Debug("receive-" + requestInfo.JT808Package.Buffer.ToArray().ToHexString());
@@ -45,8 +62,31 @@ namespace GPS.Gateway.JT808SuperSocketServer
                 switch (requestInfo.JT808Package.Header.MsgId)
                 {
                     case JT808.Protocol.Enums.JT808MsgId.终端鉴权:
+                        InitProducer(requestInfo.JT808Package.Header.TerminalPhoneNo);
+                        jT808PackageImpl = new JT808_0x8001Package(requestInfo.JT808Package.Header, sNumId, new JT808_0x8001()
+                        {
+                            MsgId = requestInfo.JT808Package.Header.MsgId,
+                            JT808PlatformResult = JT808PlatformResult.Success,
+                            MsgNum = requestInfo.JT808Package.Header.MsgNum
+                        }, JT808GlobalConfigs);
+                        break;
                     case JT808.Protocol.Enums.JT808MsgId.终端心跳:
+                        jT808PackageImpl = new JT808_0x8001Package(requestInfo.JT808Package.Header, sNumId, new JT808_0x8001()
+                        {
+                            MsgId = requestInfo.JT808Package.Header.MsgId,
+                            JT808PlatformResult = JT808PlatformResult.Success,
+                            MsgNum = requestInfo.JT808Package.Header.MsgNum
+                        }, JT808GlobalConfigs);
+                        break;
                     case JT808.Protocol.Enums.JT808MsgId.终端注销:
+                        CloseProducer();
+                        jT808PackageImpl = new JT808_0x8001Package(requestInfo.JT808Package.Header, sNumId, new JT808_0x8001()
+                        {
+                            MsgId = requestInfo.JT808Package.Header.MsgId,
+                            JT808PlatformResult = JT808PlatformResult.Success,
+                            MsgNum = requestInfo.JT808Package.Header.MsgNum
+                        }, JT808GlobalConfigs);
+                        break;
                     case JT808.Protocol.Enums.JT808MsgId.位置信息汇报:
                         jT808PackageImpl = new JT808_0x8001Package(requestInfo.JT808Package.Header, sNumId, new JT808_0x8001()
                         {
@@ -56,6 +96,7 @@ namespace GPS.Gateway.JT808SuperSocketServer
                         }, JT808GlobalConfigs);
                         break;
                     case JT808.Protocol.Enums.JT808MsgId.终端注册:
+                        InitProducer(requestInfo.JT808Package.Header.TerminalPhoneNo);
                         jT808PackageImpl = new JT808_0x8100Package(requestInfo.JT808Package.Header, sNumId, new JT808_0x8100()
                         {
                             Code = "J" + requestInfo.JT808Package.Header.TerminalPhoneNo,
@@ -83,6 +124,22 @@ namespace GPS.Gateway.JT808SuperSocketServer
                 session.Logger.Error("Exception receive-" + requestInfo.JT808Package.Buffer.ToArray().ToHexString());
                 session.Logger.Error(ex);
             }
+        }
+
+        private void InitProducer(string topic)
+        {
+            if (MQProducer  == null)
+            {
+                MQConfig.Add("topic", topic);
+                MQProducer = new Producer<string, string>(MQConfig, new StringSerializer(Encoding.UTF8), new StringSerializer(Encoding.UTF8));
+            }
+        }
+
+        private void CloseProducer()
+        {
+            MQProducer.Flush(500);
+            MQProducer.Dispose();
+            MQProducer = null;
         }
     }
 }

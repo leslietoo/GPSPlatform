@@ -17,25 +17,39 @@ namespace GPS.Gateway.JT808SuperSocketServer
         {
            return base.TrySend(jT808Package.JT808Package.Buffer.ToArray(), 0, jT808Package.JT808Package.Buffer.Length);
         }
+
         //protected override void OnSessionStarted()
         //{
 
         //}
 
-        //protected override void HandleUnknownRequest(TRequestInfo requestInfo)
-        //{
-        //    base.HandleUnknownRequest(requestInfo);
-        //}
+        /// <summary>
+        /// 处理未知的请求
+        /// </summary>
+        /// <param name="requestInfo"></param>
+        protected override void HandleUnknownRequest(TRequestInfo requestInfo)
+        {
+            base.HandleUnknownRequest(requestInfo);
+        }
 
-        //protected override void HandleException(Exception e)
-        //{
+        /// <summary>
+        /// 异常处理
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void HandleException(Exception e)
+        {
 
-        //}
+        }
 
-        //protected override void OnSessionClosed(CloseReason reason)
-        //{
+        /// <summary>
+        /// 作用 主动断开客户端连接
+        /// 不是自己的设备就断开
+        /// </summary>
+        /// <param name="reason"></param>
+        protected override void OnSessionClosed(CloseReason reason)
+        {
 
-        //    base.OnSessionClosed(reason);
-        //}
+            base.OnSessionClosed(reason);
+        }
     }
 }
