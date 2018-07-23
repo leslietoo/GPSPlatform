@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JT808.Protocol.Test", "..\.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Protocol.Common", "..\..\Protocol.Common\src\Protocol.Common\Protocol.Common.csproj", "{FF634083-ADF8-4F2C-836A-5F09774579BD}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JT808.MsgIdExtensions", "JT808.MsgIdExtensions\JT808.MsgIdExtensions.csproj", "{E2C3514D-EDBD-49D0-B172-423337227CC2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{FF634083-ADF8-4F2C-836A-5F09774579BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF634083-ADF8-4F2C-836A-5F09774579BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF634083-ADF8-4F2C-836A-5F09774579BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2C3514D-EDBD-49D0-B172-423337227CC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2C3514D-EDBD-49D0-B172-423337227CC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2C3514D-EDBD-49D0-B172-423337227CC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2C3514D-EDBD-49D0-B172-423337227CC2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -43,6 +49,7 @@ Global
 		{0047CA84-014C-4707-8AE3-54EB5908CE81} = {B32F8347-9FEC-4B20-8694-7E5B79B63BD6}
 		{C701EB7D-C795-4B52-990D-3A5897083D42} = {B32F8347-9FEC-4B20-8694-7E5B79B63BD6}
 		{FF634083-ADF8-4F2C-836A-5F09774579BD} = {B32F8347-9FEC-4B20-8694-7E5B79B63BD6}
+		{E2C3514D-EDBD-49D0-B172-423337227CC2} = {B32F8347-9FEC-4B20-8694-7E5B79B63BD6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {674FDCF4-E328-4682-90DC-B72901077006}
