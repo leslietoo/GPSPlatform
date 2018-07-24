@@ -6,6 +6,8 @@ using System.Text;
 using Xunit;
 using Protocol.Common.Extensions;
 using JT808.Protocol.Test.JT808LocationAttach;
+using System.IO;
+using ProtoBuf;
 
 namespace JT808.Protocol.Test.MessageBodyRequest
 {
@@ -124,6 +126,12 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             byte[] bytes = "7E 02 00 00 3D 01 35 10 26 00 01 04 7D 02 00 00 00 00 00 08 00 03 01 57 8E 40 06 CA 39 66 FF AE 00 14 00 00 18 07 21 02 31 17 01 04 00 00 80 52 10 01 63 2A 02 00 00 30 01 14 31 01 09 56 02 0A 00 57 08 00 00 00 00 00 00 00 00 89 7E".ToHexBytes();
             JT808Package jT808Package = new JT808Package(bytes);
             jT808Package.ReadBuffer(jT808GlobalConfigs);
+
+            using (var ms = new MemoryStream())
+            {
+                Serializer.Serialize(ms, jT808Package);
+                string hex = ms.ToArray().ToHexString();
+            }
         }
 
         [Fact]

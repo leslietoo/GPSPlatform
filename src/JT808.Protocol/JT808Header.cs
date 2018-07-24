@@ -1,5 +1,6 @@
 ﻿using JT808.Protocol.Enums;
 using JT808.Protocol.Exceptions;
+using ProtoBuf;
 using Protocol.Common.Extensions;
 using System;
 using System.Text;
@@ -9,6 +10,7 @@ namespace JT808.Protocol
     /// <summary>
     /// 头部
     /// </summary>
+    [ProtoContract]
     public class JT808Header : JT808BufferedEntityBase
     {
         public JT808Header(Memory<byte> buffer) : base(buffer)
@@ -23,6 +25,7 @@ namespace JT808.Protocol
         /// <summary>
         /// 消息ID 
         /// </summary>
+        [ProtoMember(0)]
         public JT808MsgId MsgId { get; set; }
         /// <summary>
         /// 终端手机号
