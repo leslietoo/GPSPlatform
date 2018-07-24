@@ -149,6 +149,10 @@
       <Project>{ff634083-adf8-4f2c-836a-5f09774579bd}</Project>
       <Name>Protocol.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\JT808.MsgIdExtensions\JT808.MsgIdExtensions.csproj">
+      <Project>{E2C3514D-EDBD-49D0-B172-423337227CC2}</Project>
+      <Name>JT808.MsgIdExtensions</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

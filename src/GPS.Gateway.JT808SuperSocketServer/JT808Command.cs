@@ -14,6 +14,7 @@ using JT808.Protocol.Exceptions;
 using Confluent.Kafka;
 using Confluent.Kafka.Serialization;
 using SuperSocket.SocketBase;
+using JT808.MsgIdExtensions;
 
 namespace GPS.Gateway.JT808SuperSocketServer
 {
@@ -136,8 +137,11 @@ namespace GPS.Gateway.JT808SuperSocketServer
             }, JT808GlobalConfigs);
         }
 
+        private static readonly JT808_0x0200_Producer jT808_0X0200_Producer = new JT808_0x0200_Producer();
+
         private IJT808Package Msg0x0200(JT808Package jT808Package)
         {
+            jT808_0X0200_Producer.MsgIdProducer.ProduceAsync(((ushort)JT808MsgId.位置信息汇报).ToString(), null, JsonConvert.SerializeObject(jT808Package));
             return new JT808_0x8001Package(jT808Package.Header, sNumId, new JT808_0x8001()
             {
                 MsgId = jT808Package.Header.MsgId,

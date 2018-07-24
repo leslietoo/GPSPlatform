@@ -8,6 +8,14 @@ namespace JT808.MsgIdExtensions
 {
     public abstract class JT808MsgIdProducerBase<TKey, TValue>: JT808MsgIdBase<TKey, TValue>
     {
+        protected JT808MsgIdProducerBase()
+        {
+        }
+
+        protected JT808MsgIdProducerBase(Dictionary<string, object> config) : base(config)
+        {
+        }
+
         public abstract Producer<TKey, TValue> MsgIdProducer { get;}
     }
 }
