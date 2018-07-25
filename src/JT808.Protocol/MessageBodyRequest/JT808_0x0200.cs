@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using JT808.Protocol.JT808RequestProperties;
 using JT808.Protocol.MessageBodyRequest.JT808LocationAttach;
+using MessagePack;
 using Protocol.Common.Extensions;
 
 namespace JT808.Protocol.MessageBodyRequest
@@ -9,6 +10,7 @@ namespace JT808.Protocol.MessageBodyRequest
     /// <summary>
     /// 位置信息汇报
     /// </summary>
+    [MessagePackObject]
     public class JT808_0x0200 : JT808Bodies
     {
         public JT808_0x0200()
@@ -22,49 +24,58 @@ namespace JT808.Protocol.MessageBodyRequest
         /// <summary>
         /// 报警标志 
         /// </summary>
+        [Key(0)]
         public int AlarmFlag { get; set; }
         /// <summary>
         /// 状态位标志
         /// </summary>
+        [Key(1)]
         public int StatusFlag { get; set; }
         /// <summary>
         /// 纬度
         /// 以度为单位的纬度值乘以 10 的 6 次方，精确到百万分之一度
         /// </summary>
-        public double Lat { get; set; }
+        [Key(2)]
+        public int Lat { get; set; }
         /// <summary>
         /// 经度
         /// 以度为单位的经度值乘以 10 的 6 次方，精确到百万分之一度
         /// </summary>
-        public double Lng { get; set; }
+        [Key(3)]
+        public int Lng { get; set; }
         /// <summary>
         /// 高程
         /// 海拔高度，单位为米（m）
         /// </summary>
-        public int Altitude { get; set; }
+        [Key(4)]
+        public ushort Altitude { get; set; }
         /// <summary>
         /// 速度 1/10km/h
         /// </summary>
-        public double Speed { get; set; }
+        [Key(5)]
+        public ushort Speed { get; set; }
         /// <summary>
         /// 方向 0-359，正北为 0，顺时针
         /// </summary>
-        public int Direction { get; set; }
+        [Key(6)]
+        public ushort Direction { get; set; }
         /// <summary>
         /// YY-MM-DD-hh-mm-ss（GMT+8 时间，本标准中之后涉及的时间均采用此时区）
         /// </summary>
+        [Key(7)]
         public DateTime GPSTime { get; set; }
         /// <summary>
         /// 位置附加信息
         /// </summary>
+        [IgnoreMember]
         public IDictionary<byte, JT808LocationAttachBase> JT808LocationAttachData { get; set; }
 
         public override void ReadBuffer(JT808GlobalConfigs jT808GlobalConfigs)
         {
             AlarmFlag = Buffer.Span.ReadIntH2L(0, 4);
             StatusFlag = Buffer.Span.ReadIntH2L(4, 4);
-            Lat = Buffer.Span.ReadIntH2L(8, 4).ToLatLng();
-            Lng = Buffer.Span.ReadIntH2L(12, 4).ToLatLng();
+            Lat = Buffer.Span.ReadIntH2L(8, 4);
+            Lng = Buffer.Span.ReadIntH2L(12, 4);
             JT808StatusProperty jT808StatusProperty = new JT808StatusProperty(Convert.ToString(StatusFlag, 2).PadLeft(32, '0'));
             if (jT808StatusProperty.Bit28 == '1')//西经
             {
@@ -74,9 +85,9 @@ namespace JT808.Protocol.MessageBodyRequest
             {
                 Lat = -Lat;
             }
-            Altitude = Buffer.Span.ReadIntH2L(16, 2);
-            Speed = Buffer.Span.ReadIntH2L(18, 2) / 10.0;
-            Direction = Buffer.Span.ReadIntH2L(20, 2);
+            Altitude = (ushort)Buffer.Span.ReadIntH2L(16, 2);
+            Speed = (ushort)Buffer.Span.ReadIntH2L(18, 2);
+            Direction = (ushort)Buffer.Span.ReadIntH2L(20, 2);
             GPSTime = Buffer.Span.ReadDateTimeLittle(22, 6);
             //JT808AlarmProperty jT808AlarmProperty = new JT808AlarmProperty(Convert.ToString(AlarmFlag, 2).PadLeft(32, '0'));
             // 位置附加信息

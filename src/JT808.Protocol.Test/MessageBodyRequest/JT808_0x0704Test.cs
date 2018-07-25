@@ -22,8 +22,8 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             JT808_0x0200_1.AlarmFlag = 1;
             JT808_0x0200_1.Altitude = 40;
             JT808_0x0200_1.GPSTime = DateTime.Parse("2018-07-15 10:10:10");
-            JT808_0x0200_1.Lat = 12.222222;
-            JT808_0x0200_1.Lng = 132.444444;
+            JT808_0x0200_1.Lat = 12222222;
+            JT808_0x0200_1.Lng = 132444444;
             JT808_0x0200_1.Speed = 60;
             JT808_0x0200_1.Direction = 0;
             JT808_0x0200_1.StatusFlag = 2;
@@ -42,8 +42,8 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             JT808_0x0200_2.AlarmFlag = 2;
             JT808_0x0200_2.Altitude = 41;
             JT808_0x0200_2.GPSTime = DateTime.Parse("2018-07-15 10:10:30");
-            JT808_0x0200_2.Lat = 13.333333;
-            JT808_0x0200_2.Lng = 132.555555;
+            JT808_0x0200_2.Lat = 13333333;
+            JT808_0x0200_2.Lng = 132555555;
             JT808_0x0200_2.Speed = 54;
             JT808_0x0200_2.Direction = 120;
             JT808_0x0200_2.StatusFlag = 1;

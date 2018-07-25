@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization;
 using MessagePack;
+using JT808.Protocol.JT808Formatters;
 
 namespace JT808.Protocol
 {
@@ -15,6 +16,7 @@ namespace JT808.Protocol
     /// </summary>
     [Serializable]
     [MessagePackObject]
+    [MessagePackFormatter(typeof(JT808PackageFromatter))]
     public class JT808Package : JT808BufferedEntityBase
     {
         public JT808Package(Memory<byte> buf) : base(buf)
@@ -26,15 +28,18 @@ namespace JT808.Protocol
         {
         }
 
+        [IgnoreMember]
         public byte[] OriginalBuffer { get; }
 
         /// <summary>
         /// 起始符
         /// </summary>
+        [IgnoreMember]
         public const byte BeginFlag = 0x7e;
         /// <summary>
         /// 终止符
         /// </summary>
+        [IgnoreMember]
         public const byte EndFlag = 0x7e;
 
         /// <summary>
@@ -46,14 +51,14 @@ namespace JT808.Protocol
         /// <summary>
         /// 起始符
         /// </summary>
-        [Key(5)]
+        [Key(4)]
         public byte End { get; set; } = EndFlag;
 
         /// <summary>
         /// 校验码
         /// 从消息头开始，同后一字节异或，直到校验码前一个字节，占用一个字节。
         /// </summary>
-        [Key(4)]
+        [Key(3)]
         public byte CheckCode { get;  set; }
 
         /// <summary>
@@ -65,7 +70,7 @@ namespace JT808.Protocol
         /// <summary>
         /// 数据体
         /// </summary>
-        [Key(3)]
+        [Key(2)]
         public JT808Bodies Bodies { get;  set; }
       
         public override void WriteBuffer(JT808GlobalConfigs jT808GlobalConfigs)
@@ -122,17 +127,15 @@ namespace JT808.Protocol
                 throw new JT808Exception($"{CheckCode}!={checkCode}");
             }
             // 3.初始化消息头
-            Header = new JT808Header(buffer.Slice(1, 12).ToArray());
+            Header = new JT808Header(buffer.Slice(1, 15).ToArray());
             Header.ReadBuffer(jT808GlobalConfigs);
             //  3.1 判断是否分包
-            if (Header.IsPackge)
+            if (Header.MessageBodyProperty.IsPackge)
             {
-                Header.PackgeCount = buffer.ReadIntH2L(13, 2);
-                Header.PackageIndex = buffer.ReadIntH2L(15, 2);
                 try
                 {
                     // 4. 分包消息体
-                    Span<byte> messageBody = buffer.Slice(17, Header.DataLength);
+                    Span<byte> messageBody = buffer.Slice(17, Header.MessageBodyProperty.DataLength);
                     // Bodies
                     Bodies = JT808MessageBodyFactory.Create(Header.MsgId, messageBody.ToArray());
                     Bodies.ReadBuffer(jT808GlobalConfigs);
@@ -145,12 +148,12 @@ namespace JT808.Protocol
             else
             {
                 // 判断是否有消息体
-                if (Header.DataLength != 0)
+                if (Header.MessageBodyProperty.DataLength != 0)
                 {
                     try
                     {
                         // 4. 未分包消息体
-                        Span<byte> messageBody = buffer.Slice(13, Header.DataLength);
+                        Span<byte> messageBody = buffer.Slice(13, Header.MessageBodyProperty.DataLength);
                         // Bodies
                         Bodies = JT808MessageBodyFactory.Create(Header.MsgId, messageBody.ToArray());
                         Bodies.ReadBuffer(jT808GlobalConfigs);

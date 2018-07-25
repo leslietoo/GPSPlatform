@@ -29,10 +29,9 @@ namespace JT808.Protocol.Test
         {
             JT808Header jT808HeaderProperty = new JT808Header();
             jT808HeaderProperty.TerminalPhoneNo = "013812345678";
-            jT808HeaderProperty.IsPackge = false;
+            jT808HeaderProperty.MessageBodyProperty = new JT808MessageBodyProperty (5);
             jT808HeaderProperty.MsgNum = 135;
             jT808HeaderProperty.MsgId = JT808MsgId.终端鉴权;
-            jT808HeaderProperty.DataLength = 5;
             jT808HeaderProperty.WriteBuffer(jT808GlobalConfigs);
             var hex = jT808HeaderProperty.Buffer.Span.ToArray().ToHexString();
         }
@@ -44,9 +43,9 @@ namespace JT808.Protocol.Test
             JT808Header jT808Header = new JT808Header(headerBytes);
             jT808Header.ReadBuffer(jT808GlobalConfigs);
             Assert.Equal("013812345678", jT808Header.TerminalPhoneNo);
-            Assert.False(jT808Header.IsPackge);
+            Assert.False(jT808Header.MessageBodyProperty.IsPackge);
             Assert.Equal(JT808MsgId.终端鉴权, jT808Header.MsgId);
-            Assert.Equal(5, jT808Header.DataLength);
+            Assert.Equal(5, jT808Header.MessageBodyProperty.DataLength);
         }
     }
 }

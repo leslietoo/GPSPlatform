@@ -7,6 +7,10 @@ using Xunit;
 using Protocol.Common.Extensions;
 using JT808.Protocol.Test.JT808LocationAttach;
 using System.IO;
+using MessagePack;
+using MessagePack.Formatters;
+using MessagePack.Resolvers;
+using JT808.Protocol.JT808Formatters;
 
 namespace JT808.Protocol.Test.MessageBodyRequest
 {
@@ -19,8 +23,8 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             jT808UploadLocationRequest.AlarmFlag = 1;
             jT808UploadLocationRequest.Altitude = 40;
             jT808UploadLocationRequest.GPSTime = DateTime.Parse("2018-07-15 10:10:10");
-            jT808UploadLocationRequest.Lat = 12.222222;
-            jT808UploadLocationRequest.Lng = 132.444444;
+            jT808UploadLocationRequest.Lat = 12222222;
+            jT808UploadLocationRequest.Lng = 132444444;
             jT808UploadLocationRequest.Speed = 60;
             jT808UploadLocationRequest.Direction = 0;
             jT808UploadLocationRequest.StatusFlag = 2;
@@ -60,8 +64,8 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             jT808UploadLocationRequest.AlarmFlag = 1;
             jT808UploadLocationRequest.Altitude = 40;
             jT808UploadLocationRequest.GPSTime = DateTime.Parse("2018-07-15 10:10:10");
-            jT808UploadLocationRequest.Lat = 12.222222;
-            jT808UploadLocationRequest.Lng = 132.444444;
+            jT808UploadLocationRequest.Lat = 12222222;
+            jT808UploadLocationRequest.Lng = 132444444;
             jT808UploadLocationRequest.Speed = 60;
             jT808UploadLocationRequest.Direction = 0;
             jT808UploadLocationRequest.StatusFlag = 2;
@@ -87,6 +91,17 @@ namespace JT808.Protocol.Test.MessageBodyRequest
         static JT808_0x0200Test()
         {
             JT808LocationAttachBase.AddJT808LocationAttachMethod<JT808LocationAttachImpl0x06>(0x06);
+            MessagePack.Resolvers.CompositeResolver.RegisterAndSetAsDefault(
+               new IMessagePackFormatter[]
+               {
+                   // for example, register reflection infos(can not serialize in default)
+                   new JT808MessageBodyPropertyFormatter(),
+                   new JT808PackageFromatter()
+               },
+               new IFormatterResolver[]
+               {
+                    ContractlessStandardResolver.Instance
+               });
         }
 
 
@@ -119,18 +134,19 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             JT808Package jT808Package = new JT808Package(bytes);
             jT808Package.ReadBuffer(jT808GlobalConfigs);
         }
+
         [Fact]
         public void Test6()
         {
             byte[] bytes = "7E 02 00 00 3D 01 35 10 26 00 01 04 7D 02 00 00 00 00 00 08 00 03 01 57 8E 40 06 CA 39 66 FF AE 00 14 00 00 18 07 21 02 31 17 01 04 00 00 80 52 10 01 63 2A 02 00 00 30 01 14 31 01 09 56 02 0A 00 57 08 00 00 00 00 00 00 00 00 89 7E".ToHexBytes();
+            //"7E 02 00 3D 01 35 10 26 00 01 04 7E 00 90 01 7E"
+
+
             JT808Package jT808Package = new JT808Package(bytes);
             jT808Package.ReadBuffer(jT808GlobalConfigs);
 
-            //using (var ms = new MemoryStream())
-            //{
-            //    Serializer.Serialize(ms, jT808Package);
-            //    string hex = ms.ToArray().ToHexString();
-            //}
+            var bytes1 = MessagePackSerializer.Serialize(jT808Package);
+            string hex = bytes1.ToHexString();
         }
 
         [Fact]
