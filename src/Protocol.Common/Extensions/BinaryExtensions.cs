@@ -151,6 +151,16 @@ namespace Protocol.Common.Extensions
             }
         }
 
+
+        public static void WriteBCDLittle(this byte[] write, string data, int offset, int len)
+        {
+            string bcd = data.PadLeft(len * 2, '0');
+            for (int i = 0; i < len; i++)
+            {
+                write[offset + i] = Convert.ToByte(bcd.Substring(i * 2, 2), 16);
+            }
+        }
+
         public static IEnumerable<byte> ToBytes(this string data,Encoding coding)
         {
             return coding.GetBytes(data);

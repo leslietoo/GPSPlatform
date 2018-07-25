@@ -73,7 +73,7 @@ namespace JT808.Protocol.MessageBodyRequest
         public override void ReadBuffer(JT808GlobalConfigs jT808GlobalConfigs)
         {
             AlarmFlag = Buffer.Span.ReadIntH2L(0, 4);
-            StatusFlag = Buffer.Span.ReadIntH2L(4, 4);
+            StatusFlag =Buffer.Span.ReadIntH2L(4, 4);
             Lat = Buffer.Span.ReadIntH2L(8, 4);
             Lng = Buffer.Span.ReadIntH2L(12, 4);
             JT808StatusProperty jT808StatusProperty = new JT808StatusProperty(Convert.ToString(StatusFlag, 2).PadLeft(32, '0'));
@@ -129,8 +129,8 @@ namespace JT808.Protocol.MessageBodyRequest
         public override void WriteBuffer(JT808GlobalConfigs jT808GlobalConfigs)
         {
             Memory<byte> buffer1 = new byte[28];
-            buffer1.Span.WriteLittle(AlarmFlag, 0, 4);
-            buffer1.Span.WriteLittle(StatusFlag, 4, 4);
+            buffer1.Span.WriteLittle((int)AlarmFlag, 0, 4);
+            buffer1.Span.WriteLittle((int)StatusFlag, 4, 4);
             buffer1.Span.WriteLatLng(Lat, 8);
             buffer1.Span.WriteLatLng(Lng, 12);
             buffer1.Span.WriteLittle(Altitude, 16,2);

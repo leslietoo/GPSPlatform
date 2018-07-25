@@ -34,7 +34,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Protocol.Common\src\Protocol.Common\Protocol.Common.csproj" />
+    <ProjectReference Include="..\Protocol.Common\Protocol.Common.csproj" />
   </ItemGroup>
 
 </Project>

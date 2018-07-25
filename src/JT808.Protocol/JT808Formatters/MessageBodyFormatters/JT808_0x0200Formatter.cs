@@ -17,14 +17,14 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
 
         public int Serialize(ref byte[] bytes, int offset, JT808_0x0200 value, IFormatterResolver formatterResolver)
         {
-            //offset += MessagePackBinaryExtensions.WriteUInt16(ref bytes, offset, value.AlarmFlag)
-            //buffer1.Span.WriteLittle(AlarmFlag, 0, 4);
-            //buffer1.Span.WriteLittle(StatusFlag, 4, 4);
-            //buffer1.Span.WriteLatLng(Lat, 8);
-            //buffer1.Span.WriteLatLng(Lng, 12);
-            //buffer1.Span.WriteLittle(Altitude, 16, 2);
-            //buffer1.Span.WriteLittle((int)(Speed * 10.0), 18, 2);
-            //buffer1.Span.WriteLittle(Direction, 20, 2);
+            offset += MessagePackBinaryExtensions.WriteInt32(ref bytes, offset, value.AlarmFlag);
+            offset += MessagePackBinaryExtensions.WriteInt32(ref bytes, offset, value.StatusFlag);
+            offset += MessagePackBinaryExtensions.WriteInt32(ref bytes, offset, value.Lat);
+            offset += MessagePackBinaryExtensions.WriteInt32(ref bytes, offset, value.Lng);
+            offset += MessagePackBinaryExtensions.WriteUInt16(ref bytes, offset, value.Altitude);
+            offset += MessagePackBinaryExtensions.WriteUInt16(ref bytes, offset, value.Speed);
+            offset += MessagePackBinaryExtensions.WriteUInt16(ref bytes, offset, value.Direction);
+
             //buffer1.Span.WriteLittle(GPSTime, 22);
             return 1;
         }
