@@ -11,6 +11,7 @@ using MessagePack;
 using MessagePack.Formatters;
 using MessagePack.Resolvers;
 using JT808.Protocol.JT808Formatters;
+using JT808.Protocol.JT808Formatters.MessageBodyFormatters;
 
 namespace JT808.Protocol.Test.MessageBodyRequest
 {
@@ -96,7 +97,9 @@ namespace JT808.Protocol.Test.MessageBodyRequest
                {
                    // for example, register reflection infos(can not serialize in default)
                    new JT808MessageBodyPropertyFormatter(),
-                   new JT808PackageFromatter()
+                   new JT808PackageFromatter(),
+                   new JT808HeaderFormatter(),
+                   new JT808_0x0200Formatter(),
                },
                new IFormatterResolver[]
                {

@@ -14,19 +14,19 @@ namespace Protocol.Common.Extensions
         {
             if (value <= MessagePackRange.MaxFixPositiveInt)
             {
-                MessagePackBinary.EnsureCapacity(ref bytes, offset, 1);
+                //MessagePackBinary.EnsureCapacity(ref bytes, offset, 1);
                 bytes[offset] = unchecked((byte)value);
                 return 1;
             }
             else if (value <= byte.MaxValue)
             {
-                MessagePackBinary.EnsureCapacity(ref bytes, offset, 1);
+                //MessagePackBinary.EnsureCapacity(ref bytes, offset, 1);
                 bytes[offset] = unchecked((byte)value);
                 return 2;
             }
             else
             {
-                MessagePackBinary.EnsureCapacity(ref bytes, offset, 2);
+                //MessagePackBinary.EnsureCapacity(ref bytes, offset, 2);
                 bytes[offset] = unchecked((byte)(value >> 8));
                 bytes[offset + 1] = unchecked((byte)value);
                 return 2;
@@ -39,26 +39,26 @@ namespace Protocol.Common.Extensions
         {
             if (value <= MessagePackRange.MaxFixPositiveInt)
             {
-                MessagePackBinary.EnsureCapacity(ref bytes, offset, 1);
+                //MessagePackBinary.EnsureCapacity(ref bytes, offset, 1);
                 bytes[offset] = unchecked((byte)value);
                 return 1;
             }
             else if (value <= byte.MaxValue)
             {
-                MessagePackBinary.EnsureCapacity(ref bytes, offset, 1);
+                //MessagePackBinary.EnsureCapacity(ref bytes, offset, 1);
                 bytes[offset] = unchecked((byte)value);
                 return 1;
             }
             else if (value <= ushort.MaxValue)
             {
-                MessagePackBinary.EnsureCapacity(ref bytes, offset, 2);
+                //MessagePackBinary.EnsureCapacity(ref bytes, offset, 2);
                 bytes[offset] = unchecked((byte)(value >> 8));
                 bytes[offset + 1] = unchecked((byte)value);
                 return 2;
             }
             else
             {
-                MessagePackBinary.EnsureCapacity(ref bytes, offset, 4);
+                //MessagePackBinary.EnsureCapacity(ref bytes, offset, 4);
                 bytes[offset] = unchecked((byte)(value >> 24));
                 bytes[offset + 1] = unchecked((byte)(value >> 16));
                 bytes[offset + 2] = unchecked((byte)(value >> 8));
@@ -73,26 +73,26 @@ namespace Protocol.Common.Extensions
         {
             if (value <= MessagePackRange.MaxFixPositiveInt)
             {
-                MessagePackBinary.EnsureCapacity(ref bytes, offset, 1);
+                //MessagePackBinary.EnsureCapacity(ref bytes, offset, 1);
                 bytes[offset] = unchecked((byte)value);
                 return 1;
             }
             else if (value <= byte.MaxValue)
             {
-                MessagePackBinary.EnsureCapacity(ref bytes, offset, 1);
+                //MessagePackBinary.EnsureCapacity(ref bytes, offset, 1);
                 bytes[offset] = unchecked((byte)value);
                 return 1;
             }
             else if (value <= ushort.MaxValue)
             {
-                MessagePackBinary.EnsureCapacity(ref bytes, offset, 2);
+                //MessagePackBinary.EnsureCapacity(ref bytes, offset, 2);
                 bytes[offset] = unchecked((byte)(value >> 8));
                 bytes[offset + 1] = unchecked((byte)value);
                 return 2;
             }
             else
             {
-                MessagePackBinary.EnsureCapacity(ref bytes, offset, 4);
+                //MessagePackBinary.EnsureCapacity(ref bytes, offset, 4);
                 bytes[offset] = unchecked((byte)(value >> 24));
                 bytes[offset + 1] = unchecked((byte)(value >> 16));
                 bytes[offset + 2] = unchecked((byte)(value >> 8));

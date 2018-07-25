@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MessagePack;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,6 +8,7 @@ namespace JT808.Protocol.MessageBodyRequest.JT808LocationAttach
     /// <summary>
     /// 位置附加信息
     /// </summary>
+    [MessagePackObject]
     public abstract class JT808LocationAttachBase: JT808BufferedEntityBase
     {
         /// <summary>

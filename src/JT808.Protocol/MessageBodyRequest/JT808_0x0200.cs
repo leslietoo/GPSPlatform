@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using JT808.Protocol.JT808Formatters.MessageBodyFormatters;
 using JT808.Protocol.JT808RequestProperties;
 using JT808.Protocol.MessageBodyRequest.JT808LocationAttach;
 using MessagePack;
@@ -11,6 +12,7 @@ namespace JT808.Protocol.MessageBodyRequest
     /// 位置信息汇报
     /// </summary>
     [MessagePackObject]
+    [MessagePackFormatter(typeof(JT808_0x0200Formatter))]
     public class JT808_0x0200 : JT808Bodies
     {
         public JT808_0x0200()
@@ -129,8 +131,8 @@ namespace JT808.Protocol.MessageBodyRequest
         public override void WriteBuffer(JT808GlobalConfigs jT808GlobalConfigs)
         {
             Memory<byte> buffer1 = new byte[28];
-            buffer1.Span.WriteLittle((int)AlarmFlag, 0, 4);
-            buffer1.Span.WriteLittle((int)StatusFlag, 4, 4);
+            buffer1.Span.WriteLittle(AlarmFlag, 0, 4);
+            buffer1.Span.WriteLittle(StatusFlag, 4, 4);
             buffer1.Span.WriteLatLng(Lat, 8);
             buffer1.Span.WriteLatLng(Lng, 12);
             buffer1.Span.WriteLittle(Altitude, 16,2);

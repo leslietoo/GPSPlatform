@@ -1,8 +1,10 @@
-﻿using MessagePack;
+﻿using JT808.Protocol.MessageBodyRequest;
+using MessagePack;
 using MessagePack.Formatters;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using JT808.Protocol.Extensions;
 
 namespace JT808.Protocol.JT808Formatters
 {
@@ -21,7 +23,9 @@ namespace JT808.Protocol.JT808Formatters
         {
             offset += MessagePackBinary.WriteByte(ref bytes, offset, value.Begin);
             offset += formatterResolver.GetFormatter<JT808Header>().Serialize(ref bytes, offset, value.Header, formatterResolver);
-            offset += formatterResolver.GetFormatter<JT808Bodies>().Serialize(ref bytes, offset, value.Bodies, formatterResolver);
+            Type type = JT808FormattersBodiesFactory.Create(value.Header.MsgId);
+            int bodyFormatter = formatterResolver.GetFormatterDynamic(type).JT808DynamicSerialize(ref bytes, offset, formatterResolver, type);
+           // offset += bodyFormatter.Serialize(ref bytes, offset, value.Bodies, formatterResolver);
             offset += MessagePackBinary.WriteByte(ref bytes, offset, 01);
             offset += MessagePackBinary.WriteByte(ref bytes, offset, value.End);
             return offset;

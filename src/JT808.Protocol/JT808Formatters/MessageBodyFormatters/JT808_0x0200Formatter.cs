@@ -1,10 +1,9 @@
 ﻿using JT808.Protocol.MessageBodyRequest;
+using JT808.Protocol.MessageBodyRequest.JT808LocationAttach;
 using MessagePack;
 using MessagePack.Formatters;
 using Protocol.Common.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
 {
@@ -24,9 +23,22 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
             offset += MessagePackBinaryExtensions.WriteUInt16(ref bytes, offset, value.Altitude);
             offset += MessagePackBinaryExtensions.WriteUInt16(ref bytes, offset, value.Speed);
             offset += MessagePackBinaryExtensions.WriteUInt16(ref bytes, offset, value.Direction);
+            offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.GPSTime);
+            if (value.JT808LocationAttachData != null && value.JT808LocationAttachData.Count > 0)
+            {
+                foreach (var item in value.JT808LocationAttachData)
+                {
+                    try
+                    {
+                        offset += formatterResolver.GetFormatter<JT808LocationAttachBase>().Serialize(ref bytes, offset, item.Value, formatterResolver);
+                    }
+                    catch (Exception ex)
+                    {
 
-            //buffer1.Span.WriteLittle(GPSTime, 22);
-            return 1;
+                    }
+                }
+            }
+            return offset;
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
@@ -13,11 +12,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Extensions\**" />
     <Compile Remove="JT808RequestProperties\JT808LocationAttachProperties\**" />
-    <EmbeddedResource Remove="Extensions\**" />
     <EmbeddedResource Remove="JT808RequestProperties\JT808LocationAttachProperties\**" />
-    <None Remove="Extensions\**" />
     <None Remove="JT808RequestProperties\JT808LocationAttachProperties\**" />
   </ItemGroup>
 
@@ -30,6 +26,8 @@
   
   <ItemGroup>
     <PackageReference Include="MessagePack" Version="1.7.3.4" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
+    <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.5.0" />
   </ItemGroup>
   

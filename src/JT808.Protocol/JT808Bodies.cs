@@ -1,7 +1,7 @@
-﻿using MessagePack;
+﻿using JT808.Protocol.JT808Formatters;
+using MessagePack;
 using System;
-using System.Collections.Generic;
-using System.Text;
+
 namespace JT808.Protocol
 {
     [MessagePackObject]

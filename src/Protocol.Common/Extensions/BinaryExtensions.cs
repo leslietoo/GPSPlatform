@@ -151,6 +151,16 @@ namespace Protocol.Common.Extensions
             }
         }
 
+        public static int WriteLittle(ref byte[] write, int offset, DateTime date)
+        {
+            write[offset++] = ((byte)(date.Year - DateLimitYear)).ToBcdByte();
+            write[offset++] = ((byte)(date.Month)).ToBcdByte();
+            write[offset++] = ((byte)(date.Day)).ToBcdByte();
+            write[offset++] = ((byte)(date.Hour)).ToBcdByte();
+            write[offset++] = ((byte)(date.Minute)).ToBcdByte();
+            write[offset++] = ((byte)(date.Second)).ToBcdByte();
+            return offset;
+        }
 
         public static void WriteBCDLittle(this byte[] write, string data, int offset, int len)
         {
