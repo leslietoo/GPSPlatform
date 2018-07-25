@@ -17,11 +17,10 @@ namespace JT808.Protocol.JT808Formatters
 
         public int Serialize(ref byte[] bytes, int offset, JT808Header value, IFormatterResolver formatterResolver)
         {
-            offset += MessagePackBinaryExtensions.WriteUInt16(ref bytes, offset,(ushort)value.MsgId);
+            offset += BinaryExtensions.WriteLittle(ref bytes, offset, (ushort)value.MsgId);
             offset += formatterResolver.GetFormatter<JT808MessageBodyProperty>().Serialize(ref bytes, offset, value.MessageBodyProperty, formatterResolver);
-            bytes.WriteBCDLittle(value.TerminalPhoneNo, offset, 6);
-            offset += 6;
-            offset += MessagePackBinaryExtensions.WriteUInt16(ref bytes, offset, value.MsgNum);
+            offset += BinaryExtensions.WriteBCDLittle(ref bytes, value.TerminalPhoneNo, offset, 6);
+            offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.MsgNum);
             if (value.MessageBodyProperty.IsPackge)
             {
                 //消息总包数2位+包序号2位=4位

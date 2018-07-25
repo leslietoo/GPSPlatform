@@ -10,11 +10,11 @@ namespace JT808.Protocol.Extensions
     {
         //int Serialize(ref byte[] bytes, int offset, T value, IFormatterResolver formatterResolver);
         //T Deserialize(byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize);
-        public static int JT808DynamicSerialize(this object objFormatter, ref byte[] bytes, int offset, IFormatterResolver formatterResolver, Type type)
+        public static int JT808DynamicSerialize(this object objFormatter, ref byte[] bytes, int offset,dynamic bodiesImpl ,IFormatterResolver formatterResolver)
         {
-            // 
-            var methodInfo = objFormatter.GetType().GetInterface(type.FullName, true).GetRuntimeMethod("Serialize", new Type[] {typeof(byte[]),typeof(int), type, typeof(IFormatterResolver) });
-            offset +=(int) methodInfo.MakeGenericMethod(type).Invoke(objFormatter,new object[] { bytes, offset, formatterResolver});
+
+            var methodInfo = objFormatter.GetType().GetMethod("Serialize");
+            offset +=(int) methodInfo.Invoke(objFormatter,new object[] { bytes, offset, bodiesImpl, formatterResolver });
             return offset;
         }
 

@@ -29,7 +29,7 @@ namespace JT808.Protocol.JT808Formatters
                 //case JT808MsgId.终端通用应答:
                 //    return new JT808_0x0001(body);
                 case JT808MsgId.位置信息汇报:
-                    return typeof(JT808_0x0200Formatter);
+                    return typeof(JT808_0x0200);
                 //case JT808MsgId.定位数据批量上传:
                 //    return new JT808_0x0704(body);
                 //case JT808MsgId.多媒体数据上传:

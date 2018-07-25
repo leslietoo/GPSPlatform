@@ -153,13 +153,39 @@ namespace Protocol.Common.Extensions
 
         public static int WriteLittle(ref byte[] write, int offset, DateTime date)
         {
-            write[offset++] = ((byte)(date.Year - DateLimitYear)).ToBcdByte();
-            write[offset++] = ((byte)(date.Month)).ToBcdByte();
-            write[offset++] = ((byte)(date.Day)).ToBcdByte();
-            write[offset++] = ((byte)(date.Hour)).ToBcdByte();
-            write[offset++] = ((byte)(date.Minute)).ToBcdByte();
-            write[offset++] = ((byte)(date.Second)).ToBcdByte();
-            return offset;
+            write[offset] = ((byte)(date.Year - DateLimitYear)).ToBcdByte();
+            write[offset+1] = ((byte)(date.Month)).ToBcdByte();
+            write[offset+2] = ((byte)(date.Day)).ToBcdByte();
+            write[offset+3] = ((byte)(date.Hour)).ToBcdByte();
+            write[offset+4] = ((byte)(date.Minute)).ToBcdByte();
+            write[offset+5] = ((byte)(date.Second)).ToBcdByte();
+            return 6;
+        }
+
+        public static int WriteLittle(ref byte[] write, int offset, int data)
+        {
+            write[offset] =(byte)(data >> 24);
+            write[offset + 1] = (byte)(data >> 16);
+            write[offset + 2] =(byte)(data >> 8);
+            write[offset + 3] =(byte)data;
+            return 4;
+        }
+
+        public static int WriteLittle(ref byte[] write, int offset, ushort data)
+        {
+            write[offset] = (byte)(data >> 8);
+            write[offset + 1] = (byte)data;
+            return 2;
+        }
+
+        public static int WriteBCDLittle(ref byte[] write, string data, int offset, int len)
+        {
+            string bcd = data.PadLeft(len * 2, '0');
+            for (int i = 0; i < len; i++)
+            {
+                write[offset + i] = Convert.ToByte(bcd.Substring(i * 2, 2), 16);
+            }
+            return len;
         }
 
         public static void WriteBCDLittle(this byte[] write, string data, int offset, int len)

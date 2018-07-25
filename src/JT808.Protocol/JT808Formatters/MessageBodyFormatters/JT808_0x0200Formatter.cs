@@ -16,13 +16,13 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
 
         public int Serialize(ref byte[] bytes, int offset, JT808_0x0200 value, IFormatterResolver formatterResolver)
         {
-            offset += MessagePackBinaryExtensions.WriteInt32(ref bytes, offset, value.AlarmFlag);
-            offset += MessagePackBinaryExtensions.WriteInt32(ref bytes, offset, value.StatusFlag);
-            offset += MessagePackBinaryExtensions.WriteInt32(ref bytes, offset, value.Lat);
-            offset += MessagePackBinaryExtensions.WriteInt32(ref bytes, offset, value.Lng);
-            offset += MessagePackBinaryExtensions.WriteUInt16(ref bytes, offset, value.Altitude);
-            offset += MessagePackBinaryExtensions.WriteUInt16(ref bytes, offset, value.Speed);
-            offset += MessagePackBinaryExtensions.WriteUInt16(ref bytes, offset, value.Direction);
+            offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.AlarmFlag);
+            offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.StatusFlag);
+            offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.Lat);
+            offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.Lng);
+            offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.Altitude);
+            offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.Speed);
+            offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.Direction);
             offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.GPSTime);
             if (value.JT808LocationAttachData != null && value.JT808LocationAttachData.Count > 0)
             {
@@ -30,7 +30,7 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
                 {
                     try
                     {
-                        offset += formatterResolver.GetFormatter<JT808LocationAttachBase>().Serialize(ref bytes, offset, item.Value, formatterResolver);
+                        //offset += formatterResolver.GetFormatter<JT808LocationAttachBase>().Serialize(ref bytes, offset, item.Value, formatterResolver);
                     }
                     catch (Exception ex)
                     {
