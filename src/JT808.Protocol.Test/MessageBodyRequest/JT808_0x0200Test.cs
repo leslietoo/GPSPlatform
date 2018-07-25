@@ -7,7 +7,6 @@ using Xunit;
 using Protocol.Common.Extensions;
 using JT808.Protocol.Test.JT808LocationAttach;
 using System.IO;
-using ProtoBuf;
 
 namespace JT808.Protocol.Test.MessageBodyRequest
 {
@@ -127,11 +126,11 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             JT808Package jT808Package = new JT808Package(bytes);
             jT808Package.ReadBuffer(jT808GlobalConfigs);
 
-            using (var ms = new MemoryStream())
-            {
-                Serializer.Serialize(ms, jT808Package);
-                string hex = ms.ToArray().ToHexString();
-            }
+            //using (var ms = new MemoryStream())
+            //{
+            //    Serializer.Serialize(ms, jT808Package);
+            //    string hex = ms.ToArray().ToHexString();
+            //}
         }
 
         [Fact]
