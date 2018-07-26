@@ -7,7 +7,6 @@ namespace JT808.Protocol
     {
         static JT808GlobalConfigs()
         {
-
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
 

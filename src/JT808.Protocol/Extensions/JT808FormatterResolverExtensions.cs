@@ -10,19 +10,18 @@ namespace JT808.Protocol.Extensions
     {
         //int Serialize(ref byte[] bytes, int offset, T value, IFormatterResolver formatterResolver);
         //T Deserialize(byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize);
-        public static int JT808DynamicSerialize(this object objFormatter, ref byte[] bytes, int offset,dynamic bodiesImpl ,IFormatterResolver formatterResolver)
+        public static int JT808DynamicSerialize(object objFormatter, ref byte[] bytes, int offset,dynamic bodiesImpl ,IFormatterResolver formatterResolver)
         {
-
             var methodInfo = objFormatter.GetType().GetMethod("Serialize");
-            offset +=(int) methodInfo.Invoke(objFormatter,new object[] { bytes, offset, bodiesImpl, formatterResolver });
-            return offset;
+            return (int)methodInfo.Invoke(objFormatter, new object[] { bytes, offset, bodiesImpl, formatterResolver }); ;
         }
 
-        //public static dynamic JT808DynamicDeserialize(this object objFormatter, Type type)
-        //{
-        //    var methodInfo = typeof(IFormatterResolver).GetRuntimeMethod("GetFormatter", Type.EmptyTypes);
-        //    dynamic formatter = methodInfo.MakeGenericMethod(type).Invoke(resolver, null);
-        //    return formatter;
-        //}
+        public static dynamic JT808DynamicDeserialize(object objFormatter, byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize)
+        {
+            var methodInfo = objFormatter.GetType().GetMethod("Deserialize");
+            readSize = 0;
+            var bodiesImpl= methodInfo.Invoke(objFormatter, new object[] { bytes, offset, formatterResolver, readSize });
+            return bodiesImpl;
+        }
     }
 }

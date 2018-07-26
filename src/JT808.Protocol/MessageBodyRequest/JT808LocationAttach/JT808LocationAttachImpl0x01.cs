@@ -1,44 +1,26 @@
 ﻿using System;
-using Protocol.Common.Extensions;
+using JT808.Protocol.JT808Formatters.MessageBodyFormatters.JT808LocationAttach;
+using MessagePack;
 
 namespace JT808.Protocol.MessageBodyRequest.JT808LocationAttach
 {
+    [MessagePackObject]
+    [MessagePackFormatter(typeof(JT808_0x0200_0x01Formatter))]
     public class JT808LocationAttachImpl0x01 : JT808LocationAttachBase
     {
-        public JT808LocationAttachImpl0x01()
-        {
-        }
-
-        public JT808LocationAttachImpl0x01(Memory<byte> buffer) : base(buffer)
-        {
-        }
-
+        [Key(0)]
+        public override byte AttachInfoId { get;  set; } = 0x01;
+        [Key(1)]
+        public override byte AttachInfoLength { get;  set; } = 4;
         /// <summary>
         /// 里程
         /// </summary>
+        [Key(2)]
         public int Mileage { get; set; }
         /// <summary>
         /// 里程 1/10km，对应车上里程表读数
         /// </summary>
+        [IgnoreMember]
         public double ConvertMileage => Mileage / 10;
-
-        public override byte AttachInfoId { get; protected set; } = 0x01;
-
-        public override byte AttachInfoLength { get; protected set; } = 4;
-
-        public override void ReadBuffer(JT808GlobalConfigs jT808GlobalConfigs)
-        {
-            AttachInfoId = Buffer.Span[0];
-            AttachInfoLength = Buffer.Span[1];
-            Mileage = Buffer.Span.ReadIntH2L(2, AttachInfoLength);
-        }
-
-        public override void WriteBuffer(JT808GlobalConfigs jT808GlobalConfigs)
-        {
-            Buffer = new byte[1+1+AttachInfoLength];
-            Buffer.Span.WriteLittle(AttachInfoId, 0);
-            Buffer.Span.WriteLittle(AttachInfoLength, 1);
-            Buffer.Span.WriteLittle(Mileage, 2, AttachInfoLength);
-        }
     }
 }

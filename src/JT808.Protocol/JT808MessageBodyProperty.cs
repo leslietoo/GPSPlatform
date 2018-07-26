@@ -1,12 +1,11 @@
 ﻿using JT808.Protocol.Enums;
+using JT808.Protocol.JT808Formatters;
 using MessagePack;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace JT808.Protocol
 {
     [MessagePackObject]
+    [MessagePackFormatter(typeof(JT808MessageBodyPropertyFormatter))]
     public struct JT808MessageBodyProperty
     {
         public JT808MessageBodyProperty(int dataLength)

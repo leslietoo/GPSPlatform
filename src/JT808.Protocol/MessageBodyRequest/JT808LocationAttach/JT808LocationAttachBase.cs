@@ -8,22 +8,12 @@ namespace JT808.Protocol.MessageBodyRequest.JT808LocationAttach
     /// <summary>
     /// 位置附加信息
     /// </summary>
-    [MessagePackObject]
-    public abstract class JT808LocationAttachBase: JT808BufferedEntityBase
+    public abstract class JT808LocationAttachBase
     {
         /// <summary>
         /// 位置附加信息方法
         /// </summary>
         public static IDictionary<byte, Type> JT808LocationAttachMethod { get; private set; }
-
-        public JT808LocationAttachBase(Memory<byte> buffer):base(buffer)
-        {
-        }
-
-        public JT808LocationAttachBase() : base()
-        {
-
-        }
 
         static JT808LocationAttachBase()
         {
@@ -58,12 +48,12 @@ namespace JT808.Protocol.MessageBodyRequest.JT808LocationAttach
         /// <summary>
         /// 附加信息Id
         /// </summary>
-        public abstract byte AttachInfoId { get; protected set; }
+        public abstract byte AttachInfoId { get;  set; }
 
         /// <summary>
         /// 附加信息长度
         /// </summary>
-        public abstract byte AttachInfoLength { get; protected set; }
+        public abstract byte AttachInfoLength { get;  set; }
 
 
         public const byte AttachId0x01 = 0x01;

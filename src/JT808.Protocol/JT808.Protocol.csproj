@@ -12,16 +12,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="JT808PackageImpl\**" />
     <Compile Remove="JT808RequestProperties\JT808LocationAttachProperties\**" />
+    <Compile Remove="MessageBodyReply\**" />
+    <Compile Remove="MessageBodySend\**" />
+    <EmbeddedResource Remove="JT808PackageImpl\**" />
     <EmbeddedResource Remove="JT808RequestProperties\JT808LocationAttachProperties\**" />
+    <EmbeddedResource Remove="MessageBodyReply\**" />
+    <EmbeddedResource Remove="MessageBodySend\**" />
+    <None Remove="JT808PackageImpl\**" />
     <None Remove="JT808RequestProperties\JT808LocationAttachProperties\**" />
+    <None Remove="MessageBodyReply\**" />
+    <None Remove="MessageBodySend\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="IJT808BufferedEntity.cs" />
     <Compile Remove="IJT808Properties.cs" />
+    <Compile Remove="JT808BufferedEntityBase.cs" />
+    <Compile Remove="JT808MessageBodyFactory.cs" />
     <Compile Remove="JT808RequestProperties\JT808TerminalLoginRequestProperty.cs" />
     <Compile Remove="JT808RequestProperties\JT808UploadLocationRequestProperty.cs" />
+    <Compile Remove="MessageBodyRequest\JT808_0x0704.cs" />
+    <Compile Remove="MessageBodyRequest\JT808_0x0801.cs" />
   </ItemGroup>
   
   <ItemGroup>

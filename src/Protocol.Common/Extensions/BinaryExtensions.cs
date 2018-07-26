@@ -151,6 +151,48 @@ namespace Protocol.Common.Extensions
             }
         }
 
+        public static long ReadBCD(byte[] buf, int offset, int len)
+        {
+            long result = 0;
+            try
+            {
+                for (int i = offset; i < offset + len; i++)
+                {
+                    result += buf[i].ReadBCD64((byte)(offset + len - i));
+                }
+            }
+            catch
+            {
+            }
+            return result;
+        }
+
+        public static DateTime ReadDateTimeLittle(byte[] buf, int offset, int len)
+        {
+            return new DateTime(
+                (buf[offset]).ReadBCD32(1) + DateLimitYear,
+                (buf[offset+1]).ReadBCD32(1),
+                (buf[offset+2]).ReadBCD32(1),
+                (buf[offset+3]).ReadBCD32(1),
+                (buf[offset+4]).ReadBCD32(1),
+                (buf[offset+5]).ReadBCD32(1));
+        }
+
+        public static int ReadInt32Little(byte[] read,int offset)
+        {
+           return (read[offset] << 24) | (read[offset+1] << 16) | (read[offset + 2] << 8) | read[offset + 3];
+        }
+
+        public static ushort ReadUInt16Little(byte[] read, int offset)
+        {
+            return (ushort)((read[offset] << 8) | (read[offset + 1]));
+        }
+
+        public static byte ReadByteLittle(byte[] read, int offset)
+        {
+            return read[offset];
+        }
+
         public static int WriteLittle(ref byte[] write, int offset, DateTime date)
         {
             write[offset] = ((byte)(date.Year - DateLimitYear)).ToBcdByte();
@@ -176,6 +218,19 @@ namespace Protocol.Common.Extensions
             write[offset] = (byte)(data >> 8);
             write[offset + 1] = (byte)data;
             return 2;
+        }
+
+        public static int WriteLittle(ref byte[] write, int offset, byte data)
+        {
+            write[offset] = data;
+            return 1;
+        }
+
+        public static int WriteLittle(ref byte[] write, int offset, string data)
+        {
+            byte[] codeBytes= Encoding.GetEncoding("GBK").GetBytes(data);
+            Buffer.BlockCopy(write, offset, codeBytes, 0, codeBytes.Length);
+            return codeBytes.Length;
         }
 
         public static int WriteBCDLittle(ref byte[] write, string data, int offset, int len)
@@ -230,6 +285,23 @@ namespace Protocol.Common.Extensions
         {
             byte result = buf[offset];
             for (int i = offset+1; i < len; i++)
+            {
+                result = (byte)(result ^ buf[i]);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 异或
+        /// </summary>
+        /// <param name="buf"></param>
+        /// <param name="offset"></param>
+        /// <param name="len"></param>
+        /// <returns></returns>
+        public static byte ToXor(this byte[] buf, int offset, int len)
+        {
+            byte result = buf[offset];
+            for (int i = offset + 1; i < len; i++)
             {
                 result = (byte)(result ^ buf[i]);
             }

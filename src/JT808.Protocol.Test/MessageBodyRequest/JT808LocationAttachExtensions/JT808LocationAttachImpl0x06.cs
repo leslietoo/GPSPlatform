@@ -10,25 +10,17 @@ namespace JT808.Protocol.Test.JT808LocationAttach
     /// UserName-BCD(10)
     /// Gerder-byte-1
     /// </summary>
-    public class JT808LocationAttachImpl0x06 : JT808LocationAttachBase
+    public class JT808LocationAttachImpl0x06
     {
-        public JT808LocationAttachImpl0x06()
-        {
-        }
-
-        public JT808LocationAttachImpl0x06(Memory<byte> buffer) : base(buffer)
-        {
-        }
-
         public int Age { get; set; }
 
         public string UserName { get; set; }
 
         public byte Gender { get; set; }
 
-        public override byte AttachInfoId { get; protected set; } = 0x06;
+        public override byte AttachInfoId { get;  set; } = 0x06;
 
-        public override byte AttachInfoLength { get; protected set; } = 13;
+        public override byte AttachInfoLength { get;  set; } = 13;
 
         public override void ReadBuffer(JT808GlobalConfigs jT808GlobalConfigs)
         {

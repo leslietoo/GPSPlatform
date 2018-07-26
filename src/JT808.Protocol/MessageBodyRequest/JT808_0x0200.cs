@@ -15,14 +15,6 @@ namespace JT808.Protocol.MessageBodyRequest
     [MessagePackFormatter(typeof(JT808_0x0200Formatter))]
     public class JT808_0x0200 : JT808Bodies
     {
-        public JT808_0x0200()
-        {
-        }
-
-        public JT808_0x0200(Memory<byte> buffer) : base(buffer)
-        {
-        }
-
         /// <summary>
         /// 报警标志 
         /// </summary>
@@ -69,94 +61,7 @@ namespace JT808.Protocol.MessageBodyRequest
         /// <summary>
         /// 位置附加信息
         /// </summary>
-        [IgnoreMember]
+        [Key(8)]
         public IDictionary<byte, JT808LocationAttachBase> JT808LocationAttachData { get; set; }
-
-        public override void ReadBuffer(JT808GlobalConfigs jT808GlobalConfigs)
-        {
-            AlarmFlag = Buffer.Span.ReadIntH2L(0, 4);
-            StatusFlag =Buffer.Span.ReadIntH2L(4, 4);
-            Lat = Buffer.Span.ReadIntH2L(8, 4);
-            Lng = Buffer.Span.ReadIntH2L(12, 4);
-            JT808StatusProperty jT808StatusProperty = new JT808StatusProperty(Convert.ToString(StatusFlag, 2).PadLeft(32, '0'));
-            if (jT808StatusProperty.Bit28 == '1')//西经
-            {
-                Lng = -Lng;
-            }
-            if (jT808StatusProperty.Bit29 == '1')//南纬
-            {
-                Lat = -Lat;
-            }
-            Altitude = (ushort)Buffer.Span.ReadIntH2L(16, 2);
-            Speed = (ushort)Buffer.Span.ReadIntH2L(18, 2);
-            Direction = (ushort)Buffer.Span.ReadIntH2L(20, 2);
-            GPSTime = Buffer.Span.ReadDateTimeLittle(22, 6);
-            //JT808AlarmProperty jT808AlarmProperty = new JT808AlarmProperty(Convert.ToString(AlarmFlag, 2).PadLeft(32, '0'));
-            // 位置附加信息
-            JT808LocationAttachData = new Dictionary<byte, JT808LocationAttachBase>();
-            if (Buffer.Length > 28)
-            {
-                Span<byte> locationAttachSpan = Buffer.Span.Slice(28);
-                int offset = 0;
-                while (locationAttachSpan.Length>offset)
-                {
-                    try
-                    {
-                        Type jT808LocationAttachType;
-                        if (JT808LocationAttachBase.JT808LocationAttachMethod.TryGetValue(locationAttachSpan[offset], out jT808LocationAttachType))
-                        {
-                            int attachId = 1;
-                            int attachLen = 1;
-                            int attachContentLen = locationAttachSpan[offset+1];
-                            int locationAttachTotalLen = attachId+ attachLen+ attachContentLen;
-                            Memory<byte> tempData = locationAttachSpan.Slice(offset, locationAttachTotalLen).ToArray(); 
-                            JT808LocationAttachBase jT808LocationAttachImpl = (JT808LocationAttachBase)Activator.CreateInstance(jT808LocationAttachType, tempData);
-                            jT808LocationAttachImpl.ReadBuffer(jT808GlobalConfigs);
-                            offset = offset + locationAttachTotalLen;
-                            JT808LocationAttachData.Add(jT808LocationAttachImpl.AttachInfoId, jT808LocationAttachImpl);
-                        }
-                        else
-                        {
-                            break;
-                        }
-                    }
-                    catch(Exception ex)
-                    {
-                        continue;
-                    }
-                }
-            }
-        }
-
-        public override void WriteBuffer(JT808GlobalConfigs jT808GlobalConfigs)
-        {
-            Memory<byte> buffer1 = new byte[28];
-            buffer1.Span.WriteLittle(AlarmFlag, 0, 4);
-            buffer1.Span.WriteLittle(StatusFlag, 4, 4);
-            buffer1.Span.WriteLatLng(Lat, 8);
-            buffer1.Span.WriteLatLng(Lng, 12);
-            buffer1.Span.WriteLittle(Altitude, 16,2);
-            buffer1.Span.WriteLittle((int)(Speed * 10.0), 18, 2);
-            buffer1.Span.WriteLittle(Direction, 20, 2);
-            buffer1.Span.WriteLittle(GPSTime, 22);
-            List<byte> attachBytes = new List<byte>();
-            attachBytes.AddRange(buffer1.ToArray());
-            if (JT808LocationAttachData!=null && JT808LocationAttachData.Count > 0)
-            {
-                foreach(var item in JT808LocationAttachData)
-                {
-                    try
-                    {
-                        item.Value.WriteBuffer(jT808GlobalConfigs);
-                        attachBytes.AddRange(item.Value.Buffer.ToArray());
-                    }
-                    catch (Exception ex)
-                    {
-                        
-                    }
-                }
-            }
-            Buffer = attachBytes.ToArray();
-        }
     }
 }

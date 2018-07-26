@@ -12,10 +12,11 @@ using MessagePack.Formatters;
 using MessagePack.Resolvers;
 using JT808.Protocol.JT808Formatters;
 using JT808.Protocol.JT808Formatters.MessageBodyFormatters;
+using JT808.Protocol.JT808Formatters.MessageBodyFormatters.JT808LocationAttach;
 
 namespace JT808.Protocol.Test.MessageBodyRequest
 {
-    public class JT808_0x0200Test: JT808PackageBase
+    public class JT808_0x0200Test : JT808PackageBase
     {
         [Fact]
         public void Test1()
@@ -60,7 +61,7 @@ namespace JT808.Protocol.Test.MessageBodyRequest
 
         [Fact]
         public void Test3()
-        { 
+        {
             JT808_0x0200 jT808UploadLocationRequest = new JT808_0x0200();
             jT808UploadLocationRequest.AlarmFlag = 1;
             jT808UploadLocationRequest.Altitude = 40;
@@ -81,9 +82,9 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             });
             jT808UploadLocationRequest.JT808LocationAttachData.Add(0x06, new JT808LocationAttachImpl0x06
             {
-                 Age=18,
-                 Gender=1,
-                 UserName="smallchi"
+                Age = 18,
+                Gender = 1,
+                UserName = "smallchi"
             });
             jT808UploadLocationRequest.WriteBuffer(jT808GlobalConfigs);
             string hex = jT808UploadLocationRequest.Buffer.ToArray().ToHexString();
@@ -100,6 +101,18 @@ namespace JT808.Protocol.Test.MessageBodyRequest
                    new JT808PackageFromatter(),
                    new JT808HeaderFormatter(),
                    new JT808_0x0200Formatter(),
+                   new JT808_0x0200_0x06Formatter(),
+                   new JT808_0x0200_0x02Formatter(),
+                   new JT808_0x0200_0x03Formatter(),
+                   new JT808_0x0200_0x04Formatter(),
+                   new JT808_0x0200_0x11Formatter(),
+                   new JT808_0x0200_0x12Formatter(),
+                   new JT808_0x0200_0x13Formatter(),
+                   new JT808_0x0200_0x25Formatter(),
+                   new JT808_0x0200_0x2AFormatter(),
+                   new JT808_0x0200_0x2BFormatter(),
+                   new JT808_0x0200_0x30Formatter(),
+                   new JT808_0x0200_0x31Formatter(),
                },
                new IFormatterResolver[]
                {
@@ -112,7 +125,7 @@ namespace JT808.Protocol.Test.MessageBodyRequest
         public void Test4()
         {
             // 1.添加自定义附加信息扩展 AddJT808LocationAttachMethod 
-           
+
 
             byte[] bodys = "00 00 00 01 00 00 00 02 00 BA 7F 0E 07 E4 F1 1C 00 28 02 58 00 00 18 07 15 10 10 10 01 04 00 00 00 64 02 02 00 37 06 0D 73 6D 61 6C 6C 63 68 69 00 00 00 12 01".ToHexBytes();
             JT808_0x0200 jT808UploadLocationRequest = new JT808_0x0200(bodys);
@@ -133,54 +146,84 @@ namespace JT808.Protocol.Test.MessageBodyRequest
         [Fact]
         public void Test5()
         {
-            byte[] bytes = "7E 02 00 00 26 01 38 12 34 56 78 00 85 00 00 00 01 00 00 00 02 00 CB 73 55 00 DE 19 A3 00 22 02 30 00 22 18 07 19 13 59 23 01 04 00 00 00 0C 02 02 00 20 6E 7E".ToHexBytes();
-            JT808Package jT808Package = new JT808Package(bytes);
-            jT808Package.ReadBuffer(jT808GlobalConfigs);
+            byte[] bytes = "7E 02 00 00 6D 01 35 10 26 00 01 2A 9C 00 00 00 00 00 08 00 01 01 57 99 5C 06 CA 26 AC 02 72 00 00 01 48 18 07 22 16 01 10 01 04 00 00 80 73 10 01 63 2A 02 00 00 30 01 17 56 02 0A 00 53 31 06 01 CC 00 24 93 16 97 41 01 CC 00 26 39 13 BB 47 01 CC 00 24 93 14 03 47 01 CC 00 24 93 16 98 4A 01 CC 00 26 39 12 54 4B 01 CC 00 24 93 12 67 4F 57 08 00 00 00 00 00 00 00 00 66 7E".ToHexBytes();
+            var jT808Package = MessagePackSerializer.Deserialize<JT808Package>(bytes);
         }
 
         [Fact]
         public void Test6()
         {
-            byte[] bytes = "7E 02 00 00 3D 01 35 10 26 00 01 04 7D 02 00 00 00 00 00 08 00 03 01 57 8E 40 06 CA 39 66 FF AE 00 14 00 00 18 07 21 02 31 17 01 04 00 00 80 52 10 01 63 2A 02 00 00 30 01 14 31 01 09 56 02 0A 00 57 08 00 00 00 00 00 00 00 00 89 7E".ToHexBytes();
-
+            byte[] bytes = "7E 02 00 00 6D 01 35 10 26 00 01 2A 9C 00 00 00 00 00 08 00 01 01 57 99 5C 06 CA 26 AC 02 72 00 00 01 48 18 07 22 16 01 10 01 04 00 00 80 73 10 01 63 2A 02 00 00 30 01 17 56 02 0A 00 53 31 06 01 CC 00 24 93 16 97 41 01 CC 00 26 39 13 BB 47 01 CC 00 24 93 14 03 47 01 CC 00 24 93 16 98 4A 01 CC 00 26 39 12 54 4B 01 CC 00 24 93 12 67 4F 57 08 00 00 00 00 00 00 00 00 66 7E".ToHexBytes();
+            // 没有解出位置信息自定义附加协议字段  只解出标准附加协议
             //"7E 
             //02 00 
-            //3D 01 
-            //35 10 26 00 01 
-            //04 7E（7D 02） 
-            //00 00 00 00
-            //00 00 08 00 
-            //03 01 57 8E 
-            //40 06 CA 39 66 
-            //FF AE 
-            //00 14 
-            //00 00 
-            //18 07 21 02 31 17 
-            //00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 7E"
-
-
-            //"7E 
-            //02 00 
-            //3D 01 
-            //35 10 26 00 01 04 
-            //7E 00 
+            //00 6D 
+            //01 35 10 26 00 01 
+            //2A 9C 
             //00 00 00 00 
-            //00 08 00 03 01 57 8E 40 06 CA 39 66 FF AE 00 14 00 00 18 07 21 02 31 17 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 7E"
-
+            //00 08 00 01 
+            //01 57 99 5C 
+            //06 CA 26 AC 
+            //02 72 
+            //00 00 
+            //01 48 
+            //18 07 22 16 01 10 
+            //01 
+            //  04 
+            //      00 00 80 73 
+            //2A 
+            //  02 
+            //      00 00 
+            //30 
+            //  01 
+            //      17 
+            //01 
+            //7E
 
             //7E 
             //02 00 
-            //00 3D 
+            //00 6D 
             //01 35 10 26 00 01 
-            //04 7E 
+            //2A 9C 
             //00 00 00 00 
-            //00 08 00 03 
-            //01 57 8E 40 
-            //06 CA 39 66 
-            //FF AE 
-            //00 14 
+            //00 08 00 01 
+            //01 57 99 5C 
+            //06 CA 26 AC 
+            //02 72 
             //00 00 
-            //18 07 21 02 31 17 01 04 00 00 80 52 10 01 63 2A 02 00 00 30 01 14 31 01 09 56 02 0A 00 57 08 00 00 00 00 00 00 00 00 89 7E
+            //01 48 
+            //18 07 22 16 01 10 
+            //01 
+            //04 
+            //00 00 80 73 
+            //10 
+            //01 
+            //63 
+            //2A 
+            //02 
+            //00 00 
+            //30 
+            //01 
+            //17 
+            //56 
+            //02 
+            //0A 00 
+            //53 
+            //31 
+            //06 01 CC 00 24 93 
+            //16 97 41 01 CC 00 
+            //26 39 13 BB 47 01 
+            //CC 00 24 93 14 03 
+            //47 01 CC 00 24 93 
+            //16 98 4A 01 CC 00 
+            //26 39 12 54 4B 01 
+            //CC 00 24 93 12 67 4F 
+            //57 
+            //08 
+            //00 00 00 00 00 00 00 00 
+            //66 
+            //7E
+
 
             JT808Package jT808Package = new JT808Package(bytes);
             jT808Package.ReadBuffer(jT808GlobalConfigs);

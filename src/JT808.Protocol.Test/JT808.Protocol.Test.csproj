@@ -7,6 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="MessageBodyReply\**" />
+    <Compile Remove="MessageBodySend\**" />
+    <EmbeddedResource Remove="MessageBodyReply\**" />
+    <EmbeddedResource Remove="MessageBodySend\**" />
+    <None Remove="MessageBodyReply\**" />
+    <None Remove="MessageBodySend\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="MessageBodyRequest\JT808_0x0704Test.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
