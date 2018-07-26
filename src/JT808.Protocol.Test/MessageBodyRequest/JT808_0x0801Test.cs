@@ -12,7 +12,7 @@ namespace JT808.Protocol.Test.MessageBodyRequest
         [Fact]
         public void Test1()
         {
-            JT808_0x0801 jT808_0X0801 = new JT808_0x0801();
+            //JT808_0x0801 jT808_0X0801 = new JT808_0x0801();
             
         }
     }

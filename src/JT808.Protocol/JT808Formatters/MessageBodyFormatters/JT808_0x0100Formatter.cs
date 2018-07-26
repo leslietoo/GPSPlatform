@@ -5,7 +5,7 @@ using Protocol.Common.Extensions;
 
 namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
 {
-    public class JT808_0x0100_Formatter : IMessagePackFormatter<JT808_0x0100>
+    public class JT808_0x0100Formatter : IMessagePackFormatter<JT808_0x0100>
     {
         public JT808_0x0100 Deserialize(byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize)
         {
@@ -34,8 +34,8 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
             offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.AreaID);
             offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.CityOrCountyId);
             offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.MakerId);
-            offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.TerminalType);
-            offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.TerminalId);
+            offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.TerminalType.PadRight(20,'0'));
+            offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.TerminalId.PadRight(7, '0'));
             offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.PlateColor);
             offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.PlateNo);
             return offset;

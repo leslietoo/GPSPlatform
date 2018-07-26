@@ -7,7 +7,7 @@ namespace JT808.Protocol.MessageBodyRequest
     /// 终端注册
     /// </summary>
     [MessagePackObject]
-    [MessagePackFormatter(typeof(JT808_0x0100_Formatter))]
+    [MessagePackFormatter(typeof(JT808_0x0100Formatter))]
     public class JT808_0x0100 : JT808Bodies
     {
         /// <summary>

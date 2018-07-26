@@ -32,16 +32,16 @@ namespace JT808.Protocol.Test
             jT808HeaderProperty.MessageBodyProperty = new JT808MessageBodyProperty (5);
             jT808HeaderProperty.MsgNum = 135;
             jT808HeaderProperty.MsgId = JT808MsgId.终端鉴权;
-            jT808HeaderProperty.WriteBuffer(jT808GlobalConfigs);
-            var hex = jT808HeaderProperty.Buffer.Span.ToArray().ToHexString();
+           // jT808HeaderProperty.WriteBuffer(jT808GlobalConfigs);
+          //  var hex = jT808HeaderProperty.Buffer.Span.ToArray().ToHexString();
         }
 
         [Fact]
         public void Test1_2()
         {
             byte[] headerBytes = "01 02 00 05 01 38 12 34 56 78 00 87 00".ToHexBytes();
-            JT808Header jT808Header = new JT808Header(headerBytes);
-            jT808Header.ReadBuffer(jT808GlobalConfigs);
+            JT808Header jT808Header = new JT808Header();
+         //   jT808Header.ReadBuffer(jT808GlobalConfigs);
             Assert.Equal("013812345678", jT808Header.TerminalPhoneNo);
             Assert.False(jT808Header.MessageBodyProperty.IsPackge);
             Assert.Equal(JT808MsgId.终端鉴权, jT808Header.MsgId);

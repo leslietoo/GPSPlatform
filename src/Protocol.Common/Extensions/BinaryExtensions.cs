@@ -73,7 +73,7 @@ namespace Protocol.Common.Extensions
 
         public static string ReadStringLittle(this Span<byte> read, int offset, int len, Encoding encoding)
         {
-            return encoding.GetString(read.ToArray(), offset, len).Trim('\0');
+            return encoding.GetString(read.ToArray(), offset, len - offset).Trim('\0');
         }
 
         public static string ReadStringLittle(this Span<byte> read, int offset, Encoding encoding)
@@ -229,7 +229,7 @@ namespace Protocol.Common.Extensions
         public static int WriteLittle(ref byte[] write, int offset, string data)
         {
             byte[] codeBytes= Encoding.GetEncoding("GBK").GetBytes(data);
-            Buffer.BlockCopy(write, offset, codeBytes, 0, codeBytes.Length);
+            Buffer.BlockCopy(codeBytes,0,write, offset, codeBytes.Length);
             return codeBytes.Length;
         }
 

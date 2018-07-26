@@ -68,6 +68,7 @@ namespace JT808.Protocol.JT808Formatters
             // 1.起始符
             offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.Begin);
             // 2.头数据 下发不需要分包处理
+#warning 头部长度需要预先知道？？？？ 
             offset = formatterResolver.GetFormatter<JT808Header>().Serialize(ref bytes, offset, value.Header, formatterResolver);
             // 3.数据体
             Type type = JT808FormattersBodiesFactory.Create(value.Header.MsgId);
@@ -77,11 +78,11 @@ namespace JT808.Protocol.JT808Formatters
                 offset = JT808FormatterResolverExtensions.JT808DynamicSerialize(formatterResolver.GetFormatterDynamic(type), ref bytes, offset, value.Bodies, formatterResolver);
             }
             // 4.校验码
-            offset += BinaryExtensions.WriteLittle(ref bytes, offset, (byte)0x00);
+            offset += BinaryExtensions.WriteLittle(ref bytes, offset, bytes.AsSpan().Slice(1, offset).ToXor(0, offset));
             // 5.终止符
             offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.End);
-            byte[] temp = JT808Escape(bytes);
-            Buffer.BlockCopy(bytes, 0, temp, 0, temp.Length);
+            byte[] temp = JT808Escape(bytes.AsSpan().Slice(0, offset));
+            Buffer.BlockCopy(temp,0, bytes, 0, temp.Length);
             return temp.Length;
         }
 
@@ -135,7 +136,7 @@ namespace JT808.Protocol.JT808Formatters
         /// </summary>
         /// <param name="buf"></param>
         /// <returns></returns>
-        private static byte[] JT808Escape(byte[] buf)
+        private static byte[] JT808Escape(ReadOnlySpan<byte> buf)
         {
             List<byte> bytes = new List<byte>();
             int n = 0;
@@ -166,7 +167,7 @@ namespace JT808.Protocol.JT808Formatters
             }
             else
             {
-                return buf;
+                return buf.ToArray();
             }
         }
     }
