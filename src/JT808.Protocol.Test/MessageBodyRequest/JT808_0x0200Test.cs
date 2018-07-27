@@ -165,7 +165,7 @@ namespace JT808.Protocol.Test.MessageBodyRequest
                  MsgId= Enums.JT808MsgId.位置信息汇报,
                  MsgNum=8888,
                  TerminalPhoneNo="112233445566",
-                 MessageBodyProperty=new JT808MessageBodyProperty(38),
+                 //MessageBodyProperty=new JT808MessageBodyProperty(38),
             };
             JT808_0x0200 jT808UploadLocationRequest = new JT808_0x0200();
             jT808UploadLocationRequest.AlarmFlag = 1;

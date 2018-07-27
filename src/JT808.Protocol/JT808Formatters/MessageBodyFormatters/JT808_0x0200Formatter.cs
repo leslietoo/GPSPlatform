@@ -1,5 +1,4 @@
-﻿using JT808.Protocol.Extensions;
-using JT808.Protocol.JT808RequestProperties;
+﻿using JT808.Protocol.JT808RequestProperties;
 using JT808.Protocol.MessageBodyRequest;
 using JT808.Protocol.MessageBodyRequest.JT808LocationAttach;
 using MessagePack;
@@ -55,15 +54,16 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
                     try
                     {
                         Type jT808LocationAttachType;
-                        if (JT808LocationAttachBase.JT808LocationAttachMethod.TryGetValue(locationAttachSpan[attachOffset], out jT808LocationAttachType))
+                        byte tempAttachId= locationAttachSpan[attachOffset];
+                        if (JT808LocationAttachBase.JT808LocationAttachMethod.TryGetValue(tempAttachId, out jT808LocationAttachType))
                         {
                             int attachContentLen = locationAttachSpan[attachOffset + 1];
                             int locationAttachTotalLen = attachId + attachLen + attachContentLen;
                             byte[] attachBuffer = locationAttachSpan.Slice(attachOffset, locationAttachTotalLen).ToArray();
-                            object attachImplObj = formatterResolver.GetFormatterDynamic(jT808LocationAttachType);
-                            dynamic attachImpl = JT808FormatterResolverExtensions.JT808DynamicDeserialize(attachImplObj, attachBuffer, attachOffset, formatterResolver,out readSize);
+
+                            dynamic attachImpl = formatterResolver.GetFormatter<object>().Deserialize(attachBuffer, attachOffset, formatterResolver,out readSize);
                             attachOffset = attachOffset + locationAttachTotalLen;
-                            jT808_0X0200.JT808LocationAttachData.Add(attachImpl.AttachInfoId, attachImpl);
+                            jT808_0X0200.JT808LocationAttachData.Add(tempAttachId, attachImpl);
                         }
                         else
                         {
@@ -102,7 +102,7 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
                     try
                     {
                         object attachImplObj = formatterResolver.GetFormatterDynamic(item.Value.GetType());
-                        offset = JT808FormatterResolverExtensions.JT808DynamicSerialize(attachImplObj, ref bytes, offset, item.Value, formatterResolver);
+                        offset = formatterResolver.GetFormatter<object>().Serialize(ref bytes, offset, item.Value, formatterResolver);
                     }
                     catch (Exception ex)
                     {

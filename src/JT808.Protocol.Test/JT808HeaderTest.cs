@@ -29,7 +29,6 @@ namespace JT808.Protocol.Test
         {
             JT808Header jT808HeaderProperty = new JT808Header();
             jT808HeaderProperty.TerminalPhoneNo = "013812345678";
-            jT808HeaderProperty.MessageBodyProperty = new JT808MessageBodyProperty (5);
             jT808HeaderProperty.MsgNum = 135;
             jT808HeaderProperty.MsgId = JT808MsgId.终端鉴权;
            // jT808HeaderProperty.WriteBuffer(jT808GlobalConfigs);
