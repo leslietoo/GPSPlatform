@@ -3,6 +3,7 @@ using MessagePack.Formatters;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using JT808.Protocol.Extensions;
 using Protocol.Common.Extensions;
 using JT808.Protocol.Exceptions;
 
@@ -36,25 +37,27 @@ namespace JT808.Protocol.JT808Formatters
             // 3.初始化消息头
             jT808Package.Header = formatterResolver.GetFormatter<JT808Header>().Deserialize(buffer, offset, formatterResolver, out readSize);
             offset = readSize;
-
-            if (jT808Package.Header.MessageBodyProperty.IsPackge)
-            {//4.分包消息体 从17位开始  或   未分包消息体 从13位开始
-                //消息总包数2位+包序号2位=4位
-                offset = offset + 2 + 2;
-            }
-            if (jT808Package.Header.MessageBodyProperty.DataLength != 0)
+            Type type = JT808FormattersBodiesFactory.Create(jT808Package.Header.MsgId);
+            if (type != null)
             {
-                try
-                {
-                    //5.处理消息体
-                    jT808Package.Bodies =(JT808Bodies)formatterResolver.GetFormatter<object>().Deserialize(buffer.AsSpan().Slice(offset, jT808Package.Header.MessageBodyProperty.DataLength).ToArray(), offset, formatterResolver, out readSize);
+                if (jT808Package.Header.MessageBodyProperty.IsPackge)
+                {//4.分包消息体 从17位开始  或   未分包消息体 从13位开始
+                 //消息总包数2位+包序号2位=4位
+                    offset = offset + 2 + 2;
                 }
-                catch (Exception ex)
+                if (jT808Package.Header.MessageBodyProperty.DataLength != 0)
                 {
-                    throw new JT808Exception($"消息体解析错误", ex);
+                    try
+                    {
+                        //5.处理消息体
+                        jT808Package.Bodies = JT808FormatterResolverExtensions.JT808DynamicDeserialize(formatterResolver.GetFormatterDynamic(type), buffer.AsSpan().Slice(offset, jT808Package.Header.MessageBodyProperty.DataLength).ToArray(), offset, formatterResolver, out readSize);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new JT808Exception($"消息体解析错误", ex);
+                    }
                 }
             }
-            
             jT808Package.End= buffer[bytes.Length-1];
             readSize = buffer.Length;
             return jT808Package;
@@ -62,31 +65,17 @@ namespace JT808.Protocol.JT808Formatters
 
         public int Serialize(ref byte[] bytes, int offset, JT808Package value, IFormatterResolver formatterResolver)
         {
-            // 1. 先判断是否分包（理论下发不需分包，但为了统一还是加上分包处理）
-            // 2. 先序列化数据体，根据数据体的长度赋值给头部，在序列化头部。
-            int messageBodyOffset = 0;
-            if (value.Header.MessageBodyProperty.IsPackge)
-            {   //3. 先写入分包消息总包数、包序号 
-                messageBodyOffset += BinaryExtensions.WriteLittle(ref bytes, messageBodyOffset, value.Header.MessageBodyProperty.PackgeCount);
-                messageBodyOffset += BinaryExtensions.WriteLittle(ref bytes, messageBodyOffset, value.Header.MessageBodyProperty.PackageIndex);
-            }
-            // 4. 处理数据体
-            messageBodyOffset = formatterResolver.GetFormatter<object>().Serialize(ref bytes, messageBodyOffset, value.Bodies, formatterResolver);
-            byte[] messageBodyBytes=null;
-            if (messageBodyOffset != 0)
-            {
-                messageBodyBytes = bytes.AsSpan().Slice(0, messageBodyOffset).ToArray();
-            }
-            // ------------------------------------开始组包
             // 1.起始符
             offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.Begin);
-            // 2.赋值头数据长度
-            value.Header.MessageBodyProperty.DataLength = messageBodyOffset;
+            // 2.头数据 下发不需要分包处理
+#warning 头部长度需要预先知道？？？？ 
             offset = formatterResolver.GetFormatter<JT808Header>().Serialize(ref bytes, offset, value.Header, formatterResolver);
-            if (messageBodyOffset != 0)
+            // 3.数据体
+            Type type = JT808FormattersBodiesFactory.Create(value.Header.MsgId);
+            if (type != null)
             {
-                Buffer.BlockCopy(messageBodyBytes, 0, bytes, offset, messageBodyOffset);
-                offset += messageBodyOffset;
+                // 3.1 处理数据体
+                offset = JT808FormatterResolverExtensions.JT808DynamicSerialize(formatterResolver.GetFormatterDynamic(type), ref bytes, offset, value.Bodies, formatterResolver);
             }
             // 4.校验码
             offset += BinaryExtensions.WriteLittle(ref bytes, offset, bytes.AsSpan().Slice(1, offset).ToXor(0, offset));

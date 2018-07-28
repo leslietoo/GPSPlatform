@@ -16,11 +16,8 @@ namespace JT808.Protocol
         /// </summary>
         [Key(0)]
         public JT808MsgId MsgId { get; set; }
-        /// <summary>
-        /// 消息体属性
-        /// </summary>
         [Key(1)]
-        public JT808MessageBodyProperty MessageBodyProperty { get; set; } = new JT808MessageBodyProperty();
+        public JT808MessageBodyProperty MessageBodyProperty { get; set; }
         /// <summary>
         /// 终端手机号
         /// 根据安装后终端自身的手机号转换。手机号不足 12 位，则在前补充数字，大陆手机号补充数字 0，港澳台则根据其区号进行位数补充
