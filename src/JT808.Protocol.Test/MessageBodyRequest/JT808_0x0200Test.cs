@@ -109,32 +109,6 @@ namespace JT808.Protocol.Test.MessageBodyRequest
         static JT808_0x0200Test()
         {
             JT808LocationAttachBase.AddJT808LocationAttachMethod<JT808LocationAttachImpl0x06>(0x06);
-            MessagePack.Resolvers.CompositeResolver.RegisterAndSetAsDefault(
-               new IMessagePackFormatter[]
-               {
-                   // for example, register reflection infos(can not serialize in default)
-                   new JT808MessageBodyPropertyFormatter(),
-                   new JT808PackageFromatter(),
-                   new JT808HeaderFormatter(),
-                   new JT808_0x0200Formatter(),
-                   new JT808_0x0200_0x01Formatter(),
-                   new JT808_0x0200_0x02Formatter(),
-                   new JT808_0x0200_0x03Formatter(),
-                   new JT808_0x0200_0x04Formatter(),
-                   new JT808_0x0200_0x11Formatter(),
-                   new JT808_0x0200_0x12Formatter(),
-                   new JT808_0x0200_0x13Formatter(),
-                   new JT808_0x0200_0x25Formatter(),
-                   new JT808_0x0200_0x2AFormatter(),
-                   new JT808_0x0200_0x2BFormatter(),
-                   new JT808_0x0200_0x30Formatter(),
-                   new JT808_0x0200_0x31Formatter(),
-                   new JT808_0x0200_0x06Formatter(),
-               },
-               new IFormatterResolver[]
-               {
-                    ContractlessStandardResolver.Instance
-               });
         }
 
         [Fact]
@@ -165,7 +139,7 @@ namespace JT808.Protocol.Test.MessageBodyRequest
                  MsgId= Enums.JT808MsgId.位置信息汇报,
                  MsgNum=8888,
                  TerminalPhoneNo="112233445566",
-                 MessageBodyProperty=new JT808MessageBodyProperty(38),
+                 //MessageBodyProperty=new JT808MessageBodyProperty(38),
             };
             JT808_0x0200 jT808UploadLocationRequest = new JT808_0x0200();
             jT808UploadLocationRequest.AlarmFlag = 1;
@@ -212,6 +186,8 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             //   02 
             //     00 37 
             //42 7E
+
+           
             byte[] bytes = "7E 02 00 00 26 11 22 33 44 55 66 22 B8 00 00 00 01 00 00 00 02 00 BA 7F 0E 07 E4 F1 1C 00 28 00 3C 00 00 18 07 15 10 10 10 01 04 00 00 00 64 02 02 00 37 57 7E".ToHexBytes();
             var jT808Package = MessagePackSerializer.Deserialize<JT808Package>(bytes);
             Assert.Equal(Enums.JT808MsgId.位置信息汇报, jT808Package.Header.MsgId);
@@ -234,84 +210,6 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             Assert.Equal(2, jT808UploadLocationRequest.StatusFlag);
             Assert.Equal(100, ((JT808LocationAttachImpl0x01)jT808UploadLocationRequest.JT808LocationAttachData[JT808LocationAttachBase.AttachId0x01]).Mileage);
             Assert.Equal(55, ((JT808LocationAttachImpl0x02)jT808UploadLocationRequest.JT808LocationAttachData[JT808LocationAttachBase.AttachId0x02]).Oil);
-        }
-
-        [Fact]
-        public void Test6()
-        {
-            byte[] bytes = "7E 02 00 00 6D 01 35 10 26 00 01 2A 9C 00 00 00 00 00 08 00 01 01 57 99 5C 06 CA 26 AC 02 72 00 00 01 48 18 07 22 16 01 10 01 04 00 00 80 73 10 01 63 2A 02 00 00 30 01 17 56 02 0A 00 53 31 06 01 CC 00 24 93 16 97 41 01 CC 00 26 39 13 BB 47 01 CC 00 24 93 14 03 47 01 CC 00 24 93 16 98 4A 01 CC 00 26 39 12 54 4B 01 CC 00 24 93 12 67 4F 57 08 00 00 00 00 00 00 00 00 66 7E".ToHexBytes();
-            // 没有解出位置信息自定义附加协议字段  只解出标准附加协议
-            //"7E 
-            //02 00 
-            //00 6D 
-            //01 35 10 26 00 01 
-            //2A 9C 
-            //00 00 00 00 
-            //00 08 00 01 
-            //01 57 99 5C 
-            //06 CA 26 AC 
-            //02 72 
-            //00 00 
-            //01 48 
-            //18 07 22 16 01 10 
-            //01 
-            //  04 
-            //      00 00 80 73 
-            //2A 
-            //  02 
-            //      00 00 
-            //30 
-            //  01 
-            //      17 
-            //01 
-            //7E
-
-            //7E 
-            //02 00 
-            //00 6D 
-            //01 35 10 26 00 01 
-            //2A 9C 
-            //00 00 00 00 
-            //00 08 00 01 
-            //01 57 99 5C 
-            //06 CA 26 AC 
-            //02 72 
-            //00 00 
-            //01 48 
-            //18 07 22 16 01 10 
-            //01 
-            //04 
-            //00 00 80 73 
-            //10 
-            //01 
-            //63 
-            //2A 
-            //02 
-            //00 00 
-            //30 
-            //01 
-            //17 
-            //56 
-            //02 
-            //0A 00 
-            //53 
-            //31 
-            //06 01 CC 00 24 93 
-            //16 97 41 01 CC 00 
-            //26 39 13 BB 47 01 
-            //CC 00 24 93 14 03 
-            //47 01 CC 00 24 93 
-            //16 98 4A 01 CC 00 
-            //26 39 12 54 4B 01 
-            //CC 00 24 93 12 67 4F 
-            //57 
-            //08 
-            //00 00 00 00 00 00 00 00 
-            //66 
-            //7E
-            JT808Package jT808Package = new JT808Package();
-            var bytes1 = MessagePackSerializer.Serialize(jT808Package);
-            string hex = bytes1.ToHexString();
         }
     }
 }

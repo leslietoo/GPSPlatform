@@ -14,15 +14,12 @@
   <ItemGroup>
     <Compile Remove="JT808PackageImpl\**" />
     <Compile Remove="JT808RequestProperties\JT808LocationAttachProperties\**" />
-    <Compile Remove="MessageBodyReply\**" />
     <Compile Remove="MessageBodySend\**" />
     <EmbeddedResource Remove="JT808PackageImpl\**" />
     <EmbeddedResource Remove="JT808RequestProperties\JT808LocationAttachProperties\**" />
-    <EmbeddedResource Remove="MessageBodyReply\**" />
     <EmbeddedResource Remove="MessageBodySend\**" />
     <None Remove="JT808PackageImpl\**" />
     <None Remove="JT808RequestProperties\JT808LocationAttachProperties\**" />
-    <None Remove="MessageBodyReply\**" />
     <None Remove="MessageBodySend\**" />
   </ItemGroup>
 
@@ -33,6 +30,8 @@
     <Compile Remove="JT808MessageBodyFactory.cs" />
     <Compile Remove="JT808RequestProperties\JT808TerminalLoginRequestProperty.cs" />
     <Compile Remove="JT808RequestProperties\JT808UploadLocationRequestProperty.cs" />
+    <Compile Remove="MessageBodyReply\JT808_0x8001.cs" />
+    <Compile Remove="MessageBodyReply\JT808_0x8100.cs" />
     <Compile Remove="MessageBodyRequest\JT808_0x0704.cs" />
     <Compile Remove="MessageBodyRequest\JT808_0x0801.cs" />
   </ItemGroup>

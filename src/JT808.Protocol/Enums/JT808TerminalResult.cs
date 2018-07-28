@@ -4,7 +4,7 @@ using System.Text;
 
 namespace JT808.Protocol.Enums
 {
-    public enum JT808TerminalResult
+    public enum JT808TerminalResult : byte
     {
         /// <summary>
         /// 成功/确认

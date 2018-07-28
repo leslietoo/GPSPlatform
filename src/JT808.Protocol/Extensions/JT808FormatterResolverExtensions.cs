@@ -13,7 +13,7 @@ namespace JT808.Protocol.Extensions
         public static int JT808DynamicSerialize(object objFormatter, ref byte[] bytes, int offset,dynamic bodiesImpl ,IFormatterResolver formatterResolver)
         {
             var methodInfo = objFormatter.GetType().GetMethod("Serialize");
-            return (int)methodInfo.Invoke(objFormatter, new object[] { bytes, offset, bodiesImpl, formatterResolver }); ;
+            return (int)methodInfo.Invoke(objFormatter, new object[] { bytes, offset, bodiesImpl, formatterResolver });
         }
 
         public static dynamic JT808DynamicDeserialize(object objFormatter, byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize)

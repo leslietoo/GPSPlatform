@@ -33,7 +33,7 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
         {
             offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.AreaID);
             offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.CityOrCountyId);
-            offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.MakerId);
+            offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.MakerId.PadRight(5, '0'));
             offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.TerminalType.PadRight(20,'0'));
             offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.TerminalId.PadRight(7, '0'));
             offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.PlateColor);

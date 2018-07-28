@@ -1,4 +1,5 @@
 ﻿using JT808.Protocol.Enums;
+using JT808.Protocol.MessageBodyReply;
 using JT808.Protocol.MessageBodyRequest;
 //using JT808.Protocol.MessageBodyReply;
 using System;
@@ -21,8 +22,8 @@ namespace JT808.Protocol.JT808Formatters
                     return typeof(JT808_0x0100);
                 //case JT808MsgId.终端注册应答:
                 //    return typeof(JT808_0x8100);
-                //case JT808MsgId.终端通用应答:
-                //    return typeof(JT808_0x0001);
+                case JT808MsgId.终端通用应答:
+                    return typeof(JT808_0x0001);
                 case JT808MsgId.位置信息汇报:
                     return  typeof(JT808_0x0200);
                 //case JT808MsgId.定位数据批量上传:
