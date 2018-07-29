@@ -26,8 +26,6 @@ namespace GPS.Gateway.JT808SuperSocketServer
     {
         public override string Name => "JT808";
 
-        public static readonly JT808GlobalConfigs JT808GlobalConfigs = new JT808GlobalConfigs();
-
         /// <summary>
         /// 平台流水号
         /// </summary>

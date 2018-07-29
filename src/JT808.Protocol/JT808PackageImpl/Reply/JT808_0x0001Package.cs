@@ -11,7 +11,7 @@ namespace JT808.Protocol.JT808PackageImpl.Reply
     /// </summary>
     public class JT808_0x0001Package : JT808PackageBase<JT808_0x0001>
     {
-        public JT808_0x0001Package(JT808Header jT808Header, ushort msgNum, JT808_0x0001 bodies, JT808GlobalConfigs jT808GlobalConfigs) : base(jT808Header, msgNum, bodies)
+        public JT808_0x0001Package(JT808Header jT808Header, ushort msgNum, JT808_0x0001 bodies) : base(jT808Header, msgNum, bodies)
         {
         }
 

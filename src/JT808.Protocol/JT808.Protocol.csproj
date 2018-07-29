@@ -27,6 +27,7 @@
     <Compile Remove="IJT808BufferedEntity.cs" />
     <Compile Remove="IJT808Properties.cs" />
     <Compile Remove="JT808BufferedEntityBase.cs" />
+    <Compile Remove="JT808GlobalConfigs.cs" />
     <Compile Remove="JT808MessageBodyFactory.cs" />
     <Compile Remove="JT808RequestProperties\JT808TerminalLoginRequestProperty.cs" />
     <Compile Remove="JT808RequestProperties\JT808UploadLocationRequestProperty.cs" />
