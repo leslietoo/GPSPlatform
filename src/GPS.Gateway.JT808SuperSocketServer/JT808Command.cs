@@ -34,7 +34,7 @@ namespace GPS.Gateway.JT808SuperSocketServer
         public override void ExecuteCommand(JT808Session<JT808RequestInfo> session, JT808RequestInfo requestInfo)
         {
             if (requestInfo.JT808Package == null) return;
-            string receive = MessagePack.MessagePackSerializer.Serialize(requestInfo.JT808Package).ToHexString();
+            string receive = requestInfo.OriginalBuffer.ToHexString();
             session.Logger.Debug("receive-" + receive);
             session.Logger.Debug("receive-" + requestInfo.JT808Package.Header.MsgId.ToString() + "-" + JsonConvert.SerializeObject(requestInfo.JT808Package));
             try

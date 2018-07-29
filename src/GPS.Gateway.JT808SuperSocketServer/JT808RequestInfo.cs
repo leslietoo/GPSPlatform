@@ -14,10 +14,13 @@ namespace GPS.Gateway.JT808SuperSocketServer
 
         public JT808Package JT808Package { get; }
 
+        public byte[] OriginalBuffer { get; }
+
         public JT808RequestInfo(byte[] buffer)
         {
             try
             {
+                OriginalBuffer = buffer;
                 JT808Package = MessagePack.MessagePackSerializer.Deserialize<JT808Package>(buffer);
             }
             catch (Exception ex)
