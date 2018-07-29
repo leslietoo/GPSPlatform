@@ -13,10 +13,14 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
     {
         public JT808_0x0001 Deserialize(byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize)
         {
+            offset = 0;
             JT808_0x0001 jT808_0X0001 = new JT808_0x0001();
-            jT808_0X0001.MsgNum = BinaryExtensions.ReadUInt16Little(bytes, offset);
+             jT808_0X0001.MsgNum = BinaryExtensions.ReadUInt16Little(bytes, offset);
+            offset = offset + 2;
             jT808_0X0001.MsgId =(JT808MsgId) BinaryExtensions.ReadUInt16Little(bytes, offset);
+            offset = offset + 2;
             jT808_0X0001.JT808TerminalResult = (JT808TerminalResult)BinaryExtensions.ReadByteLittle(bytes, offset);
+            offset = offset + 1;
             readSize = offset;
             return jT808_0X0001;
         }

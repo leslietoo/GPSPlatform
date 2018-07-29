@@ -16,12 +16,12 @@ namespace JT808.Protocol.JT808Formatters
                     return typeof(JT808_0x0102);
                 case JT808MsgId.终端心跳:
                     return typeof(JT808_0x0002);
-                //case JT808MsgId.平台通用应答:
-                //    return typeof(JT808_0x8001);
+                case JT808MsgId.平台通用应答:
+                    return typeof(JT808_0x8001);
                 case JT808MsgId.终端注册:
                     return typeof(JT808_0x0100);
-                //case JT808MsgId.终端注册应答:
-                //    return typeof(JT808_0x8100);
+                case JT808MsgId.终端注册应答:
+                    return typeof(JT808_0x8100);
                 case JT808MsgId.终端通用应答:
                     return typeof(JT808_0x0001);
                 case JT808MsgId.位置信息汇报:
