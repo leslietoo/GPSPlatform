@@ -2,6 +2,7 @@
 
 namespace JT808.Protocol.Exceptions
 {
+    [Serializable]
     public class JT808Exception:Exception
     {
         public JT808Exception()
