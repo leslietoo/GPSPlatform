@@ -6,7 +6,7 @@ using System;
 
 namespace JT808.Protocol.JT808Formatters
 {
-    public static class JT808FormattersBodiesFactory
+    internal static class JT808FormattersBodiesFactory
     {
         public static Type Create(JT808MsgId jT808MsgId)
         {

@@ -26,20 +26,6 @@ namespace GPS.Gateway.JT808SuperSocketServer
     {
         public override string Name => "JT808";
 
-        /// <summary>
-        /// 平台流水号
-        /// </summary>
-        private ushort _SNumId;
-
-        public ushort sNumId
-        {
-            get
-            {
-               if (_SNumId >= 65535) _SNumId = 0;
-               return  _SNumId++;
-            }
-        }
-
         public JT808Command()
         {
             InitHandler();
@@ -100,7 +86,7 @@ namespace GPS.Gateway.JT808SuperSocketServer
 
         private IJT808Package Msg0x0102(JT808Package jT808Package)
         {
-                return new JT808_0x8001Package(jT808Package.Header, sNumId, new JT808_0x8001()
+                return new JT808_0x8001Package(jT808Package.Header,  new JT808_0x8001()
                 {
                     MsgId = jT808Package.Header.MsgId,
                     JT808PlatformResult = JT808PlatformResult.Success,
@@ -110,7 +96,7 @@ namespace GPS.Gateway.JT808SuperSocketServer
 
         private IJT808Package Msg0x0002(JT808Package jT808Package)
         {
-            return new JT808_0x8001Package(jT808Package.Header, sNumId, new JT808_0x8001()
+            return new JT808_0x8001Package(jT808Package.Header,  new JT808_0x8001()
             {
                 MsgId = jT808Package.Header.MsgId,
                 JT808PlatformResult = JT808PlatformResult.Success,
@@ -120,7 +106,7 @@ namespace GPS.Gateway.JT808SuperSocketServer
 
         private IJT808Package Msg0x0003(JT808Package jT808Package)
         {
-            return new JT808_0x8001Package(jT808Package.Header, sNumId, new JT808_0x8001()
+            return new JT808_0x8001Package(jT808Package.Header,  new JT808_0x8001()
             {
                 MsgId = jT808Package.Header.MsgId,
                 JT808PlatformResult = JT808PlatformResult.Success,
@@ -130,7 +116,7 @@ namespace GPS.Gateway.JT808SuperSocketServer
 
         private IJT808Package Msg0x0100(JT808Package jT808Package)
         {
-            return new JT808_0x8100Package(jT808Package.Header, sNumId, new JT808_0x8100()
+            return new JT808_0x8100Package(jT808Package.Header,  new JT808_0x8100()
             {
                 Code = "J" + jT808Package.Header.TerminalPhoneNo,
                 JT808TerminalRegisterResult = JT808TerminalRegisterResult.成功,
@@ -143,7 +129,7 @@ namespace GPS.Gateway.JT808SuperSocketServer
         private IJT808Package Msg0x0200(JT808Package jT808Package)
         {
             //jT808_0X0200_Producer.MsgIdProducer.ProduceAsync(((ushort)JT808MsgId.位置信息汇报).ToString(), null, JsonConvert.SerializeObject(jT808Package));
-            return new JT808_0x8001Package(jT808Package.Header, sNumId, new JT808_0x8001()
+            return new JT808_0x8001Package(jT808Package.Header,  new JT808_0x8001()
             {
                 MsgId = jT808Package.Header.MsgId,
                 JT808PlatformResult = JT808PlatformResult.Success,
