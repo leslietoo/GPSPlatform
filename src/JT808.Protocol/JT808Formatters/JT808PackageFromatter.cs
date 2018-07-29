@@ -3,9 +3,8 @@ using MessagePack.Formatters;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Protocol.Common.Extensions;
-using JT808.Protocol.Exceptions;
 using JT808.Protocol.Extensions;
+using JT808.Protocol.Exceptions;
 
 namespace JT808.Protocol.JT808Formatters
 {
@@ -73,8 +72,8 @@ namespace JT808.Protocol.JT808Formatters
             int messageBodyOffset = 0;
             if (value.Header.MessageBodyProperty.IsPackge)
             {   //3. 先写入分包消息总包数、包序号 
-                messageBodyOffset += BinaryExtensions.WriteLittle(ref bytes, messageBodyOffset, value.Header.MessageBodyProperty.PackgeCount);
-                messageBodyOffset += BinaryExtensions.WriteLittle(ref bytes, messageBodyOffset, value.Header.MessageBodyProperty.PackageIndex);
+                messageBodyOffset += JT808BinaryExtensions.WriteLittle(ref bytes, messageBodyOffset, value.Header.MessageBodyProperty.PackgeCount);
+                messageBodyOffset += JT808BinaryExtensions.WriteLittle(ref bytes, messageBodyOffset, value.Header.MessageBodyProperty.PackageIndex);
             }
             // 4. 数据体
             Type type = JT808FormattersBodiesFactory.Create(value.Header.MsgId);
@@ -93,7 +92,7 @@ namespace JT808.Protocol.JT808Formatters
             }
             // ------------------------------------开始组包
             // 1.起始符
-            offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.Begin);
+            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.Begin);
             // 2.赋值头数据长度
             value.Header.MessageBodyProperty.DataLength = messageBodyOffset;
             offset = formatterResolver.GetFormatter<JT808Header>().Serialize(ref bytes, offset, value.Header, formatterResolver);
@@ -103,9 +102,9 @@ namespace JT808.Protocol.JT808Formatters
                 offset += messageBodyOffset;
             }
             // 4.校验码
-            offset += BinaryExtensions.WriteLittle(ref bytes, offset, bytes.AsSpan().Slice(1, offset).ToXor(0, offset));
+            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, bytes.AsSpan().Slice(1, offset).ToXor(0, offset));
             // 5.终止符
-            offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.End);
+            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.End);
             byte[] temp = JT808Escape(bytes.AsSpan().Slice(0, offset));
             Buffer.BlockCopy(temp, 0, bytes, 0, temp.Length);
             return temp.Length;

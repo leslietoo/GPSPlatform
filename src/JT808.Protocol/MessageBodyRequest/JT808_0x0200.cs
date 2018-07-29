@@ -4,7 +4,7 @@ using JT808.Protocol.JT808Formatters.MessageBodyFormatters;
 using JT808.Protocol.JT808RequestProperties;
 using JT808.Protocol.MessageBodyRequest.JT808LocationAttach;
 using MessagePack;
-using Protocol.Common.Extensions;
+using JT808.Protocol.Extensions;
 
 namespace JT808.Protocol.MessageBodyRequest
 {

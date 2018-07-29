@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Xunit;
-using Protocol.Common.Extensions;
+using JT808.Protocol.Extensions;
 using JT808.Protocol.Test.JT808LocationAttach;
 using System.IO;
 using MessagePack;

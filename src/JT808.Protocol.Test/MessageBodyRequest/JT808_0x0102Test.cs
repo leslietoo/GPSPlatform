@@ -1,7 +1,7 @@
 
 using Xunit;
 using JT808.Protocol.MessageBodyRequest;
-using Protocol.Common.Extensions;
+using JT808.Protocol.Extensions;
 using MessagePack;
 
 namespace JT808.Protocol.Test.MessageBodyRequest

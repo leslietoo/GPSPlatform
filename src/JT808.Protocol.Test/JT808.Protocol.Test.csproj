@@ -24,7 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\JT808.Protocol\JT808.Protocol.csproj" />
-    <ProjectReference Include="..\Protocol.Common\Protocol.Common.csproj" />
   </ItemGroup>
 
 </Project>

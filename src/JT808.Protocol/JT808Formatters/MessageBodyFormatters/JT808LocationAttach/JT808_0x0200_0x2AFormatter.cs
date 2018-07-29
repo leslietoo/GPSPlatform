@@ -1,7 +1,7 @@
 ﻿using JT808.Protocol.MessageBodyRequest.JT808LocationAttach;
 using MessagePack;
 using MessagePack.Formatters;
-using Protocol.Common.Extensions;
+using JT808.Protocol.Extensions;
 
 namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters.JT808LocationAttach
 {
@@ -11,11 +11,11 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters.JT808LocationAtta
         {
             offset = 0;
             JT808LocationAttachImpl0x2A jT808LocationAttachImpl0X2A = new JT808LocationAttachImpl0x2A();
-            jT808LocationAttachImpl0X2A.AttachInfoId = BinaryExtensions.ReadByteLittle(bytes, offset);
+            jT808LocationAttachImpl0X2A.AttachInfoId = JT808BinaryExtensions.ReadByteLittle(bytes, offset);
             offset = offset + 1;
-            jT808LocationAttachImpl0X2A.AttachInfoLength = BinaryExtensions.ReadByteLittle(bytes, offset);
+            jT808LocationAttachImpl0X2A.AttachInfoLength = JT808BinaryExtensions.ReadByteLittle(bytes, offset);
             offset = offset + 1;
-            jT808LocationAttachImpl0X2A.IOStatus = BinaryExtensions.ReadUInt16Little(bytes, offset);
+            jT808LocationAttachImpl0X2A.IOStatus = JT808BinaryExtensions.ReadUInt16Little(bytes, offset);
             offset = offset + 2;
             readSize = offset;
             return jT808LocationAttachImpl0X2A;
@@ -23,9 +23,9 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters.JT808LocationAtta
 
         public int Serialize(ref byte[] bytes, int offset, JT808LocationAttachImpl0x2A value, IFormatterResolver formatterResolver)
         {
-            offset += BinaryExtensions.WriteLittle(ref bytes, offset,value.AttachInfoId);
-            offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.AttachInfoLength);
-            offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.IOStatus);
+            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset,value.AttachInfoId);
+            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.AttachInfoLength);
+            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.IOStatus);
             return offset;
         }
     }

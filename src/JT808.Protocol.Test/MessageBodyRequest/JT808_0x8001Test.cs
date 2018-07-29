@@ -1,6 +1,6 @@
 ﻿using System.Text;
 using Xunit;
-using Protocol.Common.Extensions;
+using JT808.Protocol.Extensions;
 using JT808.Protocol.MessageBodyReply;
 using MessagePack;
 

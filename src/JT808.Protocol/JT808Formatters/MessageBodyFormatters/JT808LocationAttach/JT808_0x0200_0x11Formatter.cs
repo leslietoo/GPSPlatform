@@ -2,7 +2,7 @@
 using JT808.Protocol.MessageBodyRequest.JT808LocationAttach;
 using MessagePack;
 using MessagePack.Formatters;
-using Protocol.Common.Extensions;
+using JT808.Protocol.Extensions;
 
 namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters.JT808LocationAttach
 {
@@ -12,15 +12,15 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters.JT808LocationAtta
         {
             offset = 0;
             JT808LocationAttachImpl0x11 jT808LocationAttachImpl0x11 = new JT808LocationAttachImpl0x11();
-            jT808LocationAttachImpl0x11.AttachInfoId = BinaryExtensions.ReadByteLittle(bytes, offset);
+            jT808LocationAttachImpl0x11.AttachInfoId = JT808BinaryExtensions.ReadByteLittle(bytes, offset);
             offset = offset + 1;
-            jT808LocationAttachImpl0x11.AttachInfoLength = BinaryExtensions.ReadByteLittle(bytes, offset);
+            jT808LocationAttachImpl0x11.AttachInfoLength = JT808BinaryExtensions.ReadByteLittle(bytes, offset);
             offset = offset + 1;
-            jT808LocationAttachImpl0x11.JT808PositionType =(JT808PositionType)BinaryExtensions.ReadByteLittle(bytes, offset);
+            jT808LocationAttachImpl0x11.JT808PositionType =(JT808PositionType)JT808BinaryExtensions.ReadByteLittle(bytes, offset);
             offset = offset + 1;
             if (jT808LocationAttachImpl0x11.JT808PositionType != JT808PositionType.无特定位置)
             {
-                jT808LocationAttachImpl0x11.AreaId = BinaryExtensions.ReadInt32Little(bytes, offset);
+                jT808LocationAttachImpl0x11.AreaId = JT808BinaryExtensions.ReadInt32Little(bytes, offset);
                 offset = offset + 4;
             }
             readSize = offset;
@@ -29,12 +29,12 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters.JT808LocationAtta
 
         public int Serialize(ref byte[] bytes, int offset, JT808LocationAttachImpl0x11 value, IFormatterResolver formatterResolver)
         {
-            offset += BinaryExtensions.WriteLittle(ref bytes, offset,value.AttachInfoId);
-            offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.AttachInfoLength);
-            offset += BinaryExtensions.WriteLittle(ref bytes, offset, (byte)value.JT808PositionType);
+            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset,value.AttachInfoId);
+            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.AttachInfoLength);
+            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, (byte)value.JT808PositionType);
             if (value.JT808PositionType != JT808PositionType.无特定位置)
             {
-                offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.AreaId);
+                offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.AreaId);
             }
             return offset;
         }
