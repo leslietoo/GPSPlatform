@@ -56,6 +56,9 @@
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="MessagePack, Version=1.7.3.4, Culture=neutral, PublicKeyToken=b4a0369545f0a1be, processorArchitecture=MSIL">
+      <HintPath>..\packages\MessagePack.1.7.3.4\lib\net45\MessagePack.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -94,6 +97,12 @@
     </Reference>
     <Reference Include="System.Text.Encoding.CodePages, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Text.Encoding.CodePages.4.5.0\lib\net461\System.Text.Encoding.CodePages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.1\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -141,17 +150,17 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\JT808\src\JT808.Protocol\JT808.Protocol.csproj">
-      <Project>{0047ca84-014c-4707-8ae3-54eb5908ce81}</Project>
-      <Name>JT808.Protocol</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Protocol.Common\src\Protocol.Common\Protocol.Common.csproj">
-      <Project>{ff634083-adf8-4f2c-836a-5f09774579bd}</Project>
-      <Name>Protocol.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\JT808.MsgIdExtensions\JT808.MsgIdExtensions.csproj">
       <Project>{E2C3514D-EDBD-49D0-B172-423337227CC2}</Project>
       <Name>JT808.MsgIdExtensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\JT808.Protocol\JT808.Protocol.csproj">
+      <Project>{0eb9471e-c040-4ef0-bbdf-239f04736612}</Project>
+      <Name>JT808.Protocol</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Protocol.Common\Protocol.Common.csproj">
+      <Project>{37e6e9a4-49cf-4c05-b951-2301750d43c2}</Project>
+      <Name>Protocol.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
@@ -13,28 +12,43 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Extensions\**" />
+    <Compile Remove="JT808PackageImpl\**" />
     <Compile Remove="JT808RequestProperties\JT808LocationAttachProperties\**" />
-    <EmbeddedResource Remove="Extensions\**" />
+    <Compile Remove="MessageBodySend\**" />
+    <EmbeddedResource Remove="JT808PackageImpl\**" />
     <EmbeddedResource Remove="JT808RequestProperties\JT808LocationAttachProperties\**" />
-    <None Remove="Extensions\**" />
+    <EmbeddedResource Remove="MessageBodySend\**" />
+    <None Remove="JT808PackageImpl\**" />
     <None Remove="JT808RequestProperties\JT808LocationAttachProperties\**" />
+    <None Remove="MessageBodySend\**" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="IJT808BufferedEntity.cs" />
     <Compile Remove="IJT808Properties.cs" />
+    <Compile Remove="JT808BufferedEntityBase.cs" />
+    <Compile Remove="JT808MessageBodyFactory.cs" />
     <Compile Remove="JT808RequestProperties\JT808TerminalLoginRequestProperty.cs" />
     <Compile Remove="JT808RequestProperties\JT808UploadLocationRequestProperty.cs" />
+    <Compile Remove="MessageBodyRequest\JT808_0x0801.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="JT808PackageImpl\JT808PackageBase.cs" />
+    <Compile Include="JT808PackageImpl\Reply\JT808_0x0001Package.cs" />
+    <Compile Include="JT808PackageImpl\Reply\JT808_0x8001Package.cs" />
+    <Compile Include="JT808PackageImpl\Reply\JT808_0x8100Package.cs" />
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="protobuf-net" Version="2.3.14" />
+    <PackageReference Include="MessagePack" Version="1.7.3.4" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
+    <PackageReference Include="System.Dynamic.Runtime" Version="4.3.0" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.5.0" />
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Protocol.Common\src\Protocol.Common\Protocol.Common.csproj" />
+    <ProjectReference Include="..\Protocol.Common\Protocol.Common.csproj" />
   </ItemGroup>
 
 </Project>

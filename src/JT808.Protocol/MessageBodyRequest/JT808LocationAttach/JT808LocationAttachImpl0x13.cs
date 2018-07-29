@@ -1,57 +1,37 @@
 ﻿using System;
 using JT808.Protocol.Enums;
-using Protocol.Common.Extensions;
+using JT808.Protocol.JT808Formatters.MessageBodyFormatters.JT808LocationAttach;
+using MessagePack;
 
 
 namespace JT808.Protocol.MessageBodyRequest.JT808LocationAttach
 {
+    [MessagePackObject]
+    [MessagePackFormatter(typeof(JT808_0x0200_0x13Formatter))]
     public class JT808LocationAttachImpl0x13 : JT808LocationAttachBase
     {
-        public JT808LocationAttachImpl0x13()
-        {
-        }
-
-        public JT808LocationAttachImpl0x13(Memory<byte> buffer) : base(buffer)
-        {
-        }
-
-        public override byte AttachInfoId { get; protected set; } = 0x13;
-
-        public override byte AttachInfoLength { get; protected set; } = 7;
+        [Key(0)]
+        public override byte AttachInfoId { get;  set; } = 0x13;
+        [Key(1)]
+        public override byte AttachInfoLength { get;  set; } = 7;
 
         /// <summary>
         /// 路段 ID
         /// </summary>
+        [Key(2)]
         public int DrivenRouteId { get; set; }
 
         /// <summary>
         /// 路段行驶时间
         /// 单位为秒（s)
         /// </summary>
-        public int Time { get; set; }
+        [Key(3)]
+        public ushort Time { get; set; }
 
         /// <summary>
         ///  结果 0：不足；1：过长
         /// </summary>
+        [Key(4)]
         public JT808DrivenRouteType DrivenRoute { get; set; }
-
-        public override void ReadBuffer(JT808GlobalConfigs jT808GlobalConfigs)
-        {
-            AttachInfoId = Buffer.Span[0];
-            AttachInfoLength = Buffer.Span[1];
-            DrivenRouteId = Buffer.Span.ReadIntH2L(2, 4);
-            Time = Buffer.Span.ReadIntH2L(6, 2);
-            DrivenRoute = (JT808DrivenRouteType)Buffer.Span[8];
-        }
-
-        public override void WriteBuffer(JT808GlobalConfigs jT808GlobalConfigs)
-        {
-            Buffer= new byte[1+1+AttachInfoLength];
-            Buffer.Span.WriteLittle(AttachInfoId, 0);
-            Buffer.Span.WriteLittle(AttachInfoLength, 1);
-            Buffer.Span.WriteLittle(DrivenRouteId, 2, 4);
-            Buffer.Span.WriteLittle(Time, 6, 2);
-            Buffer.Span.WriteLittle((byte)DrivenRoute, 8);
-        }
     }
 }

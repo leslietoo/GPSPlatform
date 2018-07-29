@@ -17,9 +17,9 @@ namespace JT808.Protocol.JT808PackageImpl.Send
             bodies.WriteBuffer(jT808GlobalConfigs);
             JT808Package jT808Package = new JT808Package();
             jT808Package.Header = new JT808Header();
-            jT808Package.Header.DataLength = bodies.Buffer.Length;
+            jT808Package.Header.MessageBodyProperty = new JT808MessageBodyProperty(bodies.Buffer.Length);
             jT808Package.Header.MsgId = JT808MsgId.文本信息下发;
-            jT808Package.Header.MsgNum = msgNum;
+            jT808Package.Header.MsgNum = (ushort)msgNum;
             jT808Package.Header.TerminalPhoneNo = jT808Header.TerminalPhoneNo;
             jT808Package.Header.WriteBuffer(jT808GlobalConfigs);
             jT808Package.Bodies = bodies;

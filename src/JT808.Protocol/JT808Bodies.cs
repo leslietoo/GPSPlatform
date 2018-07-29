@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using MessagePack;
+
 namespace JT808.Protocol
 {
-    public abstract class JT808Bodies : JT808BufferedEntityBase
+    [MessagePackObject]
+    public abstract class JT808Bodies
     {
-        public JT808Bodies(Memory<byte> buffer) : base(buffer)
-        {
 
-        }
-
-        public JT808Bodies()
-        {
-
-        }
     }
 }

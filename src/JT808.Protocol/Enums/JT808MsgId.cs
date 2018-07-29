@@ -14,7 +14,7 @@ namespace JT808.Protocol.Enums
         /// </summary>
         终端通用应答 = 0x0001,
         /// <summary>
-        /// 心跳
+        /// 终端心跳
         /// </summary>
         终端心跳 = 0x0002,
         /// <summary>

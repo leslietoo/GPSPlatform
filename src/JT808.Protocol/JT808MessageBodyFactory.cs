@@ -1,10 +1,7 @@
 ﻿using JT808.Protocol.Enums;
 using JT808.Protocol.MessageBodyRequest;
-using JT808.Protocol.MessageBodyReply;
+//using JT808.Protocol.MessageBodyReply;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using JT808.Protocol.JT808RequestProperties;
 
 namespace JT808.Protocol
 {

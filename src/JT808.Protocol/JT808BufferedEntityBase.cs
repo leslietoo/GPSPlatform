@@ -1,8 +1,10 @@
-﻿using System;
+﻿using MessagePack;
+using System;
 using System.Runtime.Serialization;
 
 namespace JT808.Protocol
 {
+    [MessagePackObject]
     public abstract class JT808BufferedEntityBase
     {
         [IgnoreDataMember]

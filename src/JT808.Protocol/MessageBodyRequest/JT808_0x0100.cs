@@ -1,30 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Protocol.Common.Extensions;
+﻿using MessagePack;
+using JT808.Protocol.JT808Formatters.MessageBodyFormatters;
 
 namespace JT808.Protocol.MessageBodyRequest
 {
     /// <summary>
     /// 终端注册
     /// </summary>
+    [MessagePackObject]
+    [MessagePackFormatter(typeof(JT808_0x0100Formatter))]
     public class JT808_0x0100 : JT808Bodies
     {
-        public JT808_0x0100()
-        {
-        }
-
-        public JT808_0x0100(Memory<byte> buffer) : base(buffer)
-        {
-        }
-
         /// <summary>
         /// 省域 ID
         /// 标示终端安装车辆所在的省域，0 保留，由平台取默
         /// 认值。省域 ID 采用 GB/T 2260 中规定的行政区划代
         /// 码六位中前两位
         /// </summary>
-        public int AreaID { get; set; }
+        [Key(0)]
+        public ushort AreaID { get; set; }
 
         /// <summary>
         /// 市县域 ID
@@ -32,12 +25,14 @@ namespace JT808.Protocol.MessageBodyRequest
         /// 台取默认值。市县域 ID 采用 GB/T 2260 中规定的行
         /// 政区划代码六位中后四位。
         /// </summary>
-        public int CityOrCountyId { get; set; }
+        [Key(1)]
+        public ushort CityOrCountyId { get; set; }
 
         /// <summary>
         /// 制造商 ID
         /// 5 个字节，终端制造商编码
         /// </summary>
+        [Key(2)]
         public string MakerId { get; set; }
 
         /// <summary>
@@ -45,6 +40,7 @@ namespace JT808.Protocol.MessageBodyRequest
         /// 20 个字节，此终端型号由制造商自行定义，位数不
         /// 足时，后补“0X00”。
         /// </summary>
+        [Key(3)]
         public string TerminalType { get; set; }
 
         /// <summary>
@@ -52,6 +48,7 @@ namespace JT808.Protocol.MessageBodyRequest
         /// 7 个字节，由大写字母和数字组成，此终端 ID 由制
         /// 造商自行定义，位数不足时，后补“0X00”。
         /// </summary>
+        [Key(4)]
         public string TerminalId { get; set; }
 
         /// <summary>
@@ -59,6 +56,7 @@ namespace JT808.Protocol.MessageBodyRequest
         /// 车牌颜色，按照 JT/T415-2006 的 5.4.12。
         /// 未上牌时，取值为 0。
         /// </summary>
+        [Key(5)]
         public byte PlateColor { get; set; }
 
         /// <summary>
@@ -66,30 +64,7 @@ namespace JT808.Protocol.MessageBodyRequest
         /// 车牌颜色为 0 时，表示车辆 VIN；
         /// 否则，表示公安交通管理部门颁发的机动车号牌。
         /// </summary>
+        [Key(6)]
         public string PlateNo { get; set; }
-
-        public override void ReadBuffer(JT808GlobalConfigs jT808GlobalConfigs)
-        {
-            AreaID = Buffer.Span.ReadIntH2L(0, 2);
-            CityOrCountyId = Buffer.Span.ReadIntH2L(2, 2);
-            MakerId = Buffer.Span.ReadStringLittle(4, 5);
-            TerminalType= Buffer.Span.ReadStringLittle(9, 20);
-            TerminalId = Buffer.Span.ReadStringLittle(29, 7);
-            PlateColor = Buffer.Span[36];
-            PlateNo = Buffer.Span.Slice(37).ReadStringLittle(0);
-        }
-
-        public override void WriteBuffer(JT808GlobalConfigs jT808GlobalConfigs)
-        {
-            List<byte> bytes = new List<byte>();
-            bytes.AddRange(AreaID.ToBytes(2));
-            bytes.AddRange(CityOrCountyId.ToBytes(2));
-            bytes.AddRange(MakerId.ToBytes());
-            bytes.AddRange(TerminalType.ToBytes());
-            bytes.AddRange(TerminalId.ToBytes());
-            bytes.Add(PlateColor);
-            bytes.AddRange(PlateNo.ToBytes());
-            Buffer = bytes.ToArray();
-        }
     }
 }
