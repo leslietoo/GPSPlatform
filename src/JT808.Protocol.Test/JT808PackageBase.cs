@@ -41,6 +41,7 @@ namespace JT808.Protocol.Test
                    new JT808_0x0001Formatter(),
                    new JT808_0x8001Formatter(),
                    new JT808_0x8100Formatter(),
+                   new JT808_0x0704Formatter(),
                },
                new IFormatterResolver[]
                {

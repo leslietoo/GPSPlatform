@@ -30,7 +30,6 @@
     <Compile Remove="JT808MessageBodyFactory.cs" />
     <Compile Remove="JT808RequestProperties\JT808TerminalLoginRequestProperty.cs" />
     <Compile Remove="JT808RequestProperties\JT808UploadLocationRequestProperty.cs" />
-    <Compile Remove="MessageBodyRequest\JT808_0x0704.cs" />
     <Compile Remove="MessageBodyRequest\JT808_0x0801.cs" />
   </ItemGroup>
   

@@ -26,8 +26,8 @@ namespace JT808.Protocol.JT808Formatters
                     return typeof(JT808_0x0001);
                 case JT808MsgId.位置信息汇报:
                     return  typeof(JT808_0x0200);
-                //case JT808MsgId.定位数据批量上传:
-                //    return  typeof(JT808_0x0704);
+                case JT808MsgId.定位数据批量上传:
+                    return typeof(JT808_0x0704);
                 //case JT808MsgId.多媒体数据上传:
                 //     return typeof(JT808_0x0801);
                 default:
