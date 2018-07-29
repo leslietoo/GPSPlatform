@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 //using JT808.Protocol.JT808PackageImpl.Reply;
-using Protocol.Common.Extensions;
 using Newtonsoft.Json;
 using JT808.Protocol.Exceptions;
 using Confluent.Kafka;
@@ -16,6 +15,7 @@ using Confluent.Kafka.Serialization;
 using SuperSocket.SocketBase;
 using JT808.MsgIdExtensions;
 using JT808.Protocol.JT808PackageImpl.Reply;
+using JT808.Protocol.Extensions;
 
 namespace GPS.Gateway.JT808SuperSocketServer
 {

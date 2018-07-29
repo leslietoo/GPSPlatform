@@ -1,7 +1,7 @@
 ﻿using JT808.Protocol.MessageBodyRequest;
 using MessagePack;
 using MessagePack.Formatters;
-using Protocol.Common.Extensions;
+using JT808.Protocol.Extensions;
 
 
 namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
@@ -12,7 +12,7 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
         {
             offset = 0;
             JT808_0x0102 jT808_0X0102 = new JT808_0x0102();
-            jT808_0X0102.Code = BinaryExtensions.ReadStringLittle(bytes, offset);
+            jT808_0X0102.Code = JT808BinaryExtensions.ReadStringLittle(bytes, offset);
             offset= jT808_0X0102.Code.Length;
             readSize = offset;
             return jT808_0X0102;
@@ -20,7 +20,7 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
 
         public int Serialize(ref byte[] bytes, int offset, JT808_0x0102 value, IFormatterResolver formatterResolver)
         {
-            offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.Code);
+            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.Code);
             return offset;
         }
     }

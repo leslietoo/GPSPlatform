@@ -158,10 +158,6 @@
       <Project>{0eb9471e-c040-4ef0-bbdf-239f04736612}</Project>
       <Name>JT808.Protocol</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Protocol.Common\Protocol.Common.csproj">
-      <Project>{37e6e9a4-49cf-4c05-b951-2301750d43c2}</Project>
-      <Name>Protocol.Common</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

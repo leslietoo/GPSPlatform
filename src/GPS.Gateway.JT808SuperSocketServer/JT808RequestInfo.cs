@@ -4,7 +4,7 @@ using SuperSocket.SocketBase.Protocol;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Protocol.Common.Extensions;
+using JT808.Protocol.Extensions;
 
 namespace GPS.Gateway.JT808SuperSocketServer
 {

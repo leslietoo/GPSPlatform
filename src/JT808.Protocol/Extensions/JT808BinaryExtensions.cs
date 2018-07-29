@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 
-namespace Protocol.Common.Extensions
+namespace JT808.Protocol.Extensions
 {
-    public static class BinaryExtensions
+    public  static   class JT808BinaryExtensions
     {
         /// <summary>
         /// 日期限制于2000年
@@ -27,12 +26,12 @@ namespace Protocol.Common.Extensions
 
         public static string ReadStringLittle(this byte[] read, int offset, int len)
         {
-            return Encoding.GetEncoding("GBK").GetString(read, offset,  len).Trim('\0');
+            return Encoding.GetEncoding("GBK").GetString(read, offset, len).Trim('\0');
         }
 
         public static string ReadStringLittle(this byte[] read, int offset)
         {
-            return Encoding.GetEncoding("GBK").GetString(read, offset, Math.Abs(read.Length- offset)).Trim('\0');
+            return Encoding.GetEncoding("GBK").GetString(read, offset, Math.Abs(read.Length - offset)).Trim('\0');
         }
 
         //public static void WriteLatLng(byte[] write, int offset,double latlng)
@@ -60,16 +59,16 @@ namespace Protocol.Common.Extensions
         {
             return new DateTime(
                 (buf[offset]).ReadBCD32(1) + DateLimitYear,
-                (buf[offset+1]).ReadBCD32(1),
-                (buf[offset+2]).ReadBCD32(1),
-                (buf[offset+3]).ReadBCD32(1),
-                (buf[offset+4]).ReadBCD32(1),
-                (buf[offset+5]).ReadBCD32(1));
+                (buf[offset + 1]).ReadBCD32(1),
+                (buf[offset + 2]).ReadBCD32(1),
+                (buf[offset + 3]).ReadBCD32(1),
+                (buf[offset + 4]).ReadBCD32(1),
+                (buf[offset + 5]).ReadBCD32(1));
         }
 
-        public static int ReadInt32Little(byte[] read,int offset)
+        public static int ReadInt32Little(byte[] read, int offset)
         {
-           return (read[offset] << 24) | (read[offset+1] << 16) | (read[offset + 2] << 8) | read[offset + 3];
+            return (read[offset] << 24) | (read[offset + 1] << 16) | (read[offset + 2] << 8) | read[offset + 3];
         }
 
         public static ushort ReadUInt16Little(byte[] read, int offset)
@@ -85,20 +84,20 @@ namespace Protocol.Common.Extensions
         public static int WriteLittle(ref byte[] write, int offset, DateTime date)
         {
             write[offset] = ((byte)(date.Year - DateLimitYear)).ToBcdByte();
-            write[offset+1] = ((byte)(date.Month)).ToBcdByte();
-            write[offset+2] = ((byte)(date.Day)).ToBcdByte();
-            write[offset+3] = ((byte)(date.Hour)).ToBcdByte();
-            write[offset+4] = ((byte)(date.Minute)).ToBcdByte();
-            write[offset+5] = ((byte)(date.Second)).ToBcdByte();
+            write[offset + 1] = ((byte)(date.Month)).ToBcdByte();
+            write[offset + 2] = ((byte)(date.Day)).ToBcdByte();
+            write[offset + 3] = ((byte)(date.Hour)).ToBcdByte();
+            write[offset + 4] = ((byte)(date.Minute)).ToBcdByte();
+            write[offset + 5] = ((byte)(date.Second)).ToBcdByte();
             return 6;
         }
 
         public static int WriteLittle(ref byte[] write, int offset, int data)
         {
-            write[offset] =(byte)(data >> 24);
+            write[offset] = (byte)(data >> 24);
             write[offset + 1] = (byte)(data >> 16);
-            write[offset + 2] =(byte)(data >> 8);
-            write[offset + 3] =(byte)data;
+            write[offset + 2] = (byte)(data >> 8);
+            write[offset + 3] = (byte)data;
             return 4;
         }
 
@@ -117,8 +116,8 @@ namespace Protocol.Common.Extensions
 
         public static int WriteLittle(ref byte[] write, int offset, string data)
         {
-            byte[] codeBytes= Encoding.GetEncoding("GBK").GetBytes(data);
-            Buffer.BlockCopy(codeBytes,0,write, offset, codeBytes.Length);
+            byte[] codeBytes = Encoding.GetEncoding("GBK").GetBytes(data);
+            Buffer.BlockCopy(codeBytes, 0, write, offset, codeBytes.Length);
             return codeBytes.Length;
         }
 
@@ -141,7 +140,7 @@ namespace Protocol.Common.Extensions
             }
         }
 
-        public static IEnumerable<byte> ToBytes(this string data,Encoding coding)
+        public static IEnumerable<byte> ToBytes(this string data, Encoding coding)
         {
             return coding.GetBytes(data);
         }
@@ -268,6 +267,5 @@ namespace Protocol.Common.Extensions
             //}
             //return Regex.Replace(hexString, @"(\w{2})", "$1 ").Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries).Select(s => Convert.ToByte(s, 16)).ToArray();
         }
-
     }
 }

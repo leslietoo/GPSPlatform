@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Xunit;
-using Protocol.Common.Extensions;
+using JT808.Protocol.Extensions;
 using JT808.Protocol.MessageBodyRequest;
 using JT808.Protocol.MessageBodyRequest.JT808LocationAttach;
 using MessagePack;

@@ -1,7 +1,7 @@
 ﻿using JT808.Protocol.Enums;
 using JT808.Protocol.JT808Formatters.MessageBodyFormatters;
 using MessagePack;
-using Protocol.Common.Extensions;
+using JT808.Protocol.Extensions;
 using System;
 
 namespace JT808.Protocol.MessageBodyReply

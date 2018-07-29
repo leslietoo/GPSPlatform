@@ -1,6 +1,6 @@
 ﻿using System;
 using JT808.Protocol.MessageBodyRequest.JT808LocationAttach;
-using Protocol.Common.Extensions;
+using JT808.Protocol.Extensions;
 using MessagePack;
 using JT808.Protocol.Test.JT808Formatters.MessageBodyFormatters.JT808LocationAttach;
 

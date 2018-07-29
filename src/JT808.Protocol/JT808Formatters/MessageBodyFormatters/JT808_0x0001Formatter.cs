@@ -2,7 +2,7 @@
 using JT808.Protocol.MessageBodyReply;
 using MessagePack;
 using MessagePack.Formatters;
-using Protocol.Common.Extensions;
+using JT808.Protocol.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -15,11 +15,11 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
         {
             offset = 0;
             JT808_0x0001 jT808_0X0001 = new JT808_0x0001();
-             jT808_0X0001.MsgNum = BinaryExtensions.ReadUInt16Little(bytes, offset);
+             jT808_0X0001.MsgNum = JT808BinaryExtensions.ReadUInt16Little(bytes, offset);
             offset = offset + 2;
-            jT808_0X0001.MsgId =(JT808MsgId) BinaryExtensions.ReadUInt16Little(bytes, offset);
+            jT808_0X0001.MsgId =(JT808MsgId) JT808BinaryExtensions.ReadUInt16Little(bytes, offset);
             offset = offset + 2;
-            jT808_0X0001.JT808TerminalResult = (JT808TerminalResult)BinaryExtensions.ReadByteLittle(bytes, offset);
+            jT808_0X0001.JT808TerminalResult = (JT808TerminalResult)JT808BinaryExtensions.ReadByteLittle(bytes, offset);
             offset = offset + 1;
             readSize = offset;
             return jT808_0X0001;
@@ -27,9 +27,9 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
 
         public int Serialize(ref byte[] bytes, int offset, JT808_0x0001 value, IFormatterResolver formatterResolver)
         {
-            offset += BinaryExtensions.WriteLittle(ref bytes, offset, value.MsgNum);
-            offset += BinaryExtensions.WriteLittle(ref bytes, offset,(ushort) value.MsgId);
-            offset += BinaryExtensions.WriteLittle(ref bytes, offset, (byte)value.JT808TerminalResult);
+            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.MsgNum);
+            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset,(ushort) value.MsgId);
+            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, (byte)value.JT808TerminalResult);
             return offset;
         }
     }

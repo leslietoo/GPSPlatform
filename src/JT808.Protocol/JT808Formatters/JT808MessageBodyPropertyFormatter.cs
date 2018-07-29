@@ -1,7 +1,7 @@
 ﻿using JT808.Protocol.Enums;
 using MessagePack;
 using MessagePack.Formatters;
-using Protocol.Common.Extensions;
+using JT808.Protocol.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,7 +16,7 @@ namespace JT808.Protocol.JT808Formatters
         public JT808MessageBodyProperty Deserialize(byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize)
         {
             JT808MessageBodyProperty messageBodyProperty = new JT808MessageBodyProperty();
-            ReadOnlySpan<char> msgMethod = Convert.ToString(BinaryExtensions.ReadUInt16Little(bytes, offset), 2).PadLeft(16, '0').AsSpan();
+            ReadOnlySpan<char> msgMethod = Convert.ToString(JT808BinaryExtensions.ReadUInt16Little(bytes, offset), 2).PadLeft(16, '0').AsSpan();
             messageBodyProperty.DataLength = Convert.ToInt32(msgMethod.Slice(6, 10).ToString(), 2);
             //  2.2. 数据加密方式
             switch (msgMethod.Slice(3, 3).ToString())
@@ -78,7 +78,7 @@ namespace JT808.Protocol.JT808Formatters
             {
                 msgMethod[5 + i] = dataLen[i - 1];
             }
-            offset+= BinaryExtensions.WriteLittle(ref bytes, offset, Convert.ToUInt16(msgMethod.ToString(), 2));
+            offset+= JT808BinaryExtensions.WriteLittle(ref bytes, offset, Convert.ToUInt16(msgMethod.ToString(), 2));
             return offset;
         }
     }
