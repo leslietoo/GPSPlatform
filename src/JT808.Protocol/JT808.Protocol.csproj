@@ -32,6 +32,13 @@
     <Compile Remove="JT808RequestProperties\JT808UploadLocationRequestProperty.cs" />
     <Compile Remove="MessageBodyRequest\JT808_0x0801.cs" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="JT808PackageImpl\JT808PackageBase.cs" />
+    <Compile Include="JT808PackageImpl\Reply\JT808_0x0001Package.cs" />
+    <Compile Include="JT808PackageImpl\Reply\JT808_0x8001Package.cs" />
+    <Compile Include="JT808PackageImpl\Reply\JT808_0x8100Package.cs" />
+  </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="MessagePack" Version="1.7.3.4" />

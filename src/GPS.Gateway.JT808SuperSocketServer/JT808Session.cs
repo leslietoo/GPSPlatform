@@ -15,7 +15,8 @@ namespace GPS.Gateway.JT808SuperSocketServer
 
         public  bool TrySend(IJT808Package jT808Package)
         {
-           return base.TrySend(jT808Package.JT808Package.Buffer.ToArray(), 0, jT808Package.JT808Package.Buffer.Length);
+            byte[] sendData = MessagePack.MessagePackSerializer.Serialize(jT808Package.JT808Package);
+           return base.TrySend(sendData, 0, sendData.Length);
         }
 
         //protected override void OnSessionStarted()

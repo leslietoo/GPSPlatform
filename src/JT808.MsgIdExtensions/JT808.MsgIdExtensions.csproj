@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\JT808\src\JT808.Protocol\JT808.Protocol.csproj" />
+    <ProjectReference Include="..\JT808.Protocol\JT808.Protocol.csproj" />
   </ItemGroup>
 
 </Project>
