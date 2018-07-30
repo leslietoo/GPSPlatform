@@ -27,21 +27,18 @@ namespace GPS.Gateway.JT808SuperSocketServer
         public void Start()
         {
             bootstrap = BootstrapFactory.CreateBootstrap();
-            Console.WriteLine("1");
+            Console.WriteLine(bootstrap.StartupConfigFile);
             if (!bootstrap.Initialize())
             {
-                Console.WriteLine("2");
                 log.Error("Failed to initialize SuperSocket ServiceEngine! Please check error log for more information!");
                 return;
             }
-            Console.WriteLine("3");
             var result = bootstrap.Start();
             foreach (var server in bootstrap.AppServers)
             {
                 if (server.State == ServerState.Running)
                 {
                     log.InfoFormat("- {0} has been started", server.Name);
-                    //HandlerManager.SendAction = Send;
                 }
                 else
                 {

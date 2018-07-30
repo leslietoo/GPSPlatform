@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GPS.Gateway.JT808SuperSocketServer
@@ -12,18 +13,27 @@ namespace GPS.Gateway.JT808SuperSocketServer
     {
         static void Main(string[] args)
         {
-            JT808Service jT808Service = new JT808Service();
-            jT808Service.Start();
-            //while (Console.ReadKey().KeyChar != 'q')
-            //{
-            //    Console.WriteLine();
-            //    continue;
-            //}
-            //Console.Read();
-            //jT808Service.Stop();
-            Console.Read();
-            jT808Service.Stop();
-            Console.Read();
+            try
+            {
+                CancellationTokenSource cts = new CancellationTokenSource();
+                Console.CancelKeyPress += new ConsoleCancelEventHandler((sender, e) =>
+                {
+                    cts.Cancel();
+                });
+                JT808Service jT808Service = new JT808Service();
+                Console.WriteLine("Start:" + jT808Service.ServiceName);
+                jT808Service.Start();
+                while (!cts.IsCancellationRequested)
+                {
+
+                }
+                Console.WriteLine("Stop:" + jT808Service.ServiceName);
+                jT808Service.Stop();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error:" + ex.ToString());
+            }
         }
     }
 }

@@ -125,11 +125,11 @@ namespace GPS.Gateway.JT808SuperSocketServer
             });
         }
 
-        private static readonly JT808_0x0200_Producer jT808_0X0200_Producer = new JT808_0x0200_Producer();
+        //private static readonly JT808_0x0200_Producer jT808_0X0200_Producer = new JT808_0x0200_Producer();
 
         private IJT808Package Msg0x0200(JT808Package jT808Package)
         {
-            jT808_0X0200_Producer.MsgIdProducer.ProduceAsync(jT808_0X0200_Producer.JT808MsgIdTopic, null, MessagePack.MessagePackSerializer.Serialize(jT808Package));
+            //T808_0X0200_Producer.MsgIdProducer.ProduceAsync(jT808_0X0200_Producer.JT808MsgIdTopic, null, MessagePack.MessagePackSerializer.Serialize(jT808Package));
             return new JT808_0x8001Package(jT808Package.Header,  new JT808_0x8001()
             {
                 MsgId = jT808Package.Header.MsgId,
