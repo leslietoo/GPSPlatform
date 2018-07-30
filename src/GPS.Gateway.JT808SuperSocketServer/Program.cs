@@ -14,11 +14,13 @@ namespace GPS.Gateway.JT808SuperSocketServer
         {
             JT808Service jT808Service = new JT808Service();
             jT808Service.Start();
-            while (Console.ReadKey().KeyChar != 'q')
-            {
-                Console.WriteLine();
-                continue;
-            }
+            //while (Console.ReadKey().KeyChar != 'q')
+            //{
+            //    Console.WriteLine();
+            //    continue;
+            //}
+            //Console.Read();
+            //jT808Service.Stop();
             Console.Read();
             jT808Service.Stop();
             Console.Read();
