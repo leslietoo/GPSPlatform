@@ -57,6 +57,9 @@ namespace JT808.Protocol.Enums
         /// 多媒体数据上传
         /// </summary>
         多媒体数据上传 = 0x0801,
-
+        /// <summary>
+        /// 自定义统一下发消息
+        /// </summary>
+        自定义统一下发消息= 0x9990
     }
 }

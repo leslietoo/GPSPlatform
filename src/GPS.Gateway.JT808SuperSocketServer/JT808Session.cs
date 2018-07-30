@@ -12,8 +12,12 @@ namespace GPS.Gateway.JT808SuperSocketServer
     public class JT808Session<TRequestInfo> : AppSession<JT808Session<TRequestInfo>, TRequestInfo>
          where TRequestInfo : class, IRequestInfo
     {
+        /// <summary>
+        /// 终端手机号
+        /// </summary>
+        public string TerminalPhoneNo { get; set; }
 
-        public  bool TrySend(IJT808Package jT808Package)
+        public bool TrySend(IJT808Package jT808Package)
         {
             byte[] sendData = MessagePack.MessagePackSerializer.Serialize(jT808Package.JT808Package);
            return base.TrySend(sendData, 0, sendData.Length);
@@ -39,7 +43,7 @@ namespace GPS.Gateway.JT808SuperSocketServer
         /// <param name="e"></param>
         protected override void HandleException(Exception e)
         {
-
+            Logger.Error(e.ToString(),e);
         }
 
         /// <summary>

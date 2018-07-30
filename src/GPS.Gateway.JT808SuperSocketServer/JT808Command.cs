@@ -34,6 +34,7 @@ namespace GPS.Gateway.JT808SuperSocketServer
         public override void ExecuteCommand(JT808Session<JT808RequestInfo> session, JT808RequestInfo requestInfo)
         {
             if (requestInfo.JT808Package == null) return;
+            session.TerminalPhoneNo = requestInfo.JT808Package.Header.TerminalPhoneNo;
             string receive = requestInfo.OriginalBuffer.ToHexString();
             session.Logger.Debug("receive-" + receive);
             session.Logger.Debug("receive-" + requestInfo.JT808Package.Header.MsgId.ToString() + "-" + JsonConvert.SerializeObject(requestInfo.JT808Package));
@@ -128,7 +129,7 @@ namespace GPS.Gateway.JT808SuperSocketServer
 
         private IJT808Package Msg0x0200(JT808Package jT808Package)
         {
-            //jT808_0X0200_Producer.MsgIdProducer.ProduceAsync(((ushort)JT808MsgId.位置信息汇报).ToString(), null, JsonConvert.SerializeObject(jT808Package));
+            jT808_0X0200_Producer.MsgIdProducer.ProduceAsync(jT808_0X0200_Producer.JT808MsgIdTopic, null, MessagePack.MessagePackSerializer.Serialize(jT808Package));
             return new JT808_0x8001Package(jT808Package.Header,  new JT808_0x8001()
             {
                 MsgId = jT808Package.Header.MsgId,
@@ -139,7 +140,12 @@ namespace GPS.Gateway.JT808SuperSocketServer
 
         private IJT808Package Msg0x0704(JT808Package jT808Package)
         {
-            return null;
+            return new JT808_0x8001Package(jT808Package.Header, new JT808_0x8001()
+            {
+                MsgId = jT808Package.Header.MsgId,
+                JT808PlatformResult = JT808PlatformResult.Success,
+                MsgNum = jT808Package.Header.MsgNum
+            });
         }
     }
 }

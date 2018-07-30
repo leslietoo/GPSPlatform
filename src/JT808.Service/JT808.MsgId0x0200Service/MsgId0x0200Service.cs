@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using JT808.Protocol.Extensions;
 
 namespace JT808.MsgId0x0200Service
 {
@@ -28,7 +29,7 @@ namespace JT808.MsgId0x0200Service
             jT808_0X0200_Consumer.MsgIdConsumer.OnMessage += (_, msg) =>
             {
                 // todo: 处理定位数据
-                logger.LogDebug($"Topic: {msg.Topic} Partition: {msg.Partition} Offset: {msg.Offset} {msg.Value}");
+                logger.LogDebug($"Topic: {msg.Topic} Partition: {msg.Partition} Offset: {msg.Offset} {msg.Value.ToHexString()}");
             };
             jT808_0X0200_Consumer.MsgIdConsumer.OnError += (_, error) =>
             {
@@ -38,7 +39,7 @@ namespace JT808.MsgId0x0200Service
             {
                 logger.LogError($"Error consuming from topic/partition/offset {msg.Topic}/{msg.Partition}/{msg.Offset}: {msg.Error}");
             };
-            jT808_0X0200_Consumer.MsgIdConsumer.Subscribe(((ushort)jT808_0X0200_Consumer.JT808MsgId).ToString());
+            jT808_0X0200_Consumer.MsgIdConsumer.Subscribe(jT808_0X0200_Consumer.JT808MsgIdTopic);
             Task.Run(() =>
             {
                 while (!cancellationToken.IsCancellationRequested)

@@ -8,11 +8,11 @@ namespace JT808.MsgIdExtensions
 {
     public abstract class JT808MsgIdConsumerBase<TKey, TValue>: JT808MsgIdBase<TKey, TValue>
     {
-        protected JT808MsgIdConsumerBase()
+        public JT808MsgIdConsumerBase()
         {
         }
 
-        protected JT808MsgIdConsumerBase(Dictionary<string, object> config) : base(config)
+        public JT808MsgIdConsumerBase(Dictionary<string, object> config) : base(config)
         {
         }
 
