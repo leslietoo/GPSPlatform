@@ -181,7 +181,7 @@ namespace JT808.Protocol.JT808RequestProperties
             {
                 span[i] = (char)this.GetType().GetProperty("Bit" + i.ToString()).GetValue(this);
             }
-            return base.ToString();
+            return span.ToString();
         }
     }
 }
