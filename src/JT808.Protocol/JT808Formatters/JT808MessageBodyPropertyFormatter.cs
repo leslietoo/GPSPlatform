@@ -11,11 +11,11 @@ namespace JT808.Protocol.JT808Formatters
     /// <summary>
     /// 消息体属性的格式化器
     /// </summary>
-    public class JT808MessageBodyPropertyFormatter : IMessagePackFormatter<JT808MessageBodyProperty>
+    public class JT808MessageBodyPropertyFormatter : IMessagePackFormatter<JT808HeaderMessageBodyProperty>
     {
-        public JT808MessageBodyProperty Deserialize(byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize)
+        public JT808HeaderMessageBodyProperty Deserialize(byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize)
         {
-            JT808MessageBodyProperty messageBodyProperty = new JT808MessageBodyProperty();
+            JT808HeaderMessageBodyProperty messageBodyProperty = new JT808HeaderMessageBodyProperty();
             ReadOnlySpan<char> msgMethod = Convert.ToString(JT808BinaryExtensions.ReadUInt16Little(bytes, offset), 2).PadLeft(16, '0').AsSpan();
             messageBodyProperty.DataLength = Convert.ToInt32(msgMethod.Slice(6, 10).ToString(), 2);
             //  2.2. 数据加密方式
@@ -44,7 +44,7 @@ namespace JT808.Protocol.JT808Formatters
             return messageBodyProperty;
         }
 
-        public int Serialize(ref byte[] bytes, int offset, JT808MessageBodyProperty value, IFormatterResolver formatterResolver)
+        public int Serialize(ref byte[] bytes, int offset, JT808HeaderMessageBodyProperty value, IFormatterResolver formatterResolver)
         {
             // 2.消息体属性
             Span<char> msgMethod = new char[16];

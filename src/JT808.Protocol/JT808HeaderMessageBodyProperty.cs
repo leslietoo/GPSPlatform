@@ -6,9 +6,9 @@ namespace JT808.Protocol
 {
     [MessagePackObject]
     [MessagePackFormatter(typeof(JT808MessageBodyPropertyFormatter))]
-    public class JT808MessageBodyProperty
+    public class JT808HeaderMessageBodyProperty
     {
-        public JT808MessageBodyProperty()
+        public JT808HeaderMessageBodyProperty()
         {
             IsPackge = false;
             Encrypt = JT808EncryptMethod.None;
