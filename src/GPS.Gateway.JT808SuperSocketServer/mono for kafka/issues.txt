@@ -1,0 +1,2 @@
+https://github.com/confluentinc/confluent-kafka-dotnet/issues/400
+https://github.com/confluentinc/confluent-kafka-dotnet/pull/418

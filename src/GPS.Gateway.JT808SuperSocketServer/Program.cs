@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using JT808.MsgIdExtensions;
+using Confluent.Kafka;
 
 namespace GPS.Gateway.JT808SuperSocketServer
 {
@@ -41,6 +42,10 @@ namespace GPS.Gateway.JT808SuperSocketServer
                                 services.AddSingleton<JT808MsgIdHandler>();
                                 services.AddSingleton<SuperSocketNLogFactoryExtensions>();
                                 var host = hostContext.Configuration.GetSection("KafkaOptions").GetValue<string>("bootstrap.servers");
+                                if(Environment.OSVersion.Platform.ToString() != "Win32NT")
+                                {
+                                    Library.Load(hostContext.Configuration.GetSection("KafkaOptions").GetValue<string>("MonoRuntimePath"));
+                                }
                                 services.Configure<SuperSocketOptions>(hostContext.Configuration.GetSection("SuperSocketOptions"));
                                 services.AddSingleton(new JT808_0x0200_Producer(new Dictionary<string, object>
                                 {
