@@ -3,14 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog.Extensions.Logging;
 using Microsoft.Extensions.Logging;
-using SuperSocket.SocketBase;
-using SuperSocket.SocketEngine;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using JT808.MsgIdExtensions;
 

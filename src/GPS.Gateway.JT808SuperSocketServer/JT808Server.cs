@@ -1,22 +1,13 @@
 ﻿using JT808.MsgIdExtensions;
 using JT808.Protocol;
-using JT808.Protocol.JT808Formatters;
-using JT808.Protocol.JT808Formatters.MessageBodyFormatters;
-using JT808.Protocol.JT808Formatters.MessageBodyFormatters.JT808LocationAttach;
-using MessagePack;
-using MessagePack.Formatters;
-using MessagePack.Resolvers;
 using SuperSocket.SocketBase;
 using SuperSocket.SocketBase.Protocol;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using JT808.Protocol.Extensions;
 using System.Threading;
 using System.Linq;
 using Microsoft.Extensions.Logging;
-using SuperSocket.SocketBase.Logging;
 
 namespace GPS.Gateway.JT808SuperSocketServer
 {
