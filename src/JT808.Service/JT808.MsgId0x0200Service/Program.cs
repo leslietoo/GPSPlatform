@@ -66,7 +66,7 @@ namespace JT808.MsgId0x0200Service
                     {
                         config.SetBasePath(AppDomain.CurrentDomain.BaseDirectory);
                         config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                                .AddJsonFile($"appsettings.{ hostingContext.HostingEnvironment}.json", optional: true, reloadOnChange: true);
+                              .AddJsonFile($"appsettings.{ hostingContext.HostingEnvironment}.json", optional: true, reloadOnChange: true);
                         config.AddEnvironmentVariables();
                     })
                     .ConfigureLogging((context, logging) =>

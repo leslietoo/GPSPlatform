@@ -1,5 +1,4 @@
 ﻿using JT808.Protocol;
-using log4net;
 using SuperSocket.SocketBase.Protocol;
 using System;
 using System.Collections.Generic;

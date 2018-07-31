@@ -1,70 +1,58 @@
-﻿using log4net;
-using SuperSocket.SocketBase;
-using SuperSocket.SocketBase.Config;
-using SuperSocket.SocketEngine;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
+﻿using JT808.MsgIdExtensions;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GPS.Gateway.JT808SuperSocketServer
 {
-    public class JT808Service: IService
+    public class JT808Service: IHostedService
     {
-        private SuperSocket.SocketBase.IBootstrap bootstrap;
+        private readonly JT808Server JT808Server;
 
-        private readonly ILog log;
+        private readonly ILogger<JT808Service> log;
 
-        public JT808Service()
+        private readonly SuperSocketOptions SuperSocketOptions;
+
+        private readonly SuperSocketNLogFactoryExtensions SuperSocketNLogFactoryExtensions;
+
+        public JT808Service(JT808Server jT808Server,
+                            IOptions<SuperSocketOptions> superSocketOptions,
+                            SuperSocketNLogFactoryExtensions  superSocketNLogFactoryExtensions,
+                            ILoggerFactory loggerFactory)
         {
-            log = LogManager.GetLogger(typeof(JT808Service));
+            JT808Server = jT808Server;
+            SuperSocketOptions = superSocketOptions.Value;
+            SuperSocketNLogFactoryExtensions = superSocketNLogFactoryExtensions;
+            log = loggerFactory.CreateLogger<JT808Service>();
         }
 
         public string ServiceName => "JT808Service";
 
-        public void Start()
+        public Task StartAsync(CancellationToken cancellationToken)
         {
-            bootstrap = BootstrapFactory.CreateBootstrap();
-            Console.WriteLine(bootstrap.StartupConfigFile);
-            if (!bootstrap.Initialize())
+            log.LogInformation("Start:" + ServiceName);
+            if (!JT808Server.Setup(SuperSocketOptions.IP, SuperSocketOptions.Port,null,null, SuperSocketNLogFactoryExtensions,null))
             {
-                log.Error("Failed to initialize SuperSocket ServiceEngine! Please check error log for more information!");
-                return;
+                log.LogError("Failed to initialize SuperSocket ServiceEngine! Please check error log for more information!");
+                return Task.CompletedTask;
             }
-            var result = bootstrap.Start();
-            foreach (var server in bootstrap.AppServers)
+            if (!JT808Server.Start())
             {
-                if (server.State == ServerState.Running)
-                {
-                    log.InfoFormat("- {0} has been started", server.Name);
-                }
-                else
-                {
-                    log.ErrorFormat("- {0} failed to start", server.Name);
-                }
+                log.LogInformation("Start Error");
+                return Task.CompletedTask;
             }
-            switch (result)
-            {
-                case (StartResult.None):
-                    log.Error("No server is configured, please check you configuration!");
-                    return;
-                case (StartResult.Success):
-                    log.Info("The SuperSocket ServiceEngine has been started!");
-                    break;
-                case (StartResult.Failed):
-                    log.Error("Failed to start the SuperSocket ServiceEngine! Please check error log for more information!");
-                    return;
-                case (StartResult.PartialSuccess):
-                    log.Error("Some server instances were started successfully, but the others failed! Please check error log for more information!");
-                    break;
-            }
+            log.LogInformation("Start Listener:" + SuperSocketOptions.ToString());
+            return Task.CompletedTask;
         }
 
-        public void Stop()
+        public Task StopAsync(CancellationToken cancellationToken)
         {
-            bootstrap?.Stop();
+            log.LogInformation("Stop:" + ServiceName);
+            log.LogInformation("Stop Listener:" + SuperSocketOptions.ToString());
+            JT808Server.Stop();
+            return Task.CompletedTask;
         }
     }
 }

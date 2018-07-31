@@ -4,6 +4,7 @@ using JT808.Protocol.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace JT808.MsgIdExtensions
 {
@@ -17,6 +18,11 @@ namespace JT808.MsgIdExtensions
         public JT808_0x0200_Producer(Dictionary<string, object> config) : base(config)
         {
             MsgIdProducer=new Producer<Null, byte[]>(Config, null, new ByteArraySerializer());
+        }
+
+        public void ProduceAsync(byte[] val)
+        {
+            MsgIdProducer.ProduceAsync(JT808MsgIdTopic, null, val);
         }
 
         public override JT808MsgId JT808MsgId => JT808MsgId.位置信息汇报;
