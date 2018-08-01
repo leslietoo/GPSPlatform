@@ -5,7 +5,7 @@ using MessagePack;
 namespace JT808.Protocol
 {
     [MessagePackObject]
-    [MessagePackFormatter(typeof(JT808MessageBodyPropertyFormatter))]
+    [MessagePackFormatter(typeof(JT808HeaderMessageBodyPropertyFormatter))]
     public class JT808HeaderMessageBodyProperty
     {
         public JT808HeaderMessageBodyProperty()

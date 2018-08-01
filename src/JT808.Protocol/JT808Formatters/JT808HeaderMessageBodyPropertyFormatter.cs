@@ -9,9 +9,9 @@ using System.Text;
 namespace JT808.Protocol.JT808Formatters
 {
     /// <summary>
-    /// 消息体属性的格式化器
+    /// 头部消息体属性的格式化器
     /// </summary>
-    public class JT808MessageBodyPropertyFormatter : IMessagePackFormatter<JT808HeaderMessageBodyProperty>
+    public class JT808HeaderMessageBodyPropertyFormatter : IMessagePackFormatter<JT808HeaderMessageBodyProperty>
     {
         public JT808HeaderMessageBodyProperty Deserialize(byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize)
         {
