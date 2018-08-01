@@ -219,6 +219,7 @@
     </None>
     <None Include="Confluent.Kafka.dll.config">
       <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
     <None Include="GPS.Gateway.JT808SuperSocketServer.conf" />
