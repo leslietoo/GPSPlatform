@@ -9,19 +9,44 @@ namespace JT808.Protocol.JT808RequestProperties
     /// </summary>
     public class JT808StatusProperty
     {
-        private const int bitCount = 32;
-
         /// <summary>
         /// 初始化读取状态位
         /// </summary>
         /// <param name="alarmStr"></param>
         public JT808StatusProperty(string alarmStr)
         {
-            ReadOnlySpan<char> span = alarmStr.AsSpan();
-            for (int i = 0; i < span.Length; i++)
-            {
-                this.GetType().GetProperty("Bit" + i.ToString()).SetValue(this, span[i]);
-            }
+            Bit0 = alarmStr[0];
+            Bit1 = alarmStr[1];
+            Bit2 = alarmStr[2];
+            Bit3 = alarmStr[3];
+            Bit4 = alarmStr[4];
+            Bit5 = alarmStr[5];
+            Bit6 = alarmStr[6];
+            Bit7 = alarmStr[7];
+            Bit8 = alarmStr[8];
+            Bit9 = alarmStr[9];
+            Bit10 = alarmStr[10];
+            Bit11 = alarmStr[11];
+            Bit12 = alarmStr[12];
+            Bit13 = alarmStr[13];
+            Bit14 = alarmStr[14];
+            Bit15 = alarmStr[15];
+            Bit16 = alarmStr[16];
+            Bit17 = alarmStr[17];
+            Bit18 = alarmStr[18];
+            Bit19 = alarmStr[19];
+            Bit20 = alarmStr[20];
+            Bit21 = alarmStr[21];
+            Bit22 = alarmStr[22];
+            Bit23 = alarmStr[23];
+            Bit24 = alarmStr[24];
+            Bit25 = alarmStr[25];
+            Bit26 = alarmStr[26];
+            Bit27 = alarmStr[27];
+            Bit28 = alarmStr[28];
+            Bit29 = alarmStr[29];
+            Bit30 = alarmStr[30];
+            Bit31 = alarmStr[31];
         }
 
         /// <summary>
@@ -33,7 +58,7 @@ namespace JT808.Protocol.JT808RequestProperties
         {
             if (alarmChar != null)
             {
-                ReadOnlySpan<char> span = alarmChar.ToString().PadRight(bitCount, '0').AsSpan();
+                ReadOnlySpan<char> span = alarmChar.ToString().PadRight(32, '0').AsSpan();
                 for (int i = 0; i < span.Length; i++)
                 {
                     this.GetType().GetProperty("Bit" + i.ToString()).SetValue(this, span[i] == '1');
@@ -176,7 +201,7 @@ namespace JT808.Protocol.JT808RequestProperties
         /// <returns></returns>
         public override string ToString()
         {
-            Span<char> span = new char[bitCount];
+            Span<char> span = new char[32];
             for (int i = 0; i < span.Length; i++)
             {
                 span[i] = (char)this.GetType().GetProperty("Bit" + i.ToString()).GetValue(this);
