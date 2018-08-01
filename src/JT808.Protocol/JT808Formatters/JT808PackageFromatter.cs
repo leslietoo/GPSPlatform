@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Text;
 using JT808.Protocol.Extensions;
 using JT808.Protocol.Exceptions;
+using JT808.Protocol.Attributes;
+
 
 namespace JT808.Protocol.JT808Formatters
 {
@@ -38,8 +40,8 @@ namespace JT808.Protocol.JT808Formatters
             offset = readSize;
             if (jT808Package.Header.MessageBodyProperty.DataLength != 0)
             {
-                Type type = JT808FormattersBodiesFactory.Create(jT808Package.Header.MsgId);
-                if (type != null)
+                JT808BodiesTypeAttribute jT808BodiesTypeAttribute = jT808Package.Header.MsgId.GetAttribute<JT808BodiesTypeAttribute>();
+                if (jT808BodiesTypeAttribute != null)
                 {
                     if (jT808Package.Header.MessageBodyProperty.IsPackge)
                     {//4.分包消息体 从17位开始  或   未分包消息体 从13位开始
@@ -51,7 +53,7 @@ namespace JT808.Protocol.JT808Formatters
                         try
                         {
                             //5.处理消息体
-                            jT808Package.Bodies = JT808FormatterResolverExtensions.JT808DynamicDeserialize(formatterResolver.GetFormatterDynamic(type), buffer.AsSpan().Slice(offset, jT808Package.Header.MessageBodyProperty.DataLength).ToArray(), offset, formatterResolver, out readSize);
+                            jT808Package.Bodies = JT808FormatterResolverExtensions.JT808DynamicDeserialize(formatterResolver.GetFormatterDynamic(jT808BodiesTypeAttribute.JT808BodiesType), buffer.AsSpan().Slice(offset, jT808Package.Header.MessageBodyProperty.DataLength).ToArray(), offset, formatterResolver, out readSize);
                         }
                         catch (Exception ex)
                         {
@@ -76,13 +78,13 @@ namespace JT808.Protocol.JT808Formatters
                 messageBodyOffset += JT808BinaryExtensions.WriteLittle(ref bytes, messageBodyOffset, value.Header.MessageBodyProperty.PackageIndex);
             }
             // 4. 数据体
-            Type type = JT808FormattersBodiesFactory.Create(value.Header.MsgId);
-            if (type != null)
+            JT808BodiesTypeAttribute jT808BodiesTypeAttribute = value.Header.MsgId.GetAttribute<JT808BodiesTypeAttribute>();
+            if (jT808BodiesTypeAttribute != null)
             {
                 if (value.Bodies != null)
                 {
                     // 4.1 处理数据体
-                    messageBodyOffset = JT808FormatterResolverExtensions.JT808DynamicSerialize(formatterResolver.GetFormatterDynamic(type), ref bytes, offset, value.Bodies, formatterResolver);
+                    messageBodyOffset = JT808FormatterResolverExtensions.JT808DynamicSerialize(formatterResolver.GetFormatterDynamic(jT808BodiesTypeAttribute.JT808BodiesType), ref bytes, offset, value.Bodies, formatterResolver);
                 }
             }
             byte[] messageBodyBytes = null;
