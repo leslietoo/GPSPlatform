@@ -55,6 +55,23 @@ namespace JT808.Protocol.Extensions
             return result;
         }
 
+        public static long ReadBCD(ReadOnlySpan<byte> buf,ref int offset, int len)
+        {
+            long result = 0;
+            try
+            {
+                for (int i = offset; i < offset + len; i++)
+                {
+                    result += buf[i].ReadBCD64((byte)(offset + len - i));
+                }
+            }
+            catch
+            {
+            }
+            offset = offset + len;
+            return result;
+        }
+
         public static DateTime ReadDateTimeLittle(byte[] buf, int offset, int len)
         {
             return new DateTime(
@@ -76,12 +93,30 @@ namespace JT808.Protocol.Extensions
             return (ushort)((read[offset] << 8) | (read[offset + 1]));
         }
 
+        public static ushort ReadUInt16Little(ReadOnlySpan<byte> read, ref int offset)
+        {
+            ushort value = (ushort)((read[offset] << 8) | (read[offset + 1]));
+            offset = offset + 2;
+            return value;
+        }
+
         public static byte ReadByteLittle(byte[] read, int offset)
         {
             return read[offset];
         }
 
         public static int WriteLittle(ref byte[] write, int offset, DateTime date)
+        {
+            write[offset] = ((byte)(date.Year - DateLimitYear)).ToBcdByte();
+            write[offset + 1] = ((byte)(date.Month)).ToBcdByte();
+            write[offset + 2] = ((byte)(date.Day)).ToBcdByte();
+            write[offset + 3] = ((byte)(date.Hour)).ToBcdByte();
+            write[offset + 4] = ((byte)(date.Minute)).ToBcdByte();
+            write[offset + 5] = ((byte)(date.Second)).ToBcdByte();
+            return 6;
+        }
+
+        public static int WriteLittle(Span<byte> write, int offset, DateTime date)
         {
             write[offset] = ((byte)(date.Year - DateLimitYear)).ToBcdByte();
             write[offset + 1] = ((byte)(date.Month)).ToBcdByte();
@@ -101,7 +136,14 @@ namespace JT808.Protocol.Extensions
             return 4;
         }
 
-        public static int WriteLittle(ref byte[] write, int offset, ushort data)
+        public static int WriteUInt16Little(ref byte[] write, int offset, ushort data)
+        {
+            write[offset] = (byte)(data >> 8);
+            write[offset + 1] = (byte)data;
+            return 2;
+        }
+
+        public static int WriteUInt16Little(Span<byte> write, int offset, ushort data)
         {
             write[offset] = (byte)(data >> 8);
             write[offset + 1] = (byte)data;
@@ -129,6 +171,17 @@ namespace JT808.Protocol.Extensions
                 write[offset + i] = Convert.ToByte(bcd.Substring(i * 2, 2), 16);
             }
             return len;
+        }
+
+        public static int WriteBCDLittle(Span<byte> write, string data, int offset,int digit, int len)
+        {
+            ReadOnlySpan<char> bcd = data.PadLeft(len, '0').AsSpan();
+
+            for (int i = 0; i < digit; i++)
+            {
+                write[offset + i] = Convert.ToByte(bcd.Slice(i * 2, 2).ToString(), 16);
+            }
+            return digit;
         }
 
         public static void WriteBCDLittle(this byte[] write, string data, int offset, int len)

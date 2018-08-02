@@ -1,4 +1,5 @@
-﻿using JT808.Protocol.Enums;
+﻿using JT808.Protocol.Attributes;
+using JT808.Protocol.Enums;
 using JT808.Protocol.JT808Formatters;
 using MessagePack;
 
@@ -9,6 +10,7 @@ namespace JT808.Protocol
     /// </summary>
     [MessagePackObject]
     [MessagePackFormatter(typeof(JT808HeaderFormatter))]
+    [JT808Formatter(typeof(JT808HeaderFormatter))]
     public class JT808Header
     {
         /// <summary>
