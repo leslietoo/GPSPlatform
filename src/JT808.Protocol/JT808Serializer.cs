@@ -29,6 +29,7 @@ namespace JT808.Protocol
         {
             get
             {
+               // System.Buffers.Binary.BinaryPrimitives.ReadInt16BigEndian()
                 return defaultResolver != null;
             }
         }

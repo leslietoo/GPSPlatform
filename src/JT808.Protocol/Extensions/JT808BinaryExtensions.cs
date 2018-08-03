@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Buffers.Binary;
 
 namespace JT808.Protocol.Extensions
 {
@@ -100,6 +101,13 @@ namespace JT808.Protocol.Extensions
             return value;
         }
 
+        public static byte ReadByteLittle(ReadOnlySpan<byte> read, ref int offset)
+        {
+            byte value = read[offset];
+            offset = offset + 1;
+            return value;
+        }
+
         public static byte ReadByteLittle(byte[] read, int offset)
         {
             return read[offset];
@@ -147,7 +155,14 @@ namespace JT808.Protocol.Extensions
         {
             write[offset] = (byte)(data >> 8);
             write[offset + 1] = (byte)data;
+            
             return 2;
+        }
+
+        public static int WriteLittle(Span<byte> write, int offset, byte data)
+        {
+            write[offset] = data;
+            return 1;
         }
 
         public static int WriteLittle(ref byte[] write, int offset, byte data)
@@ -223,6 +238,23 @@ namespace JT808.Protocol.Extensions
         /// <param name="len"></param>
         /// <returns></returns>
         public static byte ToXor(this byte[] buf, int offset, int len)
+        {
+            byte result = buf[offset];
+            for (int i = offset + 1; i < len; i++)
+            {
+                result = (byte)(result ^ buf[i]);
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 异或
+        /// </summary>
+        /// <param name="buf"></param>
+        /// <param name="offset"></param>
+        /// <param name="len"></param>
+        /// <returns></returns>
+        public static byte ToXor(this ReadOnlySpan<byte> buf, int offset, int len)
         {
             byte result = buf[offset];
             for (int i = offset + 1; i < len; i++)

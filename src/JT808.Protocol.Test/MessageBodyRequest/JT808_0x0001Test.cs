@@ -27,7 +27,8 @@ namespace JT808.Protocol.Test.MessageBodyRequest
                  JT808TerminalResult= Enums.JT808TerminalResult.Success
             };
             //"7E 00 01 00 05 01 23 45 67 89 00 04 B3 03 E8 00 02 00 D3 7E"
-            var hex = MessagePackSerializer.Serialize(jT808Package).ToHexString();
+            //"7E 00 01 00 05 01 23 45 67 89 00 04 B3 00 00 00 00 00 3A 7E"
+            var hex = JT808Serializer.Serialize(jT808Package).ToHexString();
         }
 
         [Fact]

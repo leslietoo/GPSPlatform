@@ -30,10 +30,10 @@ namespace JT808.Protocol
             var formatters = new IMessagePackFormatter[]
             {
                    // for example, register reflection infos(can not serialize in default)
-                   new JT808PackageFromatter(),
-                   new JT808HeaderFormatter(),
-                   new JT808HeaderMessageBodyPropertyFormatter(),
-                   new JT808_0x0001Formatter(),
+                  // new JT808PackageFromatter(),
+                  // new JT808HeaderFormatter(),
+                 //  new JT808HeaderMessageBodyPropertyFormatter(),
+                 //  new JT808_0x0001Formatter(),
                    new JT808_0x8001Formatter(),
                    new JT808_0x8100Formatter(),
                    new JT808_0x0704Formatter(),
