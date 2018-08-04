@@ -1,5 +1,4 @@
 ﻿using System;
-using MessagePack;
 using JT808.Protocol.JT808Formatters;
 using JT808.Protocol.Attributes;
 

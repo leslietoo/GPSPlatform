@@ -1,6 +1,4 @@
 ﻿using JT808.Protocol.Enums;
-using MessagePack;
-using MessagePack.Formatters;
 using JT808.Protocol.Extensions;
 using System;
 
@@ -43,7 +41,7 @@ namespace JT808.Protocol.JT808Formatters
             return messageBodyProperty;
         }
 
-        public int Serialize(Span<byte> bytes, int offset, JT808HeaderMessageBodyProperty value, IJT808FormatterResolver formatterResolver)
+        public int Serialize(ref byte[] bytes, int offset, JT808HeaderMessageBodyProperty value, IJT808FormatterResolver formatterResolver)
         {
             // 2.消息体属性
             Span<char> msgMethod = new char[16];
@@ -77,7 +75,7 @@ namespace JT808.Protocol.JT808Formatters
             {
                 msgMethod[5 + i] = dataLen[i - 1];
             }
-            offset += JT808BinaryExtensions.WriteUInt16Little(bytes, offset, Convert.ToUInt16(msgMethod.ToString(), 2));
+            offset += JT808BinaryExtensions.WriteUInt16Little(ref bytes, offset, Convert.ToUInt16(msgMethod.ToString(), 2));
             return offset;
         }
     }

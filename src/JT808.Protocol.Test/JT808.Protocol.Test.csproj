@@ -7,11 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="MessageBodyReply\**" />
     <Compile Remove="MessageBodySend\**" />
-    <EmbeddedResource Remove="MessageBodyReply\**" />
     <EmbeddedResource Remove="MessageBodySend\**" />
-    <None Remove="MessageBodyReply\**" />
     <None Remove="MessageBodySend\**" />
   </ItemGroup>
 

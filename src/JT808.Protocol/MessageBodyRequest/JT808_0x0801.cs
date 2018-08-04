@@ -1,8 +1,6 @@
 ﻿using JT808.Protocol.Enums;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Protocol.Common.Extensions;
+
 
 namespace JT808.Protocol.MessageBodyRequest
 {

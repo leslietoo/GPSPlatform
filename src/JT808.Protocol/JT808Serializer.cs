@@ -13,6 +13,11 @@ namespace JT808.Protocol
     {
         static IJT808FormatterResolver defaultResolver;
 
+        static JT808Serializer()
+        {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        }
+
         public static IJT808FormatterResolver DefaultResolver
         {
             get
@@ -44,16 +49,16 @@ namespace JT808.Protocol
             if (resolver == null) resolver = DefaultResolver;
             var formatter = resolver.GetFormatter<T>();
             // ref https://www.cnblogs.com/TianFang/p/9193881.html
-            var pool = MemoryPool<byte>.Shared;
-            var buffer = pool.Rent(65536);
+            var pool = ArrayPool<byte>.Shared;
+            byte[] buffer = pool.Rent(65536);
             try
             {
-                var len = formatter.Serialize(buffer.Memory.Span, 0, obj, DefaultResolver);
-                return buffer.Memory.Slice(0, len).ToArray();
+                var len = formatter.Serialize(ref buffer, 0, obj, DefaultResolver);
+                return buffer.AsSpan().Slice(0, len).ToArray();
             }
             finally
             {
-                buffer.Dispose();
+                buffer=null;
             }
         }
 

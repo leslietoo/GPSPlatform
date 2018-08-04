@@ -1,5 +1,4 @@
-﻿using MessagePack;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using Xunit;
@@ -27,7 +26,6 @@ namespace JT808.Protocol.Test.MessageBodyRequest
                  JT808TerminalResult= Enums.JT808TerminalResult.Success
             };
             //"7E 00 01 00 05 01 23 45 67 89 00 04 B3 03 E8 00 02 00 D3 7E"
-            //"7E 00 01 00 05 01 23 45 67 89 00 04 B3 00 00 00 00 00 3A 7E"
             var hex = JT808Serializer.Serialize(jT808Package).ToHexString();
         }
 
@@ -35,7 +33,7 @@ namespace JT808.Protocol.Test.MessageBodyRequest
         public void Test2()
         {
             var bytes = "7E 00 01 00 05 01 23 45 67 89 00 04 B3 03 E8 00 02 00 D3 7E".ToHexBytes();
-            JT808Package jT808Package = MessagePackSerializer.Deserialize<JT808Package>(bytes);
+            JT808Package jT808Package = JT808Serializer.Deserialize<JT808Package>(bytes);
             Assert.Equal(Enums.JT808MsgId.终端通用应答, jT808Package.Header.MsgId);
             Assert.Equal(1203, jT808Package.Header.MsgNum);
 

@@ -1,6 +1,4 @@
-﻿using MessagePack;
-using MessagePack.Formatters;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using JT808.Protocol.Extensions;
@@ -67,15 +65,15 @@ namespace JT808.Protocol.JT808Formatters
             return jT808Package;
         }
 
-        public int Serialize(Span<byte> bytes, int offset, JT808Package value, IJT808FormatterResolver formatterResolver)
+        public int Serialize(ref byte[] bytes, int offset, JT808Package value, IJT808FormatterResolver formatterResolver)
         {
             // 1. 先判断是否分包（理论下发不需分包，但为了统一还是加上分包处理）
             // 2. 先序列化数据体，根据数据体的长度赋值给头部，在序列化头部。
             int messageBodyOffset = 0;
             if (value.Header.MessageBodyProperty.IsPackge)
             {   //3. 先写入分包消息总包数、包序号 
-                messageBodyOffset += JT808BinaryExtensions.WriteUInt16Little(bytes, messageBodyOffset, value.Header.MessageBodyProperty.PackgeCount);
-                messageBodyOffset += JT808BinaryExtensions.WriteUInt16Little(bytes, messageBodyOffset, value.Header.MessageBodyProperty.PackageIndex);
+                messageBodyOffset += JT808BinaryExtensions.WriteUInt16Little(ref bytes, messageBodyOffset, value.Header.MessageBodyProperty.PackgeCount);
+                messageBodyOffset += JT808BinaryExtensions.WriteUInt16Little(ref bytes, messageBodyOffset, value.Header.MessageBodyProperty.PackageIndex);
             }
             // 4. 数据体
             JT808BodiesTypeAttribute jT808BodiesTypeAttribute = value.Header.MsgId.GetAttribute<JT808BodiesTypeAttribute>();
@@ -84,35 +82,32 @@ namespace JT808.Protocol.JT808Formatters
                 if (value.Bodies != null)
                 {
                     // 4.1 处理数据体
-                    byte[] bytesTemp = bytes.ToArray();
-                    messageBodyOffset = JT808FormatterResolverExtensions.JT808DynamicSerialize(formatterResolver.GetFormatterDynamic(jT808BodiesTypeAttribute.JT808BodiesType), bytes, offset, value.Bodies, formatterResolver);
+                    messageBodyOffset = JT808FormatterResolverExtensions.JT808DynamicSerialize(formatterResolver.GetFormatterDynamic(jT808BodiesTypeAttribute.JT808BodiesType),ref bytes, offset, value.Bodies, formatterResolver);
                 }
             }
-            Span<byte> messageBodyBytes = null;
+            byte[] messageBodyBytes = null;
             if (messageBodyOffset != 0)
             {
-                messageBodyBytes = bytes.Slice(0, messageBodyOffset);
+                messageBodyBytes = bytes.AsSpan().Slice(0, messageBodyOffset).ToArray();
             }
             // ------------------------------------开始组包
             // 1.起始符
             offset += JT808BinaryExtensions.WriteLittle(bytes, offset, value.Begin);
             // 2.赋值头数据长度
             value.Header.MessageBodyProperty.DataLength = messageBodyOffset;
-            offset = formatterResolver.GetFormatter<JT808Header>().Serialize(bytes, offset, value.Header, formatterResolver);
+            offset = formatterResolver.GetFormatter<JT808Header>().Serialize(ref bytes, offset, value.Header, formatterResolver);
             if (messageBodyOffset != 0)
             {
-                messageBodyBytes.CopyTo(bytes);
-                //Buffer.BlockCopy(messageBodyBytes, 0, bytes, offset, messageBodyOffset);
+                //messageBodyBytes.CopyTo(bytes);
+                Buffer.BlockCopy(messageBodyBytes, 0, bytes, offset, messageBodyOffset);
                 offset += messageBodyOffset;
             }
             // 4.校验码
-            offset += JT808BinaryExtensions.WriteLittle(bytes, offset, bytes.Slice(1, offset).ToXor(0, offset));
+            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, bytes.AsSpan().Slice(1, offset).ToXor(0, offset));
             // 5.终止符
-            offset += JT808BinaryExtensions.WriteLittle(bytes, offset, value.End);
-            Span<byte> temp = JT808Escape(bytes.Slice(0, offset));
-            //Buffer.BlockCopy(temp, 0, bytes, 0, temp.Length);
-            bytes.Clear();
-            temp.CopyTo(bytes);
+            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.End);
+            byte[] temp = JT808Escape(bytes.AsSpan().Slice(0, offset));
+            Buffer.BlockCopy(temp, 0, bytes, 0, temp.Length);
             return temp.Length;
         }
 
@@ -166,7 +161,7 @@ namespace JT808.Protocol.JT808Formatters
         /// </summary>
         /// <param name="buf"></param>
         /// <returns></returns>
-        private static Span<byte> JT808Escape(Span<byte> buf)
+        private static byte[] JT808Escape(Span<byte> buf)
         {
             List<byte> bytes = new List<byte>();
             int n = 0;

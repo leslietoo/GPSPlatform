@@ -2,7 +2,6 @@
 using Xunit;
 using JT808.Protocol.Extensions;
 using JT808.Protocol.MessageBodyReply;
-using MessagePack;
 
 namespace JT808.Protocol.Test.MessageBodyRequest
 {
@@ -34,14 +33,14 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             //31 32 33 34 35 36 
             //68 
             //7E"
-            var hex = MessagePackSerializer.Serialize(jT808Package).ToHexString();
+            var hex = JT808Serializer.Serialize(jT808Package).ToHexString();
         }
 
         [Fact]
         public void Test2()
         {
             var bytes = "7E 81 00 00 09 01 23 45 67 89 00 00 0A 00 64 00 31 32 33 34 35 36 68 7E".ToHexBytes();
-            JT808Package jT808Package = MessagePackSerializer.Deserialize<JT808Package>(bytes);
+            JT808Package jT808Package = JT808Serializer.Deserialize<JT808Package>(bytes);
             Assert.Equal(Enums.JT808MsgId.终端注册应答, jT808Package.Header.MsgId);
             Assert.Equal(10, jT808Package.Header.MsgNum);
             Assert.Equal("012345678900", jT808Package.Header.TerminalPhoneNo);
@@ -77,14 +76,14 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             //04 
             //61 
             //7E"
-            var hex = MessagePackSerializer.Serialize(jT808Package).ToHexString();
+            var hex = JT808Serializer.Serialize(jT808Package).ToHexString();
         }
 
         [Fact]
         public void Test4()
         {
             var bytes = "7E 81 00 00 03 01 23 45 67 89 00 00 0A 00 64 04 61 7E".ToHexBytes();
-            JT808Package jT808Package = MessagePackSerializer.Deserialize<JT808Package>(bytes);
+            JT808Package jT808Package = JT808Serializer.Deserialize<JT808Package>(bytes);
             Assert.Equal(Enums.JT808MsgId.终端注册应答, jT808Package.Header.MsgId);
             Assert.Equal(10, jT808Package.Header.MsgNum);
             Assert.Equal("012345678900", jT808Package.Header.TerminalPhoneNo);
@@ -113,14 +112,14 @@ namespace JT808.Protocol.Test.MessageBodyRequest
                 MsgNum = 100
             };
             //"7E 81 00 00 13 01 23 45 67 89 00 00 0A 00 64 00 7A 73 73 64 61 66 32 33 31 32 34 73 66 64 73 63 3B 7E"
-            var hex = MessagePackSerializer.Serialize(jT808Package).ToHexString();
+            var hex = JT808Serializer.Serialize(jT808Package).ToHexString();
         }
 
         [Fact]
         public void Test6()
         {
             var bytes = "7E 81 00 00 13 01 23 45 67 89 00 00 0A 00 64 00 7A 73 73 64 61 66 32 33 31 32 34 73 66 64 73 63 3B 7E".ToHexBytes();
-            JT808Package jT808Package = MessagePackSerializer.Deserialize<JT808Package>(bytes);
+            JT808Package jT808Package = JT808Serializer.Deserialize<JT808Package>(bytes);
             Assert.Equal(Enums.JT808MsgId.终端注册应答, jT808Package.Header.MsgId);
             Assert.Equal(10, jT808Package.Header.MsgNum);
             Assert.Equal("012345678900", jT808Package.Header.TerminalPhoneNo);

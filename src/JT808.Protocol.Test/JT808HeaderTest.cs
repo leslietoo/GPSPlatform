@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Text;
 using Xunit;
 using JT808.Protocol.Extensions;
-using MessagePack;
 
 namespace JT808.Protocol.Test
 {
@@ -33,7 +32,7 @@ namespace JT808.Protocol.Test
             jT808HeaderProperty.MsgNum = 135;
             jT808HeaderProperty.MsgId = JT808MsgId.终端鉴权;
             //"01 02 00 05 01 38 12 34 56 78 00 87"
-            var hex = MessagePackSerializer.Serialize(jT808HeaderProperty).ToHexString();
+            var hex = JT808Serializer.Serialize(jT808HeaderProperty).ToHexString();
         }
 
         [Fact]
@@ -41,7 +40,7 @@ namespace JT808.Protocol.Test
         {
             //01 02 00 05 01 38 12 34 56 78 00 87
             byte[] headerBytes = "01 02 00 05 01 38 12 34 56 78 00 87".ToHexBytes();
-            JT808Header jT808Header = MessagePackSerializer.Deserialize<JT808Header>(headerBytes);
+            JT808Header jT808Header = JT808Serializer.Deserialize<JT808Header>(headerBytes);
             Assert.Equal(135, jT808Header.MsgNum);
             Assert.Equal("013812345678", jT808Header.TerminalPhoneNo);
             Assert.False(jT808Header.MessageBodyProperty.IsPackge);

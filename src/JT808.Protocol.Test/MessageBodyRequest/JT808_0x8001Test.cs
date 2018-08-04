@@ -2,7 +2,6 @@
 using Xunit;
 using JT808.Protocol.Extensions;
 using JT808.Protocol.MessageBodyReply;
-using MessagePack;
 
 namespace JT808.Protocol.Test.MessageBodyRequest
 {
@@ -34,14 +33,14 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             //00 
             //61 
             //7E"
-            var hex = MessagePackSerializer.Serialize(jT808Package).ToHexString();
+            var hex = JT808Serializer.Serialize(jT808Package).ToHexString();
         }
 
         [Fact]
         public void Test2()
         {
             var bytes = "7E 80 01 00 05 01 23 45 67 89 00 00 0A 00 64 02 00 00 61 7E".ToHexBytes();
-            JT808Package jT808Package = MessagePackSerializer.Deserialize<JT808Package>(bytes);
+            JT808Package jT808Package = JT808Serializer.Deserialize<JT808Package>(bytes);
             Assert.Equal(Enums.JT808MsgId.平台通用应答, jT808Package.Header.MsgId);
             Assert.Equal(10, jT808Package.Header.MsgNum);
             Assert.Equal("012345678900", jT808Package.Header.TerminalPhoneNo);

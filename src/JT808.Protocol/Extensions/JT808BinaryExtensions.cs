@@ -25,9 +25,20 @@ namespace JT808.Protocol.Extensions
             return result * (long)Math.Pow(100, dig - 1);
         }
 
-        public static string ReadStringLittle(this byte[] read, int offset, int len)
+        public static string ReadStringLittle(ReadOnlySpan<byte> read, ref int offset, int len)
         {
-            return Encoding.GetEncoding("GBK").GetString(read, offset, len).Trim('\0');
+            var encoding = Encoding.GetEncoding("GBK");
+            string value = encoding.GetString(read.Slice(offset, len).ToArray()).Trim('\0');
+            offset += value.Length;
+            return value;
+        }
+
+        public static string ReadStringLittle(ReadOnlySpan<byte> read, ref int offset)
+        {
+            var encoding = Encoding.GetEncoding("GBK");
+            string value = encoding.GetString(read.Slice(offset).ToArray()).Trim('\0');
+            offset += value.Length;
+            return value;
         }
 
         public static string ReadStringLittle(this byte[] read, int offset)
@@ -84,9 +95,29 @@ namespace JT808.Protocol.Extensions
                 (buf[offset + 5]).ReadBCD32(1));
         }
 
+        public static DateTime ReadDateTimeLittle(ReadOnlySpan<byte> buf,ref int offset)
+        {
+            DateTime dateTime= new DateTime(
+                (buf[offset]).ReadBCD32(1) + DateLimitYear,
+                (buf[offset + 1]).ReadBCD32(1),
+                (buf[offset + 2]).ReadBCD32(1),
+                (buf[offset + 3]).ReadBCD32(1),
+                (buf[offset + 4]).ReadBCD32(1),
+                (buf[offset + 5]).ReadBCD32(1));
+            offset = offset + 6;
+            return dateTime;
+        }
+
         public static int ReadInt32Little(byte[] read, int offset)
         {
             return (read[offset] << 24) | (read[offset + 1] << 16) | (read[offset + 2] << 8) | read[offset + 3];
+        }
+
+        public static int ReadInt32Little(ReadOnlySpan<byte> read, ref int offset)
+        {
+            int value= (read[offset] << 24) | (read[offset + 1] << 16) | (read[offset + 2] << 8) | read[offset + 3];
+            offset = offset + 4;
+            return value;
         }
 
         public static ushort ReadUInt16Little(byte[] read, int offset)
@@ -151,14 +182,6 @@ namespace JT808.Protocol.Extensions
             return 2;
         }
 
-        public static int WriteUInt16Little(Span<byte> write, int offset, ushort data)
-        {
-            write[offset] = (byte)(data >> 8);
-            write[offset + 1] = (byte)data;
-            
-            return 2;
-        }
-
         public static int WriteLittle(Span<byte> write, int offset, byte data)
         {
             write[offset] = data;
@@ -178,17 +201,7 @@ namespace JT808.Protocol.Extensions
             return codeBytes.Length;
         }
 
-        public static int WriteBCDLittle(ref byte[] write, string data, int offset, int len)
-        {
-            string bcd = data.PadLeft(len * 2, '0');
-            for (int i = 0; i < len; i++)
-            {
-                write[offset + i] = Convert.ToByte(bcd.Substring(i * 2, 2), 16);
-            }
-            return len;
-        }
-
-        public static int WriteBCDLittle(Span<byte> write, string data, int offset,int digit, int len)
+        public static int WriteBCDLittle(ref byte[] write, string data, int offset, int digit, int len)
         {
             ReadOnlySpan<char> bcd = data.PadLeft(len, '0').AsSpan();
 
@@ -197,6 +210,16 @@ namespace JT808.Protocol.Extensions
                 write[offset + i] = Convert.ToByte(bcd.Slice(i * 2, 2).ToString(), 16);
             }
             return digit;
+        }
+
+        public static int WriteBCDLittle(ref byte[] write, string data, int offset, int len)
+        {
+            string bcd = data.PadLeft(len * 2, '0');
+            for (int i = 0; i < len; i++)
+            {
+                write[offset + i] = Convert.ToByte(bcd.Substring(i * 2, 2), 16);
+            }
+            return len;
         }
 
         public static void WriteBCDLittle(this byte[] write, string data, int offset, int len)

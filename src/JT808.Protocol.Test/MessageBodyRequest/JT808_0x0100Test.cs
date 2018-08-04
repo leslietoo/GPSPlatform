@@ -1,7 +1,6 @@
 ﻿using Xunit;
 using JT808.Protocol.MessageBodyRequest;
 using JT808.Protocol.Extensions;
-using MessagePack;
 
 namespace JT808.Protocol.Test.MessageBodyRequest
 {
@@ -27,14 +26,14 @@ namespace JT808.Protocol.Test.MessageBodyRequest
                  TerminalId="CHI123",
                  TerminalType="smallchi123"
             };
-            var hex = MessagePackSerializer.Serialize(jT808_0X0100).ToHexString();
+            var hex = JT808Serializer.Serialize(jT808_0X0100).ToHexString();
         }
 
         [Fact]
         public void Test1_1()
         {
                 byte[] bytes = "7E 01 00 00 2D 00 01 23 45 67 89 00 0A 00 28 00 32 31 32 33 34 30 73 6D 61 6C 6C 63 68 69 31 32 33 30 30 30 30 30 30 30 30 30 43 48 49 31 32 33 30 01 D4 C1 41 31 32 33 34 35 BA 7E".ToHexBytes();
-                JT808Package jT808_0X0100 = MessagePack.MessagePackSerializer.Deserialize<JT808Package>(bytes);
+                JT808Package jT808_0X0100 = JT808Serializer.Deserialize<JT808Package>(bytes);
                 Assert.Equal(Enums.JT808MsgId.终端注册, jT808_0X0100.Header.MsgId);
                 Assert.Equal(10, jT808_0X0100.Header.MsgNum);
                 Assert.Equal("000123456789", jT808_0X0100.Header.TerminalPhoneNo);

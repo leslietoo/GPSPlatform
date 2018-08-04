@@ -1,8 +1,5 @@
 ﻿using JT808.Protocol.Enums;
 using JT808.Protocol.JT808Formatters.MessageBodyFormatters;
-using MessagePack;
-using JT808.Protocol.Extensions;
-using System;
 using JT808.Protocol.Attributes;
 
 namespace JT808.Protocol.MessageBodyReply

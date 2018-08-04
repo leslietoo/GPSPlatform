@@ -2,26 +2,21 @@
 using JT808.Protocol.JT808RequestProperties;
 using JT808.Protocol.MessageBodyRequest;
 using JT808.Protocol.MessageBodyRequest.JT808LocationAttach;
-using MessagePack;
-using MessagePack.Formatters;
 using System;
 using System.Collections.Generic;
 
 namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
 {
-    public class JT808_0x0200Formatter : IMessagePackFormatter<JT808_0x0200>
+    public class JT808_0x0200Formatter : IJT808Formatter<JT808_0x0200>
     {
-        public JT808_0x0200 Deserialize(byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize)
+        public JT808_0x0200 Deserialize(ReadOnlySpan<byte> bytes, int offset, IJT808FormatterResolver formatterResolver, out int readSize)
         {
             offset = 0;
             JT808_0x0200 jT808_0X0200 = new JT808_0x0200();
-            jT808_0X0200.AlarmFlag = JT808BinaryExtensions.ReadInt32Little(bytes, offset);
-            offset += 4;
-            jT808_0X0200.StatusFlag = JT808BinaryExtensions.ReadInt32Little(bytes, offset);
-            offset += 4;
-            jT808_0X0200.Lat = JT808BinaryExtensions.ReadInt32Little(bytes, offset);
-            offset += 4;
-            jT808_0X0200.Lng = JT808BinaryExtensions.ReadInt32Little(bytes, offset);
+            jT808_0X0200.AlarmFlag = JT808BinaryExtensions.ReadInt32Little(bytes,ref offset);
+            jT808_0X0200.StatusFlag = JT808BinaryExtensions.ReadInt32Little(bytes,ref offset);
+            jT808_0X0200.Lat = JT808BinaryExtensions.ReadInt32Little(bytes,ref offset);
+            jT808_0X0200.Lng = JT808BinaryExtensions.ReadInt32Little(bytes,ref offset);
             JT808StatusProperty jT808StatusProperty = new JT808StatusProperty(Convert.ToString(jT808_0X0200.StatusFlag, 2).PadLeft(32, '0'));
             if (jT808StatusProperty.Bit28 == '1')//西经
             {
@@ -31,22 +26,17 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
             {
                 jT808_0X0200.Lat = -jT808_0X0200.Lat;
             }
-            offset += 4;
-            jT808_0X0200.Altitude = JT808BinaryExtensions.ReadUInt16Little(bytes, offset);
-            offset += 2;
-            jT808_0X0200.Speed = JT808BinaryExtensions.ReadUInt16Little(bytes, offset);
-            offset += 2;
-            jT808_0X0200.Direction = JT808BinaryExtensions.ReadUInt16Little(bytes, offset);
-            offset += 2;
-            jT808_0X0200.GPSTime=JT808BinaryExtensions.ReadDateTimeLittle(bytes, offset, 6);
-            offset += 6;
+            jT808_0X0200.Altitude = JT808BinaryExtensions.ReadUInt16Little(bytes,ref offset);
+            jT808_0X0200.Speed = JT808BinaryExtensions.ReadUInt16Little(bytes,ref offset);
+            jT808_0X0200.Direction = JT808BinaryExtensions.ReadUInt16Little(bytes,ref offset);
+            jT808_0X0200.GPSTime=JT808BinaryExtensions.ReadDateTimeLittle(bytes,ref offset);
             // 位置附加信息
             jT808_0X0200.JT808LocationAttachData = new Dictionary<byte, JT808LocationAttachBase>();
             if (bytes.Length > 28)
             {
                 int attachOffset = 0;
-                ReadOnlyMemory<byte> locationAttachMemory = bytes;
-                ReadOnlySpan<byte> locationAttachSpan = locationAttachMemory.Span.Slice(28);
+                ReadOnlySpan<byte> locationAttachMemory = bytes;
+                ReadOnlySpan<byte> locationAttachSpan = locationAttachMemory.Slice(28);
                 while (locationAttachSpan.Length > attachOffset)
                 {
                     int attachId = 1;
@@ -84,15 +74,15 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
             return jT808_0X0200;
         }
 
-        public int Serialize(ref byte[] bytes, int offset, JT808_0x0200 value, IFormatterResolver formatterResolver)
+        public int Serialize(ref byte[] bytes, int offset, JT808_0x0200 value, IJT808FormatterResolver formatterResolver)
         {
             offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.AlarmFlag);
             offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.StatusFlag);
             offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.Lat);
             offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.Lng);
-            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.Altitude);
-            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.Speed);
-            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.Direction);
+            offset += JT808BinaryExtensions.WriteUInt16Little(ref bytes, offset, value.Altitude);
+            offset += JT808BinaryExtensions.WriteUInt16Little(ref bytes, offset, value.Speed);
+            offset += JT808BinaryExtensions.WriteUInt16Little(ref bytes, offset, value.Direction);
             offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.GPSTime);
             if (value.JT808LocationAttachData != null && value.JT808LocationAttachData.Count > 0)
             {

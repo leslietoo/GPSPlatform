@@ -4,7 +4,7 @@ using System.Text;
 using JT808.Protocol.Enums;
 using Xunit;
 using JT808.Protocol.MessageBodyReply;
-using Protocol.Common.Extensions;
+using JT808.Protocol.Extensions;
 
 namespace JT808.Protocol.Test.MessageBodyReply
 {
@@ -18,16 +18,14 @@ namespace JT808.Protocol.Test.MessageBodyReply
             jT808TerminalRegisterReplyProperty.MsgNum = 10;
             jT808TerminalRegisterReplyProperty.JT808TerminalRegisterResult = JT808TerminalRegisterResult.成功;
             jT808TerminalRegisterReplyProperty.Code = "smallchi";
-            jT808TerminalRegisterReplyProperty.WriteBuffer(jT808GlobalConfigs);  
-            var hex = jT808TerminalRegisterReplyProperty.Buffer.ToArray().ToHexString();
+            var hex = JT808Serializer.Serialize(jT808TerminalRegisterReplyProperty).ToHexString();
         }
 
         [Fact]
         public void Test1_2()
         {
             var bytes = "00 0A 00 73 6D 61 6C 6C 63 68 69".ToHexBytes();
-            JT808_0x8100 jT808TerminalRegisterReply = new JT808_0x8100(bytes);
-            jT808TerminalRegisterReply.ReadBuffer(jT808GlobalConfigs);
+            JT808_0x8100 jT808TerminalRegisterReply = JT808Serializer.Deserialize<JT808_0x8100>(bytes);
             Assert.Equal(10, jT808TerminalRegisterReply.MsgNum);
             Assert.Equal(JT808TerminalRegisterResult.成功, jT808TerminalRegisterReply.JT808TerminalRegisterResult);
             Assert.Equal("smallchi", jT808TerminalRegisterReply.Code);

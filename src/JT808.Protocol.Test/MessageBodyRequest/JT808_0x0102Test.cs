@@ -2,7 +2,6 @@
 using Xunit;
 using JT808.Protocol.MessageBodyRequest;
 using JT808.Protocol.Extensions;
-using MessagePack;
 
 namespace JT808.Protocol.Test.MessageBodyRequest
 {
@@ -13,14 +12,14 @@ namespace JT808.Protocol.Test.MessageBodyRequest
         {
             JT808_0x0102 jT808LoginRequestProperty = new JT808_0x0102();
             jT808LoginRequestProperty.Code = "45612";
-            string hex=MessagePackSerializer.Serialize(jT808LoginRequestProperty) .ToHexString();
+            string hex= JT808Serializer.Serialize(jT808LoginRequestProperty) .ToHexString();
         }
 
         [Fact]
         public void Test2()
         {
             byte[] bodys = "34 35 36 31 32".ToHexBytes();
-            JT808_0x0102 jT808LoginRequest = MessagePackSerializer.Deserialize<JT808_0x0102>(bodys);
+            JT808_0x0102 jT808LoginRequest = JT808Serializer.Deserialize<JT808_0x0102>(bodys);
             Assert.Equal("45612", jT808LoginRequest.Code);
         }
 
@@ -38,14 +37,14 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             {
                  Code= "456121111"
             };
-            string hex = MessagePackSerializer.Serialize(jT808LoginRequest).ToHexString();
+            string hex = JT808Serializer.Serialize(jT808LoginRequest).ToHexString();
         }
 
         [Fact]
         public void Test4()
         {
             byte[] bodys = "7E 01 02 00 09 01 23 45 67 89 00 30 39 34 35 36 31 32 31 31 31 31 BE 7E".ToHexBytes();
-            JT808Package jT808LoginRequest = MessagePackSerializer.Deserialize<JT808Package>(bodys);
+            JT808Package jT808LoginRequest = JT808Serializer.Deserialize<JT808Package>(bodys);
             Assert.Equal(Enums.JT808MsgId.ÖÕ¶Ë¼øÈ¨, jT808LoginRequest.Header.MsgId);
             Assert.Equal(12345, jT808LoginRequest.Header.MsgNum);
             Assert.Equal("012345678900", jT808LoginRequest.Header.TerminalPhoneNo);
