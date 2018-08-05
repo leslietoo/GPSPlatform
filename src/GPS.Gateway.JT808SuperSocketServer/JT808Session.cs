@@ -19,7 +19,7 @@ namespace GPS.Gateway.JT808SuperSocketServer
 
         public bool TrySend(IJT808Package jT808Package)
         {
-            byte[] sendData = MessagePack.MessagePackSerializer.Serialize(jT808Package.JT808Package);
+            byte[] sendData = JT808Serializer.Serialize(jT808Package.JT808Package);
            return base.TrySend(sendData, 0, sendData.Length);
         }
 

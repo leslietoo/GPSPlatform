@@ -29,13 +29,11 @@ namespace GPS.Gateway.JT808SuperSocketServer
             JT808_0x0200_Producer jT808_0X0200_Producer,
             ILoggerFactory loggerFactory) : base(new DefaultReceiveFilterFactory<JT808ReceiveFilter, JT808RequestInfo>())
         {
-            
             JT808MsgIdHandler = jT808MsgIdHandler;
             jT808_UnificationSend_Consumer_CancellationTokenSource = new CancellationTokenSource();
             JT808_UnificationSend_Consumer = jT808_UnificationSend_Consumer;
             JT808_0X0200_Producer = jT808_0X0200_Producer;
             log = loggerFactory.CreateLogger<JT808Server>();
-            JT808GlobalConfigs.RegisterMessagePackFormatter();
             log.LogDebug("Init JT808Server");
         }
 

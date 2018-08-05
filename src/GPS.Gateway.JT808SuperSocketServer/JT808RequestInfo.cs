@@ -20,7 +20,7 @@ namespace GPS.Gateway.JT808SuperSocketServer
             try
             {
                 OriginalBuffer = buffer;
-                JT808Package = MessagePack.MessagePackSerializer.Deserialize<JT808Package>(buffer);
+                JT808Package = JT808Serializer.Deserialize<JT808Package>(buffer);
             }
             catch (Exception ex)
             {

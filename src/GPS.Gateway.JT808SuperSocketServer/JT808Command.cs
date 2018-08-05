@@ -29,7 +29,7 @@ namespace GPS.Gateway.JT808SuperSocketServer
                     IJT808Package jT808PackageImpl = handlerFunc(requestInfo.JT808Package, session);
                     if (jT808PackageImpl != null)
                     {
-                        session.Logger.Debug("send-" + jT808PackageImpl.JT808Package.Header.MsgId.ToString() + "-" + MessagePack.MessagePackSerializer.Serialize(jT808PackageImpl.JT808Package).ToHexString());
+                        session.Logger.Debug("send-" + jT808PackageImpl.JT808Package.Header.MsgId.ToString() + "-" + JT808Serializer.Serialize(jT808PackageImpl.JT808Package).ToHexString());
                         session.Logger.Debug("send-" + jT808PackageImpl.JT808Package.Header.MsgId.ToString() + "-" + JsonConvert.SerializeObject(jT808PackageImpl.JT808Package));
                         session.TrySend(jT808PackageImpl);
                     }
