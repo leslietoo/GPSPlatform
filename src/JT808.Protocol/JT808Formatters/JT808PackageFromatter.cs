@@ -92,18 +92,17 @@ namespace JT808.Protocol.JT808Formatters
             }
             // ------------------------------------开始组包
             // 1.起始符
-            offset += JT808BinaryExtensions.WriteLittle(bytes, offset, value.Begin);
+            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.Begin);
             // 2.赋值头数据长度
             value.Header.MessageBodyProperty.DataLength = messageBodyOffset;
             offset = formatterResolver.GetFormatter<JT808Header>().Serialize(ref bytes, offset, value.Header, formatterResolver);
             if (messageBodyOffset != 0)
             {
-                //messageBodyBytes.CopyTo(bytes);
                 Buffer.BlockCopy(messageBodyBytes, 0, bytes, offset, messageBodyOffset);
                 offset += messageBodyOffset;
             }
             // 4.校验码
-            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, bytes.AsSpan().Slice(1, offset).ToXor(0, offset));
+            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, bytes.ToXor(1, offset));
             // 5.终止符
             offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.End);
             byte[] temp = JT808Escape(bytes.AsSpan().Slice(0, offset));

@@ -58,7 +58,7 @@ namespace JT808.Protocol
             }
             finally
             {
-                buffer=null;
+                pool.Return(buffer, true);
             }
         }
 
