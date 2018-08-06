@@ -8,28 +8,27 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using JT808.Protocol.Extensions;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace JT808.MsgId0x0200Service
 {
-    public class MsgId0x0200Service : IHostedService
+    public class MsgId0x0200Service
     {
         private readonly JT808_0x0200_Consumer jT808_0X0200_Consumer;
 
         private readonly ILogger<MsgId0x0200Service> logger;
 
-        public MsgId0x0200Service(ILoggerFactory loggerFactory, JT808_0x0200_Consumer jT808_0X0200_Consumer)
+        public MsgId0x0200Service(ILoggerFactory loggerFactory, 
+            JT808_0x0200_Consumer jT808_0X0200_Consumer)
         {
-
             this.jT808_0X0200_Consumer = jT808_0X0200_Consumer;
             logger = loggerFactory.CreateLogger<MsgId0x0200Service>();
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-
             jT808_0X0200_Consumer.MsgIdConsumer.OnMessage += (_, msg) =>
             {
+                
                 // todo: 处理定位数据
                 logger.LogDebug($"Topic: {msg.Topic} Partition: {msg.Partition} Offset: {msg.Offset} {msg.Value.ToHexString()}");
             };
