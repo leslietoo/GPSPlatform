@@ -1,4 +1,5 @@
 ﻿using JT808.Protocol.Attributes;
+using JT808.Protocol.Exceptions;
 using JT808.Protocol.JT808Formatters;
 using JT808.Protocol.JT808Resolvers;
 using System;
@@ -56,6 +57,14 @@ namespace JT808.Protocol
                 var len = formatter.Serialize(ref buffer, 0, obj, DefaultResolver);
                 return buffer.AsSpan().Slice(0, len).ToArray();
             }
+            catch (JT808Exception ex)
+            {
+                throw new JT808Exception("Serialize", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Serialize", ex);
+            }
             finally
             {
                 pool.Return(buffer, true);
@@ -69,10 +78,17 @@ namespace JT808.Protocol
 
         public static T Deserialize<T>(ReadOnlySpan<byte> bytes, IJT808FormatterResolver resolver)
         {
-            if (resolver == null) resolver = DefaultResolver;
-            var formatter = resolver.GetFormatter<T>();
-            int readSize;
-            return formatter.Deserialize(bytes, 0, resolver, out readSize);
+            try
+            {
+                if (resolver == null) resolver = DefaultResolver;
+                var formatter = resolver.GetFormatter<T>();
+                int readSize;
+                return formatter.Deserialize(bytes, 0, resolver, out readSize);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Deserialize", ex);
+            }
         }
     }
 }

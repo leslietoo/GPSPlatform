@@ -34,7 +34,14 @@ namespace JT808.Protocol.JT808Formatters
             jT808Package.Begin = buffer[offset];
             offset = offset + 1;
             // 3.初始化消息头
-            jT808Package.Header = formatterResolver.GetFormatter<JT808Header>().Deserialize(buffer, offset, formatterResolver, out readSize);
+            try
+            {
+                jT808Package.Header = formatterResolver.GetFormatter<JT808Header>().Deserialize(buffer, offset, formatterResolver, out readSize);
+            }
+            catch (Exception ex)
+            {
+                throw new JT808Exception($"消息头解析错误,offset:{offset.ToString()}", ex);
+            }
             offset = readSize;
             if (jT808Package.Header.MessageBodyProperty.DataLength != 0)
             {
@@ -55,7 +62,7 @@ namespace JT808.Protocol.JT808Formatters
                         }
                         catch (Exception ex)
                         {
-                            throw new JT808Exception($"消息体解析错误", ex);
+                            throw new JT808Exception($"消息体解析错误,offset:{offset.ToString()}", ex);
                         }
                     }
                 }
