@@ -8,18 +8,25 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using JT808.Protocol.Extensions;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.SignalR;
+using JT808.MsgId0x0200WebSocket.Hubs;
 
-namespace JT808.MsgId0x0200Service
+namespace JT808.MsgId0x0200WebSocket.Services
 {
-    public class MsgId0x0200Service
+    public class MsgId0x0200Service : IHostedService
     {
         private readonly JT808_0x0200_Consumer jT808_0X0200_Consumer;
 
         private readonly ILogger<MsgId0x0200Service> logger;
 
-        public MsgId0x0200Service(ILoggerFactory loggerFactory, 
+        private readonly IHubContext<AlarmHub> _hubContext;
+
+        public MsgId0x0200Service(ILoggerFactory loggerFactory,
+            IHubContext<AlarmHub> hubContext,
             JT808_0x0200_Consumer jT808_0X0200_Consumer)
         {
+            this._hubContext = hubContext;
             this.jT808_0X0200_Consumer = jT808_0X0200_Consumer;
             logger = loggerFactory.CreateLogger<MsgId0x0200Service>();
         }
@@ -28,9 +35,17 @@ namespace JT808.MsgId0x0200Service
         {
             jT808_0X0200_Consumer.MsgIdConsumer.OnMessage += (_, msg) =>
             {
-                
                 // todo: 处理定位数据
                 logger.LogDebug($"Topic: {msg.Topic} Partition: {msg.Partition} Offset: {msg.Offset} {msg.Value.ToHexString()}");
+                try
+                {
+                    _hubContext.Clients.All.SendAsync("ReceiveMessage", $"Home page loaded at: {DateTime.Now}");
+                    _hubContext.Clients.All.SendAsync("ReceiveMessage", msg.Value.ToHexString());
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex,"Error");
+                }
             };
             jT808_0X0200_Consumer.MsgIdConsumer.OnError += (_, error) =>
             {
