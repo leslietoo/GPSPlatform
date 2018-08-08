@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 
-namespace JT808.MsgId0x0200WebSocket.Hubs
+namespace JT808.WebSocketServer.Hubs
 {
     public class ChatHub:Hub
     {

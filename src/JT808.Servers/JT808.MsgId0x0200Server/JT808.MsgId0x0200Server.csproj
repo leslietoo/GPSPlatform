@@ -10,11 +10,11 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="2.1.1" />
-    <PackageReference Include="NLog.Extensions.Logging" Version="1.2.0" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="1.2.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\JT808.MsgIdExtensions\JT808.MsgIdExtensions.csproj" />
+    <ProjectReference Include="..\..\JT808.Services\JT808.MsgId0x0200Services\JT808.MsgId0x0200Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,7 +34,5 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
-  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 
 </Project>

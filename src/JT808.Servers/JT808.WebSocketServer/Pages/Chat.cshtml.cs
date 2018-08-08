@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace JT808.MsgId0x0200WebSocket.Pages
+namespace JT808.WebSocketServer.Pages
 {
-    public class IndexModel : PageModel
+    public class ChatModel : PageModel
     {
         public void OnGet()
         {

@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using JT808.MsgId0x0200WebSocket.Hubs;
-using JT808.MsgId0x0200WebSocket.Services;
+using JT808.MsgId0x0200Services;
+using JT808.MsgId0x0200Services.Hubs;
 using JT808.MsgIdExtensions;
+using JT808.WebSocketServer.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -13,14 +14,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace JT808.MsgId0x0200WebSocket
+namespace JT808.WebSocketServer
 {
-    /// <summary>
-    /// 
-    /// signalr“¿¿µ◊¢»Î£∫https://docs.microsoft.com/en-us/aspnet/signalr/overview/advanced/dependency-injection
-    /// signalr hubcontext£∫https://docs.microsoft.com/en-us/aspnet/core/signalr/hubcontext?view=aspnetcore-2.1
-    /// https://docs.microsoft.com/en-us/dotnet/standard/microservices-architecture/multi-container-microservice-net-applications/background-tasks-with-ihostedservice
-    /// </summary>
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -50,13 +45,13 @@ namespace JT808.MsgId0x0200WebSocket
             }));
             var host = Configuration.GetSection("KafkaOptions").GetValue<string>("bootstrap.servers");
             services.AddSingleton(new JT808_0x0200_Consumer(new Dictionary<string, object>
-                        {
-                            { "group.id", "JT808_0x0200_WebSocket_Alarm" },
-                            { "enable.auto.commit", true },
-                            { "bootstrap.servers", host }
-                        }));
+            {
+                { "group.id", "JT808_0x0200_WebSocket_Alarm" },
+                { "enable.auto.commit", true },
+                { "bootstrap.servers", host }
+            }));
             services.AddSignalR();
-            services.AddSingleton<IHostedService, MsgId0x0200Service>();
+            services.AddSingleton<IHostedService, ToWebSocketService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

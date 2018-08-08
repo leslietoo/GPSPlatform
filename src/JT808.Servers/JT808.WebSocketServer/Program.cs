@@ -12,7 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace JT808.MsgId0x0200WebSocket
+namespace JT808.WebSocketServer
 {
     public class Program
     {

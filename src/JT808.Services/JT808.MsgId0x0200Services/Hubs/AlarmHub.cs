@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using JT808.Protocol;
 
-namespace JT808.MsgId0x0200WebSocket.Hubs
+namespace JT808.MsgId0x0200Services.Hubs
 {
     public class AlarmHub : Hub
     {
