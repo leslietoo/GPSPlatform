@@ -4,6 +4,8 @@ using JT808.Protocol.Enums;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace GPS.JT808PubSubToKafka
 {
@@ -36,6 +38,7 @@ namespace GPS.JT808PubSubToKafka
 
         public override void Subscribe()
         {
+            
             consumer.Subscribe(JT808MsgIdTopic);
         }
 
