@@ -8,6 +8,7 @@ using JT808.Protocol.Extensions;
 using System.Threading;
 using System.Linq;
 using Microsoft.Extensions.Logging;
+using GPS.PubSub.Abstractions;
 
 namespace GPS.Gateway.JT808SuperSocketServer
 {
@@ -15,7 +16,7 @@ namespace GPS.Gateway.JT808SuperSocketServer
     {
         private readonly JT808_UnificationSend_Consumer JT808_UnificationSend_Consumer;
 
-        public JT808_0x0200_Producer JT808_0X0200_Producer { get; private set; }
+        public IProducerFactory ProducerFactory { get;  set; }
 
         private CancellationTokenSource jT808_UnificationSend_Consumer_CancellationTokenSource;
 
@@ -26,13 +27,13 @@ namespace GPS.Gateway.JT808SuperSocketServer
         public JT808Server(
             JT808MsgIdHandler jT808MsgIdHandler,
             JT808_UnificationSend_Consumer jT808_UnificationSend_Consumer,
-            JT808_0x0200_Producer jT808_0X0200_Producer,
+            IProducerFactory producerFactory,
             ILoggerFactory loggerFactory) : base(new DefaultReceiveFilterFactory<JT808ReceiveFilter, JT808RequestInfo>())
         {
             JT808MsgIdHandler = jT808MsgIdHandler;
             jT808_UnificationSend_Consumer_CancellationTokenSource = new CancellationTokenSource();
             JT808_UnificationSend_Consumer = jT808_UnificationSend_Consumer;
-            JT808_0X0200_Producer = jT808_0X0200_Producer;
+            ProducerFactory = producerFactory;
             log = loggerFactory.CreateLogger<JT808Server>();
             log.LogDebug("Init JT808Server");
         }

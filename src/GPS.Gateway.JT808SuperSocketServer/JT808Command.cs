@@ -12,6 +12,11 @@ namespace GPS.Gateway.JT808SuperSocketServer
     /// </summary>
     public class JT808Command : CommandBase<JT808Session<JT808RequestInfo>, JT808RequestInfo>
     {
+        public JT808Command()
+        {
+
+        }
+
         public override string Name => "JT808";
 
         public override void ExecuteCommand(JT808Session<JT808RequestInfo> session, JT808RequestInfo requestInfo)

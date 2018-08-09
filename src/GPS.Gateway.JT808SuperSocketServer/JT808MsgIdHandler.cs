@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GPS.PubSub.Abstractions;
 
 namespace GPS.Gateway.JT808SuperSocketServer
 {
@@ -75,7 +76,7 @@ namespace GPS.Gateway.JT808SuperSocketServer
 
         private IJT808Package Msg0x0200(JT808Package jT808Package, JT808Session<JT808RequestInfo> session)
         {
-            ((JT808Server)session.AppServer)?.JT808_0X0200_Producer.ProduceAsync(JT808Serializer.Serialize(jT808Package));
+            ((JT808Server)session.AppServer)?.ProducerFactory.CreateProducer((ushort)JT808MsgId.位置信息汇报).ProduceAsync(JT808Serializer.Serialize(jT808Package));
             return new JT808_0x8001Package(jT808Package.Header, new JT808_0x8001()
             {
                 MsgId = jT808Package.Header.MsgId,

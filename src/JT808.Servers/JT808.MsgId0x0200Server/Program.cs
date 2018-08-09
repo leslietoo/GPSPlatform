@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 using JT808.MsgIdExtensions;
 using JT808.MsgId0x0200Services;
 using Newtonsoft.Json;
+using Confluent.Kafka;
+using Confluent.Kafka.Serialization;
+using JT808.Protocol.Extensions;
 
 namespace JT808.MsgId0x0200Service
 {

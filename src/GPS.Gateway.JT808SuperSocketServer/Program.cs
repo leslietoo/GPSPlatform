@@ -7,7 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using JT808.MsgIdExtensions;
-using Confluent.Kafka;
+using SuperSocket.SocketBase.Logging;
+using GPS.JT808PubSubToKafka;
+using GPS.PubSub.Abstractions;
 
 namespace GPS.Gateway.JT808SuperSocketServer
 {
@@ -40,17 +42,18 @@ namespace GPS.Gateway.JT808SuperSocketServer
                                 services.AddSingleton<ILoggerFactory, LoggerFactory>();
                                 services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
                                 services.AddSingleton<JT808MsgIdHandler>();
-                                services.AddSingleton<SuperSocketNLogFactoryExtensions>();
+                                services.AddSingleton<ILogFactory, SuperSocketNLogFactoryExtensions>();
                                 var host = hostContext.Configuration.GetSection("KafkaOptions").GetValue<string>("bootstrap.servers");
-                                if(Environment.OSVersion.Platform.ToString() != "Win32NT")
-                                {
-                                    Library.Load(hostContext.Configuration.GetSection("KafkaOptions").GetValue<string>("MonoRuntimePath"));
-                                }
+                                KafkaMonoConfig.Load(hostContext.Configuration.GetSection("KafkaOptions").GetValue<string>("MonoRuntimePath"));
                                 services.Configure<SuperSocketOptions>(hostContext.Configuration.GetSection("SuperSocketOptions"));
-                                services.AddSingleton(new JT808_0x0200_Producer(new Dictionary<string, object>
-                                {
-                                    { "bootstrap.servers", host }
-                                }));
+                                services.AddSingleton(typeof(IProducerFactory), 
+                                    new JT808MsgIdProducerFactory(
+                                        new GPS.JT808PubSubToKafka.JT808_0x0200_Producer(
+                                            new Dictionary<string, object>
+                                            {
+                                                { "bootstrap.servers", host }
+                                            })
+                                ));
                                 services.AddSingleton(new JT808_UnificationSend_Consumer(new Dictionary<string, object>
                                 {
                                     { "group.id", "GatewayUnificationSend" },

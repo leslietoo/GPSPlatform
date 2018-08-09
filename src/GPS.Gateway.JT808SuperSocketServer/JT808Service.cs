@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SuperSocket.SocketBase.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,16 +16,16 @@ namespace GPS.Gateway.JT808SuperSocketServer
 
         private readonly SuperSocketOptions SuperSocketOptions;
 
-        private readonly SuperSocketNLogFactoryExtensions SuperSocketNLogFactoryExtensions;
+        private readonly ILogFactory LogFactory;
 
         public JT808Service(JT808Server jT808Server,
                             IOptions<SuperSocketOptions> superSocketOptions,
-                            SuperSocketNLogFactoryExtensions  superSocketNLogFactoryExtensions,
+                            ILogFactory logFactory,
                             ILoggerFactory loggerFactory)
         {
             JT808Server = jT808Server;
             SuperSocketOptions = superSocketOptions.Value;
-            SuperSocketNLogFactoryExtensions = superSocketNLogFactoryExtensions;
+            LogFactory = logFactory;
             log = loggerFactory.CreateLogger<JT808Service>();
         }
 
@@ -33,7 +34,7 @@ namespace GPS.Gateway.JT808SuperSocketServer
         public Task StartAsync(CancellationToken cancellationToken)
         {
             log.LogInformation("Start:" + ServiceName);
-            if (!JT808Server.Setup(SuperSocketOptions.IP, SuperSocketOptions.Port,null,null, SuperSocketNLogFactoryExtensions,null))
+            if (!JT808Server.Setup(SuperSocketOptions.IP, SuperSocketOptions.Port,null,null, LogFactory, null))
             {
                 log.LogError("Failed to initialize SuperSocket ServiceEngine! Please check error log for more information!");
                 return Task.CompletedTask;
