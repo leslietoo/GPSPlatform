@@ -9,9 +9,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\JT808.MsgIdExtensions\JT808.MsgIdExtensions.csproj" />
-    <ProjectReference Include="..\..\JT808.Protocol\JT808.Protocol.csproj" />
+    <ProjectReference Include="..\..\GPS.PubSubs\GPS.JT808PubSubToKafka\GPS.JT808PubSubToKafka.csproj" />
     <ProjectReference Include="..\..\JT808.Services\JT808.MsgId0x0200Services\JT808.MsgId0x0200Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.Development.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

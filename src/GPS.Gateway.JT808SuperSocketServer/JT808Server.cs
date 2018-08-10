@@ -1,24 +1,18 @@
-﻿using JT808.MsgIdExtensions;
-using JT808.Protocol;
-using SuperSocket.SocketBase;
+﻿using SuperSocket.SocketBase;
 using SuperSocket.SocketBase.Protocol;
 using System;
-using System.Threading.Tasks;
-using JT808.Protocol.Extensions;
-using System.Threading;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using GPS.PubSub.Abstractions;
+using JT808.Protocol.Enums;
 
 namespace GPS.Gateway.JT808SuperSocketServer
 {
     public class JT808Server : AppServer<JT808Session<JT808RequestInfo>, JT808RequestInfo>
     {
-        private readonly JT808_UnificationSend_Consumer JT808_UnificationSend_Consumer;
+        public IProducerFactory ProducerFactory { get; private set; }
 
-        public IProducerFactory ProducerFactory { get;  set; }
-
-        private CancellationTokenSource jT808_UnificationSend_Consumer_CancellationTokenSource;
+        public IConsumerFactory ConsumerFactory { get; private set; }
 
         public JT808MsgIdHandler JT808MsgIdHandler { get; private set; }
 
@@ -26,13 +20,13 @@ namespace GPS.Gateway.JT808SuperSocketServer
 
         public JT808Server(
             JT808MsgIdHandler jT808MsgIdHandler,
-            JT808_UnificationSend_Consumer jT808_UnificationSend_Consumer,
+            IConsumerFactory consumerFactory,
             IProducerFactory producerFactory,
-            ILoggerFactory loggerFactory) : base(new DefaultReceiveFilterFactory<JT808ReceiveFilter, JT808RequestInfo>())
+            ILoggerFactory loggerFactory) 
+            : base(new DefaultReceiveFilterFactory<JT808ReceiveFilter, JT808RequestInfo>())
         {
             JT808MsgIdHandler = jT808MsgIdHandler;
-            jT808_UnificationSend_Consumer_CancellationTokenSource = new CancellationTokenSource();
-            JT808_UnificationSend_Consumer = jT808_UnificationSend_Consumer;
+            ConsumerFactory = consumerFactory;
             ProducerFactory = producerFactory;
             log = loggerFactory.CreateLogger<JT808Server>();
             log.LogDebug("Init JT808Server");
@@ -40,48 +34,25 @@ namespace GPS.Gateway.JT808SuperSocketServer
 
         protected override void OnStarted()
         {
-            if (JT808_UnificationSend_Consumer != null)
+            try
             {
-                try
-                {
-                    JT808_UnificationSend_Consumer.MsgIdConsumer.OnMessage += (_, msg) =>
-                    {
-                        // todo: 处理下发数据
-                        Logger.Debug($"Topic: {msg.Topic} Partition: {msg.Partition} Offset: {msg.Offset} {msg.Value.ToHexString()}");
-                        try
-                        {
-                            GetSessions(f => f.TerminalPhoneNo == msg.Key).FirstOrDefault()?.TrySend(msg.Value, 0, msg.Value.Length);
-                        }
-                        catch (Exception ex)
-                        {
-                            Logger.Error("UnificationSend Error OnMessage", ex);
-                        }
-                    };
-                    JT808_UnificationSend_Consumer.MsgIdConsumer.OnError += (_, error) =>
-                    {
-                        Logger.Debug($"Error: {error}");
-                    };
-                    JT808_UnificationSend_Consumer.MsgIdConsumer.OnConsumeError += (_, msg) =>
-                    {
-                        Logger.Debug($"Error consuming from topic/partition/offset {msg.Topic}/{msg.Partition}/{msg.Offset}: {msg.Error}");
-                    };
-                    JT808_UnificationSend_Consumer.MsgIdConsumer.Subscribe(JT808_UnificationSend_Consumer.JT808MsgIdTopic);
-                    Task.Run(() =>
-                    {
-                        while (!jT808_UnificationSend_Consumer_CancellationTokenSource.IsCancellationRequested)
-                        {
-                            JT808_UnificationSend_Consumer.MsgIdConsumer.Poll(TimeSpan.FromMilliseconds(100));
-                        }
-                    }, jT808_UnificationSend_Consumer_CancellationTokenSource.Token);
-                }
-                catch (AggregateException ex)
-                {
-                    Logger.Error("OnStarted AggregateError", ex);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error("OnStarted Error", ex);
-                }
+                ConsumerFactory
+                            .Subscribe((ushort)JT808MsgId.自定义统一下发消息)
+                            .OnMessage(msg =>
+                            {
+                                try
+                                {
+                                    GetSessions(f => f.TerminalPhoneNo == msg.Key).FirstOrDefault()?.TrySend(msg.data, 0, msg.data.Length);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Logger.Error("Send Error", ex);
+                                }
+                            });
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("Consumer Error", ex);
             }
             base.OnStarted();
         }
@@ -90,16 +61,12 @@ namespace GPS.Gateway.JT808SuperSocketServer
         {
             try
             {
-                jT808_UnificationSend_Consumer_CancellationTokenSource.Cancel();
-                if (JT808_UnificationSend_Consumer != null)
-                {
-                    JT808_UnificationSend_Consumer.MsgIdConsumer.Unsubscribe();
-                    JT808_UnificationSend_Consumer.MsgIdConsumer.Dispose();
-                }
+                ConsumerFactory.Unsubscribe();
+                ProducerFactory.Dispose();
             }
             catch (Exception ex)
             {
-                Logger.Error("OnStopped Error", ex);
+                Logger.Error("Stopped Error", ex);
             }
             base.OnStopped();
         }

@@ -242,10 +242,6 @@
       <Project>{5b7c2c5f-7b40-4990-90ab-1d43b5e2e961}</Project>
       <Name>GPS.JT808PubSubToKafka</Name>
     </ProjectReference>
-    <ProjectReference Include="..\JT808.MsgIdExtensions\JT808.MsgIdExtensions.csproj">
-      <Project>{E2C3514D-EDBD-49D0-B172-423337227CC2}</Project>
-      <Name>JT808.MsgIdExtensions</Name>
-    </ProjectReference>
     <ProjectReference Include="..\JT808.Protocol\JT808.Protocol.csproj">
       <Project>{0eb9471e-c040-4ef0-bbdf-239f04736612}</Project>
       <Name>JT808.Protocol</Name>

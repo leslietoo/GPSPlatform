@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using JT808.MsgIdExtensions;
 using SuperSocket.SocketBase.Logging;
 using GPS.JT808PubSubToKafka;
 using GPS.PubSub.Abstractions;
@@ -41,6 +40,7 @@ namespace GPS.Gateway.JT808SuperSocketServer
                             {
                                 services.AddSingleton<ILoggerFactory, LoggerFactory>();
                                 services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
+                                var loggerFactory = services.BuildServiceProvider().GetRequiredService<ILoggerFactory>();
                                 services.AddSingleton<JT808MsgIdHandler>();
                                 services.AddSingleton<ILogFactory, SuperSocketNLogFactoryExtensions>();
                                 var host = hostContext.Configuration.GetSection("KafkaOptions").GetValue<string>("bootstrap.servers");
@@ -54,12 +54,15 @@ namespace GPS.Gateway.JT808SuperSocketServer
                                                 { "bootstrap.servers", host }
                                             })
                                 ));
-                                services.AddSingleton(new JT808_UnificationSend_Consumer(new Dictionary<string, object>
-                                {
-                                    { "group.id", "GatewayUnificationSend" },
-                                    { "enable.auto.commit", true },
-                                    { "bootstrap.servers", host }
-                                }));
+                                services.AddSingleton(typeof(IConsumerFactory),
+                                    new JT808MsgIdConsumerFactory(
+                                        new GPS.JT808PubSubToKafka.JT808_UnificationSend_Consumer(
+                                            new Dictionary<string, object>
+                                            {
+                                                { "group.id", "GatewayUnificationSend" },
+                                                { "enable.auto.commit", true },
+                                                { "bootstrap.servers", host }
+                                            }, loggerFactory)));
                                 services.AddSingleton<JT808Server>();
                                 services.AddScoped<IHostedService, JT808Service>();
                             });

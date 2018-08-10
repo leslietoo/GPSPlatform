@@ -6,12 +6,9 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using JT808.MsgIdExtensions;
 using JT808.MsgId0x0200Services;
-using Newtonsoft.Json;
-using Confluent.Kafka;
-using Confluent.Kafka.Serialization;
-using JT808.Protocol.Extensions;
+using GPS.JT808PubSubToKafka;
+using GPS.PubSub.Abstractions;
 
 namespace JT808.MsgId0x0200Service
 {
@@ -41,13 +38,17 @@ namespace JT808.MsgId0x0200Service
                     {
                         services.AddSingleton<ILoggerFactory, LoggerFactory>();
                         services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
+                        var loggerFactory = services.BuildServiceProvider().GetRequiredService<ILoggerFactory>();
                         var host = hostContext.Configuration.GetSection("KafkaOptions").GetValue<string>("bootstrap.servers");
-                        services.AddSingleton(new JT808_0x0200_Consumer(new Dictionary<string, object>
-                        {
-                            { "group.id", "JT808_0x0200_ToDatabese" },
-                            { "enable.auto.commit", true },
-                            { "bootstrap.servers", host }
-                        }));
+                        services.AddSingleton(typeof(IConsumerFactory),
+                            new JT808MsgIdConsumerFactory(
+                                new GPS.JT808PubSubToKafka.JT808_0x0200_Consumer(
+                                    new Dictionary<string, object>
+                                    {
+                                        { "group.id", "JT808_0x0200_ToDatabese" },
+                                        { "enable.auto.commit", true },
+                                        { "bootstrap.servers", host }
+                                    }, loggerFactory)));
                         services.AddScoped<IHostedService, ToDatabaseService>();
                     });
 

@@ -13,6 +13,7 @@ namespace GPS.JT808PubSubToKafka
         {
         }
 
-        public abstract void ProduceAsync(byte[] data);
+        public abstract void Dispose();
+        public abstract void ProduceAsync(string key, byte[] data);
     }
 }

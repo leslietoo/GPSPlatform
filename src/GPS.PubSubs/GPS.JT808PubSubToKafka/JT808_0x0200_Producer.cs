@@ -18,9 +18,14 @@ namespace GPS.JT808PubSubToKafka
             producer = new Producer<Null, byte[]>(Config, null, new ByteArraySerializer());
         }
 
-        public override void ProduceAsync(byte[] data)
+        public override void ProduceAsync(string key,byte[] data)
         {
             producer.ProduceAsync(JT808MsgIdTopic, null, data);
+        }
+
+        public override void Dispose()
+        {
+            producer.Dispose();
         }
 
         public override ushort CategoryId  => (ushort)JT808.Protocol.Enums.JT808MsgId.位置信息汇报;

@@ -5,11 +5,9 @@ using System.Threading;
 
 namespace GPS.PubSub.Abstractions
 {
-    public interface IConsumer : IPubSub,IDisposable
+    public interface IConsumer : IPubSub
     {
-        event EventHandler<object> OnMessage;
-        event EventHandler<object> OnError;
-        event EventHandler<object> OnConsumeError;
+        void OnMessage(Action<(string Key, byte[] data)> callback);
         CancellationTokenSource Cts { get; }
         void Subscribe();
         void Unsubscribe();

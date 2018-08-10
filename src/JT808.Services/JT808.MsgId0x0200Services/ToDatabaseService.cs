@@ -1,58 +1,38 @@
-﻿using JT808.MsgIdExtensions;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using JT808.Protocol.Extensions;
+using GPS.PubSub.Abstractions;
 
 namespace JT808.MsgId0x0200Services
 {
     public class ToDatabaseService : IHostedService
     {
-        private readonly JT808_0x0200_Consumer jT808_0X0200_Consumer;
+        private readonly IConsumerFactory ConsumerFactory;
 
         private readonly ILogger<ToDatabaseService> logger;
 
-        public ToDatabaseService(ILoggerFactory loggerFactory, JT808_0x0200_Consumer jT808_0X0200_Consumer)
+        public ToDatabaseService(ILoggerFactory loggerFactory, IConsumerFactory consumerFactory)
         {
-            this.jT808_0X0200_Consumer = jT808_0X0200_Consumer;
+            ConsumerFactory = consumerFactory;
             logger = loggerFactory.CreateLogger<ToDatabaseService>();
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            jT808_0X0200_Consumer.MsgIdConsumer.OnMessage += (_, msg) =>
-            {
-                // todo: 处理定位数据
-                logger.LogDebug($"Topic: {msg.Topic} Partition: {msg.Partition} Offset: {msg.Offset} {msg.Value.ToHexString()}");
-            };
-            jT808_0X0200_Consumer.MsgIdConsumer.OnError += (_, error) =>
-            {
-                logger.LogError($"Error: {error}");
-            };
-            jT808_0X0200_Consumer.MsgIdConsumer.OnConsumeError += (_, msg) =>
-            {
-                logger.LogError($"Error consuming from topic/partition/offset {msg.Topic}/{msg.Partition}/{msg.Offset}: {msg.Error}");
-            };
-            jT808_0X0200_Consumer.MsgIdConsumer.Subscribe(jT808_0X0200_Consumer.JT808MsgIdTopic);
-            Task.Run(() =>
-            {
-                while (!cancellationToken.IsCancellationRequested)
+            ConsumerFactory
+                .Subscribe((ushort)JT808.Protocol.Enums.JT808MsgId.位置信息汇报)
+                .OnMessage((msg) =>
                 {
-                    jT808_0X0200_Consumer.MsgIdConsumer.Poll(TimeSpan.FromMilliseconds(100));
-                }
-            }, cancellationToken);
+                   
+                });
             return Task.CompletedTask;
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
             logger.LogInformation("Stop ...");
-            jT808_0X0200_Consumer.MsgIdConsumer.Unsubscribe();
-            jT808_0X0200_Consumer.MsgIdConsumer.Dispose();
+            ConsumerFactory.Unsubscribe((ushort)JT808.Protocol.Enums.JT808MsgId.位置信息汇报);
             logger.LogInformation("Stop CompletedTask");
             return Task.CompletedTask;
         }

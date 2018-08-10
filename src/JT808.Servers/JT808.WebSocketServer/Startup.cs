@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GPS.JT808PubSubToKafka;
+using GPS.PubSub.Abstractions;
 using JT808.MsgId0x0200Services;
 using JT808.MsgId0x0200Services.Hubs;
-using JT808.MsgIdExtensions;
 using JT808.WebSocketServer.Hubs;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace JT808.WebSocketServer
 {
@@ -28,6 +30,8 @@ namespace JT808.WebSocketServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<ILoggerFactory, LoggerFactory>();
+            services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -44,12 +48,16 @@ namespace JT808.WebSocketServer
                              .AllowCredentials();
             }));
             var host = Configuration.GetSection("KafkaOptions").GetValue<string>("bootstrap.servers");
-            services.AddSingleton(new JT808_0x0200_Consumer(new Dictionary<string, object>
-            {
-                { "group.id", "JT808_0x0200_WebSocket_Alarm" },
-                { "enable.auto.commit", true },
-                { "bootstrap.servers", host }
-            }));
+            var loggerFactory = services.BuildServiceProvider().GetRequiredService<ILoggerFactory>();
+            services.AddSingleton(typeof(IConsumerFactory),
+                new JT808MsgIdConsumerFactory(
+                    new GPS.JT808PubSubToKafka.JT808_0x0200_Consumer(
+                        new Dictionary<string, object>
+                        {
+                            { "group.id", "JT808_0x0200_WebSocket_Alarm" },
+                            { "enable.auto.commit", true },
+                            { "bootstrap.servers", host }
+                        }, loggerFactory)));
             services.AddSignalR();
             services.AddSingleton<IHostedService, ToWebSocketService>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

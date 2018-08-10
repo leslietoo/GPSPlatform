@@ -1,7 +1,9 @@
-﻿namespace GPS.PubSub.Abstractions
+﻿using System;
+
+namespace GPS.PubSub.Abstractions
 {
-    public interface IProducer:IPubSub
+    public interface IProducer:IPubSub, IDisposable
     {
-        void ProduceAsync(byte[] data);
+        void ProduceAsync(string key, byte[] data);
     }
 }

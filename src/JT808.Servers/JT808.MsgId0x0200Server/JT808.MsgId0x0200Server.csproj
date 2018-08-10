@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\GPS.PubSubs\GPS.JT808PubSubToKafka\GPS.JT808PubSubToKafka.csproj" />
     <ProjectReference Include="..\..\JT808.Services\JT808.MsgId0x0200Services\JT808.MsgId0x0200Services.csproj" />
   </ItemGroup>
 
