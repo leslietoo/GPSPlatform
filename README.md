@@ -24,6 +24,7 @@
 | ISourcePackageDispatcher | 源包分发器 | 需要将源数据转给其他平台 |
 
 #####基于SignalR的JT808.WebSocketServer服务
+> 统一用户鉴权（待实现）
 推送平台：Web平台、App、及小程序
 使用场景：推送设备报警状态、胎压预警等
 
