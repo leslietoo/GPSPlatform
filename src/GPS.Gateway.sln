@@ -21,11 +21,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JT808.WebSocketServer", "JT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JT808.MsgId0x0200Server", "JT808.Servers\JT808.MsgId0x0200Server\JT808.MsgId0x0200Server.csproj", "{AD91CE84-F078-46CE-85DF-86218B7D3050}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPS.PubSub.Abstractions", "GPS.PubSub.Abstractions\GPS.PubSub.Abstractions.csproj", "{865B1D16-90BF-493A-9B67-00EFA6E66992}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPS.PubSub.Abstractions", "GPS.PubSub.Abstractions\GPS.PubSub.Abstractions.csproj", "{865B1D16-90BF-493A-9B67-00EFA6E66992}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GPS.PubSubs", "GPS.PubSubs", "{0CD9C89B-0D5A-44CB-A1F8-29C4B79D3F4E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPS.JT808PubSubToKafka", "GPS.PubSubs\GPS.JT808PubSubToKafka\GPS.JT808PubSubToKafka.csproj", "{5B7C2C5F-7B40-4990-90AB-1D43B5E2E961}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPS.Dispatcher.Abstractions", "GPS.Dispatcher.Abstractions\GPS.Dispatcher.Abstractions.csproj", "{1AB53AD9-2C59-46D7-9F76-43AABD94DA73}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,6 +67,10 @@ Global
 		{5B7C2C5F-7B40-4990-90AB-1D43B5E2E961}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B7C2C5F-7B40-4990-90AB-1D43B5E2E961}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B7C2C5F-7B40-4990-90AB-1D43B5E2E961}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AB53AD9-2C59-46D7-9F76-43AABD94DA73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AB53AD9-2C59-46D7-9F76-43AABD94DA73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AB53AD9-2C59-46D7-9F76-43AABD94DA73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AB53AD9-2C59-46D7-9F76-43AABD94DA73}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,6 +86,7 @@ Global
 		{865B1D16-90BF-493A-9B67-00EFA6E66992} = {B32F8347-9FEC-4B20-8694-7E5B79B63BD6}
 		{0CD9C89B-0D5A-44CB-A1F8-29C4B79D3F4E} = {B32F8347-9FEC-4B20-8694-7E5B79B63BD6}
 		{5B7C2C5F-7B40-4990-90AB-1D43B5E2E961} = {0CD9C89B-0D5A-44CB-A1F8-29C4B79D3F4E}
+		{1AB53AD9-2C59-46D7-9F76-43AABD94DA73} = {B32F8347-9FEC-4B20-8694-7E5B79B63BD6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {674FDCF4-E328-4682-90DC-B72901077006}

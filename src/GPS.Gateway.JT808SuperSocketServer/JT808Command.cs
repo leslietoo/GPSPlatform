@@ -21,21 +21,24 @@ namespace GPS.Gateway.JT808SuperSocketServer
 
         public override void ExecuteCommand(JT808Session<JT808RequestInfo> session, JT808RequestInfo requestInfo)
         {
+            var JT808Server = (JT808Server)session.AppServer;
+            JT808Server.SourcePackageDispatcher?.SendAsync(requestInfo.OriginalBuffer);
             if (requestInfo.JT808Package == null) return;
+            JT808Server.DeviceMonitoringDispatcher?.SendAsync(requestInfo.JT808Package.Header.TerminalPhoneNo,requestInfo.OriginalBuffer);
             session.TerminalPhoneNo = requestInfo.JT808Package.Header.TerminalPhoneNo;
             string receive = requestInfo.OriginalBuffer.ToHexString();
-            session.Logger.Debug("receive-" + receive);
-            session.Logger.Debug("receive-" + requestInfo.JT808Package.Header.MsgId.ToString() + "-" + JsonConvert.SerializeObject(requestInfo.JT808Package));
+            //session.Logger.Debug("receive-" + receive);
+            //session.Logger.Debug("receive-" + requestInfo.JT808Package.Header.MsgId.ToString() + "-" + JsonConvert.SerializeObject(requestInfo.JT808Package));
             try
             {
-                Func<JT808Package, JT808Session<JT808RequestInfo>, IJT808Package> handlerFunc;
-                if (((JT808Server)session.AppServer).JT808MsgIdHandler.HandlerDict.TryGetValue(requestInfo.JT808Package.Header.MsgId,out handlerFunc))
+                Func<JT808RequestInfo, JT808Session<JT808RequestInfo>, IJT808Package> handlerFunc;
+                if (JT808Server.JT808MsgIdHandler.HandlerDict.TryGetValue(requestInfo.JT808Package.Header.MsgId,out handlerFunc))
                 {
-                    IJT808Package jT808PackageImpl = handlerFunc(requestInfo.JT808Package, session);
+                    IJT808Package jT808PackageImpl = handlerFunc(requestInfo, session);
                     if (jT808PackageImpl != null)
                     {
                         session.Logger.Debug("send-" + jT808PackageImpl.JT808Package.Header.MsgId.ToString() + "-" + JT808Serializer.Serialize(jT808PackageImpl.JT808Package).ToHexString());
-                        session.Logger.Debug("send-" + jT808PackageImpl.JT808Package.Header.MsgId.ToString() + "-" + JsonConvert.SerializeObject(jT808PackageImpl.JT808Package));
+                        //session.Logger.Debug("send-" + jT808PackageImpl.JT808Package.Header.MsgId.ToString() + "-" + JsonConvert.SerializeObject(jT808PackageImpl.JT808Package));
                         session.TrySend(jT808PackageImpl);
                     }
                 }

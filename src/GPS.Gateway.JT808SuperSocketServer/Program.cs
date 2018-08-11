@@ -63,6 +63,7 @@ namespace GPS.Gateway.JT808SuperSocketServer
                                                 { "enable.auto.commit", true },
                                                 { "bootstrap.servers", host }
                                             }, loggerFactory)));
+                                
                                 services.AddSingleton<JT808Server>();
                                 services.AddScoped<IHostedService, JT808Service>();
                             });

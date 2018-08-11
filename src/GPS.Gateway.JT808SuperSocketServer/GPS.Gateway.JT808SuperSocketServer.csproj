@@ -234,6 +234,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GPS.Dispatcher.Abstractions\GPS.Dispatcher.Abstractions.csproj">
+      <Project>{1ab53ad9-2c59-46d7-9f76-43aabd94da73}</Project>
+      <Name>GPS.Dispatcher.Abstractions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GPS.PubSub.Abstractions\GPS.PubSub.Abstractions.csproj">
       <Project>{865b1d16-90bf-493a-9b67-00efa6e66992}</Project>
       <Name>GPS.PubSub.Abstractions</Name>
