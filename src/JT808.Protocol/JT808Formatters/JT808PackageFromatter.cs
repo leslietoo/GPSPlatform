@@ -82,7 +82,8 @@ namespace JT808.Protocol.JT808Formatters
                 messageBodyOffset += JT808BinaryExtensions.WriteUInt16Little(ref bytes, messageBodyOffset, value.Header.MessageBodyProperty.PackgeCount);
                 messageBodyOffset += JT808BinaryExtensions.WriteUInt16Little(ref bytes, messageBodyOffset, value.Header.MessageBodyProperty.PackageIndex);
             }
-            // 4. 数据体
+            // 4. 数据体 
+            //JT808.Protocol.Enums.JT808MsgId 映射对应消息特性
             JT808BodiesTypeAttribute jT808BodiesTypeAttribute = value.Header.MsgId.GetAttribute<JT808BodiesTypeAttribute>();
             if (jT808BodiesTypeAttribute != null)
             {

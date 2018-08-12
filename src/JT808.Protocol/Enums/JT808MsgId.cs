@@ -1,6 +1,7 @@
 ﻿using JT808.Protocol.Attributes;
 using JT808.Protocol.MessageBodyReply;
 using JT808.Protocol.MessageBodyRequest;
+using JT808.Protocol.MessageBodySend;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -59,7 +60,7 @@ namespace JT808.Protocol.Enums
         /// <summary>
         /// 文本信息下发
         /// </summary>
-        //[JT808BodiesType(typeof(JT808_0x8300))]
+        [JT808BodiesType(typeof(JT808_0x8300))]
         文本信息下发 = 0x8300,
         /// <summary>
         /// 定位数据批量上传
@@ -74,6 +75,6 @@ namespace JT808.Protocol.Enums
         /// <summary>
         /// 自定义统一下发消息
         /// </summary>
-        自定义统一下发消息= 0x9990
+        自定义统一下发消息 = 0x9990
     }
 }

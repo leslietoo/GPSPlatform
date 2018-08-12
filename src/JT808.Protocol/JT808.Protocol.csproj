@@ -16,17 +16,14 @@
     <Compile Remove="JT808PackageImpl\**" />
     <Compile Remove="JT808RequestProperties\JT808LocationAttachProperties\**" />
     <Compile Remove="MessageBodyRequest\JT808LocationAttach\**" />
-    <Compile Remove="MessageBodySend\**" />
     <EmbeddedResource Remove="JT808Formatters\MessageBodyFormatters\JT808LocationAttach\**" />
     <EmbeddedResource Remove="JT808PackageImpl\**" />
     <EmbeddedResource Remove="JT808RequestProperties\JT808LocationAttachProperties\**" />
     <EmbeddedResource Remove="MessageBodyRequest\JT808LocationAttach\**" />
-    <EmbeddedResource Remove="MessageBodySend\**" />
     <None Remove="JT808Formatters\MessageBodyFormatters\JT808LocationAttach\**" />
     <None Remove="JT808PackageImpl\**" />
     <None Remove="JT808RequestProperties\JT808LocationAttachProperties\**" />
     <None Remove="MessageBodyRequest\JT808LocationAttach\**" />
-    <None Remove="MessageBodySend\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -56,6 +53,7 @@
     <Compile Include="JT808PackageImpl\Reply\JT808_0x0001Package.cs" />
     <Compile Include="JT808PackageImpl\Reply\JT808_0x8001Package.cs" />
     <Compile Include="JT808PackageImpl\Reply\JT808_0x8100Package.cs" />
+    <Compile Include="JT808PackageImpl\Send\JT808_0x8300Package.cs" />
     <Compile Include="MessageBodyRequest\JT808LocationAttach\JT808LocationAttachBase.cs" />
     <Compile Include="MessageBodyRequest\JT808LocationAttach\JT808LocationAttachImpl0x01.cs" />
     <Compile Include="MessageBodyRequest\JT808LocationAttach\JT808LocationAttachImpl0x02.cs" />
