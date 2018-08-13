@@ -39,7 +39,7 @@ namespace GPS.JT808PubSubToRabbitMQ.Consumer
                         var loggerFactory = services.BuildServiceProvider().GetRequiredService<ILoggerFactory>();
                         services.AddSingleton(typeof(IConsumerFactory),
                             new ConsumerFactory(
-                                new GPS.JT808PubSubToRabbitMQ.JT808_0x0200_Consumer("host=172.16.19.120"
+                                new GPS.JT808PubSubToRabbitMQ.JT808_0x0200_Consumer("host=127.0.0.1"
                                     , loggerFactory)));
                         services.AddScoped<IHostedService, ToDatabaseService>();
                     });

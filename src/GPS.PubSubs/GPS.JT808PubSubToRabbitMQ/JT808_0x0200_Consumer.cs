@@ -30,8 +30,9 @@ namespace GPS.JT808PubSubToRabbitMQ
         public override void OnMessage(Action<(string Key, byte[] data)> callback)
         {
             var exchange = bus.Advanced.ExchangeDeclare(JT808MsgIdTopic, ExchangeType.Fanout);
-            IQueue queue= bus.Advanced.QueueDeclare(JT808MsgIdTopic);
-            bus.Advanced.Bind(exchange, queue, JT808MsgIdTopic);
+            string queueName = JT808MsgIdTopic +"_" + Guid.NewGuid().ToString("N").Substring(0,6);
+            IQueue queue= bus.Advanced.QueueDeclare(queueName);
+            bus.Advanced.Bind(exchange, queue, "anything");
             consumeDisposable=bus.Advanced.Consume<byte[]>(queue,(msg, mri)=> 
             {
                 callback(("", msg.Body));
