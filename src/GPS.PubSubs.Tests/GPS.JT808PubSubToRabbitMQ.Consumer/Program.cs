@@ -1,15 +1,14 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using GPS.PubSub.Abstractions;
+using JT808.MsgId0x0200Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using NLog.Extensions.Logging;
 using Microsoft.Extensions.Logging;
+using NLog.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using JT808.MsgId0x0200Services;
-using GPS.PubSub.Abstractions;
 
-namespace JT808.MsgId0x0200Service
+namespace GPS.JT808PubSubToRabbitMQ.Consumer
 {
     class Program
     {
@@ -38,16 +37,10 @@ namespace JT808.MsgId0x0200Service
                         services.AddSingleton<ILoggerFactory, LoggerFactory>();
                         services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
                         var loggerFactory = services.BuildServiceProvider().GetRequiredService<ILoggerFactory>();
-                        var host = hostContext.Configuration.GetSection("KafkaOptions").GetValue<string>("bootstrap.servers");
                         services.AddSingleton(typeof(IConsumerFactory),
                             new ConsumerFactory(
-                                new GPS.JT808PubSubToKafka.JT808_0x0200_Consumer(
-                                    new Dictionary<string, object>
-                                    {
-                                        { "group.id", "JT808_0x0200_ToDatabese" },
-                                        { "enable.auto.commit", true },
-                                        { "bootstrap.servers", host }
-                                    }, loggerFactory)));
+                                new GPS.JT808PubSubToRabbitMQ.JT808_0x0200_Consumer("host=172.16.19.120"
+                                    , loggerFactory)));
                         services.AddScoped<IHostedService, ToDatabaseService>();
                     });
 

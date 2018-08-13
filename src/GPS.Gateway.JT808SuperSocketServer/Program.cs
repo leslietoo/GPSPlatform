@@ -47,7 +47,7 @@ namespace GPS.Gateway.JT808SuperSocketServer
                                 KafkaMonoConfig.Load(hostContext.Configuration.GetSection("KafkaOptions").GetValue<string>("MonoRuntimePath"));
                                 services.Configure<SuperSocketOptions>(hostContext.Configuration.GetSection("SuperSocketOptions"));
                                 services.AddSingleton(typeof(IProducerFactory), 
-                                    new JT808MsgIdProducerFactory(
+                                    new ProducerFactory(
                                         new GPS.JT808PubSubToKafka.JT808_0x0200_Producer(
                                             new Dictionary<string, object>
                                             {
@@ -55,7 +55,7 @@ namespace GPS.Gateway.JT808SuperSocketServer
                                             })
                                 ));
                                 services.AddSingleton(typeof(IConsumerFactory),
-                                    new JT808MsgIdConsumerFactory(
+                                    new ConsumerFactory(
                                         new GPS.JT808PubSubToKafka.JT808_UnificationSend_Consumer(
                                             new Dictionary<string, object>
                                             {
@@ -63,7 +63,6 @@ namespace GPS.Gateway.JT808SuperSocketServer
                                                 { "enable.auto.commit", true },
                                                 { "bootstrap.servers", host }
                                             }, loggerFactory)));
-                                
                                 services.AddSingleton<JT808Server>();
                                 services.AddScoped<IHostedService, JT808Service>();
                             });

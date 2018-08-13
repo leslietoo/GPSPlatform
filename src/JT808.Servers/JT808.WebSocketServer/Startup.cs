@@ -50,7 +50,7 @@ namespace JT808.WebSocketServer
             var host = Configuration.GetSection("KafkaOptions").GetValue<string>("bootstrap.servers");
             var loggerFactory = services.BuildServiceProvider().GetRequiredService<ILoggerFactory>();
             services.AddSingleton(typeof(IConsumerFactory),
-                new JT808MsgIdConsumerFactory(
+                new ConsumerFactory(
                     new GPS.JT808PubSubToKafka.JT808_0x0200_Consumer(
                         new Dictionary<string, object>
                         {

@@ -1,14 +1,15 @@
-﻿using GPS.PubSub.Abstractions;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
-namespace GPS.JT808PubSubToKafka
+namespace GPS.PubSub.Abstractions
 {
-    public class JT808MsgIdProducerFactory : IProducerFactory
+    public class ProducerFactory: IProducerFactory
     {
-        public IDictionary<ushort, IProducer> ProducerDict { get ;}
+        public IDictionary<ushort, IProducer> ProducerDict { get; }
 
-        public JT808MsgIdProducerFactory(params IProducer[] producers)
+        public ProducerFactory(params IProducer[] producers)
         {
             if (producers != null)
             {

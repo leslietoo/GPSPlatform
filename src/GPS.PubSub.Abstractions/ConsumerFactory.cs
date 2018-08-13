@@ -1,14 +1,15 @@
-﻿using GPS.PubSub.Abstractions;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
-namespace GPS.JT808PubSubToKafka
+namespace GPS.PubSub.Abstractions
 {
-    public class JT808MsgIdConsumerFactory : IConsumerFactory
+   public class ConsumerFactory: IConsumerFactory
     {
-        public IDictionary<ushort, IConsumer> ConsumerDict { get ;}
+        public IDictionary<ushort, IConsumer> ConsumerDict { get; }
 
-        public JT808MsgIdConsumerFactory(params IConsumer[] consumers)
+        public ConsumerFactory(params IConsumer[] consumers)
         {
             if (consumers != null)
             {

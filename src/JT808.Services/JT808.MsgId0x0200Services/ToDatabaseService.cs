@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 using GPS.PubSub.Abstractions;
+using JT808.Protocol.Extensions;
 
 namespace JT808.MsgId0x0200Services
 {
@@ -24,7 +25,7 @@ namespace JT808.MsgId0x0200Services
                 .Subscribe((ushort)JT808.Protocol.Enums.JT808MsgId.位置信息汇报)
                 .OnMessage((msg) =>
                 {
-                   
+                    logger.LogDebug($"{msg.Key},{ msg.data.ToHexString()}");
                 });
             return Task.CompletedTask;
         }
