@@ -72,6 +72,10 @@ namespace JT808.Protocol.Enums
         /// </summary>
         //[JT808BodiesType(typeof(JT808_0x0801))]
         多媒体数据上传 = 0x0801,
+        [JT808BodiesType(typeof(JT808_0x8201))]
+        位置信息查询=0x8201,
+        [JT808BodiesType(typeof(JT808_0x0201))]
+        位置信息查询应答 = 0x0201,
         /// <summary>
         /// 自定义统一下发消息
         /// </summary>
