@@ -76,6 +76,10 @@ namespace JT808.Protocol.Enums
         位置信息查询=0x8201,
         [JT808BodiesType(typeof(JT808_0x0201))]
         位置信息查询应答 = 0x0201,
+        [JT808BodiesType(typeof(JT808_0x8107))]
+        查询终端属性 = 0x8107,
+        [JT808BodiesType(typeof(JT808_0x0107))]
+        查询终端属性应答 =0x0107,
         /// <summary>
         /// 自定义统一下发消息
         /// </summary>
