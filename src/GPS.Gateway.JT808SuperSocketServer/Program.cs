@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 using SuperSocket.SocketBase.Logging;
 using GPS.JT808PubSubToKafka;
 using GPS.PubSub.Abstractions;
+using GPS.JT808DeviceMonitoringDispatcher;
+using GPS.JT808SourcePackageDispatcher;
+using GPS.Dispatcher.Abstractions;
 
 namespace GPS.Gateway.JT808SuperSocketServer
 {
@@ -56,13 +59,18 @@ namespace GPS.Gateway.JT808SuperSocketServer
                                 ));
                                 services.AddSingleton(typeof(IConsumerFactory),
                                     new ConsumerFactory(
-                                        new GPS.JT808PubSubToKafka.JT808_UnificationSend_Consumer(
-                                            new Dictionary<string, object>
-                                            {
-                                                { "group.id", "GatewayUnificationSend" },
-                                                { "enable.auto.commit", true },
-                                                { "bootstrap.servers", host }
-                                            }, loggerFactory)));
+                                        // RabbitMQ
+                                        new GPS.JT808PubSubToRabbitMQ.JT808_UnificationSend_Consumer("host=172.16.19.120"
+                                        , loggerFactory)
+                                        //  Kafka
+                                 //new GPS.JT808PubSubToKafka.JT808_UnificationSend_Consumer(
+                                 //    new Dictionary<string, object>
+                                 //    {
+                                 //        { "group.id", "GatewayUnificationSend" },
+                                 //        { "enable.auto.commit", true },
+                                 //        { "bootstrap.servers", host }
+                                 //    }, loggerFactory)
+                                 ));
                                 services.AddSingleton<JT808Server>();
                                 services.AddScoped<IHostedService, JT808Service>();
                             });

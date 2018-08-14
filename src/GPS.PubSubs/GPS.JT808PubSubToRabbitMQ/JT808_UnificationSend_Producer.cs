@@ -30,7 +30,7 @@ namespace GPS.JT808PubSubToRabbitMQ
 
         public override void ProduceAsync(string key,byte[] data)
         {
-            bus.PublishAsync(new JT808_UnificationSend_Message {Key=key,Data=data }, $"{JT808MsgIdTopic}.{key}");
+            bus.PublishAsync(new JT808_UnificationSend_Message {Key=key,Data=data }, JT808MsgIdTopic);
         }
     }
 }

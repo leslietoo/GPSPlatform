@@ -38,7 +38,7 @@ namespace GPS.JT808PubSubToRabbitMQ
             subscriptionResult=bus.Subscribe<JT808_UnificationSend_Message>(JT808MsgIdTopic, (msg)=> 
             {
                 callback((msg.Key, msg.Data));
-            }, x => x.WithTopic($"{JT808MsgIdTopic}.*"));
+            });
         }
 
         public override void Subscribe()

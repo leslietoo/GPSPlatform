@@ -25,14 +25,6 @@ namespace GPS.JT808PubSubToRabbitMQ
         {
             var exchange = bus.Advanced.ExchangeDeclare(JT808MsgIdTopic, ExchangeType.Fanout);
             bus.Advanced.Publish(exchange, "", false, new Message<byte[]>(data));
-            //
-            //bus.Advanced.PublishAsync(
-            //        bus.Advanced.ExchangeDeclare($"exchange-{JT808MsgIdTopic}", ExchangeType.Fanout, true),
-            //        JT808MsgIdTopic,
-            //        false,
-            //        new Message<byte[]>(data)
-            //    );
-            //bus.PublishAsync(data,JT808MsgIdTopic);
         }
 
         public override void Dispose()

@@ -41,6 +41,22 @@ namespace GPS.Gateway.JT808SuperSocketServer
             log.LogDebug("Init JT808Server");
         }
 
+        public JT808Server(
+                 JT808MsgIdHandler jT808MsgIdHandler,
+                 IConsumerFactory consumerFactory,
+                 IProducerFactory producerFactory,
+                 ILoggerFactory loggerFactory)
+                    : base(new DefaultReceiveFilterFactory<JT808ReceiveFilter, JT808RequestInfo>())
+        {
+            JT808MsgIdHandler = jT808MsgIdHandler;
+            ConsumerFactory = consumerFactory;
+            ProducerFactory = producerFactory;
+            SourcePackageDispatcher = null;
+            DeviceMonitoringDispatcher = null;
+            log = loggerFactory.CreateLogger<JT808Server>();
+            log.LogDebug("Init JT808Server");
+        }
+
         protected override void OnStarted()
         {
             try

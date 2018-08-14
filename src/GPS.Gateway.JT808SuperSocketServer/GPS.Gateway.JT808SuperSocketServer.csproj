@@ -54,6 +54,12 @@
     <Reference Include="Confluent.Kafka">
       <HintPath>mono for kafka\Confluent.Kafka.dll</HintPath>
     </Reference>
+    <Reference Include="EasyNetQ, Version=3.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\EasyNetQ.3.3.0\lib\net451\EasyNetQ.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Diagnostics.Tracing.EventSource, Version=1.1.28.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Diagnostics.Tracing.EventSource.Redist.1.1.28\lib\net46\Microsoft.Diagnostics.Tracing.EventSource.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Extensions.Configuration, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.Configuration.2.1.1\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll</HintPath>
     </Reference>
@@ -116,6 +122,9 @@
     </Reference>
     <Reference Include="NLog.Extensions.Logging, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.Extensions.Logging.1.2.0\lib\net461\NLog.Extensions.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="RabbitMQ.Client, Version=5.0.0.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
+      <HintPath>..\packages\RabbitMQ.Client.5.1.0\lib\net451\RabbitMQ.Client.dll</HintPath>
     </Reference>
     <Reference Include="SuperSocket.Common, Version=1.6.6.1, Culture=neutral, PublicKeyToken=6c80000676988ebb, processorArchitecture=MSIL">
       <HintPath>..\packages\SuperSocket.1.6.6.1\lib\net45\SuperSocket.Common.dll</HintPath>
@@ -238,6 +247,14 @@
       <Project>{1ab53ad9-2c59-46d7-9f76-43aabd94da73}</Project>
       <Name>GPS.Dispatcher.Abstractions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GPS.Dispatchers\GPS.JT808DeviceMonitoringDispatcher\GPS.JT808DeviceMonitoringDispatcher.csproj">
+      <Project>{3c2dd431-d920-42ad-8dcf-3f2d8f5deb47}</Project>
+      <Name>GPS.JT808DeviceMonitoringDispatcher</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GPS.Dispatchers\GPS.JT808SourcePackageDispatcher\GPS.JT808SourcePackageDispatcher.csproj">
+      <Project>{e8276e2b-34aa-49c8-99c6-0131b6ad26a7}</Project>
+      <Name>GPS.JT808SourcePackageDispatcher</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GPS.PubSub.Abstractions\GPS.PubSub.Abstractions.csproj">
       <Project>{865b1d16-90bf-493a-9b67-00efa6e66992}</Project>
       <Name>GPS.PubSub.Abstractions</Name>
@@ -245,6 +262,10 @@
     <ProjectReference Include="..\GPS.PubSubs\GPS.JT808PubSubToKafka\GPS.JT808PubSubToKafka.csproj">
       <Project>{5b7c2c5f-7b40-4990-90ab-1d43b5e2e961}</Project>
       <Name>GPS.JT808PubSubToKafka</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GPS.PubSubs\GPS.JT808PubSubToRabbitMQ\GPS.JT808PubSubToRabbitMQ.csproj">
+      <Project>{fb2f4327-5843-4698-abad-145274f18f1e}</Project>
+      <Name>GPS.JT808PubSubToRabbitMQ</Name>
     </ProjectReference>
     <ProjectReference Include="..\JT808.Protocol\JT808.Protocol.csproj">
       <Project>{0eb9471e-c040-4ef0-bbdf-239f04736612}</Project>

@@ -30,24 +30,12 @@ namespace GPS.JT808PubSubToRabbitMQ
         public override void OnMessage(Action<(string Key, byte[] data)> callback)
         {
             var exchange = bus.Advanced.ExchangeDeclare(JT808MsgIdTopic, ExchangeType.Fanout);
-            string queueName = JT808MsgIdTopic +"_" + Guid.NewGuid().ToString("N").Substring(0,6);
-            IQueue queue= bus.Advanced.QueueDeclare(queueName);
-            bus.Advanced.Bind(exchange, queue, "anything");
+            IQueue queue= bus.Advanced.QueueDeclare(JT808MsgIdTopic+ ExchangeType.Fanout);
+            bus.Advanced.Bind(exchange, queue, "");
             consumeDisposable=bus.Advanced.Consume<byte[]>(queue,(msg, mri)=> 
             {
-                callback(("", msg.Body));
+                callback((JT808MsgIdTopic + ExchangeType.Fanout, msg.Body));
             });
-            //var exchange1 = bus.Advanced.ExchangeDeclare(JT808MsgIdTopic, ExchangeType.Fanout);
-            //IQueue queue1 = bus.Advanced.QueueDeclare(JT808MsgIdTopic+"2");
-            //bus.Advanced.Bind(exchange, queue1, JT808MsgIdTopic);
-            //bus.Advanced.Consume<byte[]>(queue1, (msg, mri) =>
-            //{
-            //    callback(("", msg.Body));
-            //});
-            //subscriptionResult =bus.Subscribe<byte[]>(JT808MsgIdTopic, msg => 
-            //{
-            //    callback(("", msg));
-            //},config=> { config.WithTopic($"{JT808MsgIdTopic}.{new Random(10000).Next(int.MaxValue).ToString()}"); });
         }
 
         public override void Subscribe()
