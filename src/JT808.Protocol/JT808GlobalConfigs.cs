@@ -1,9 +1,9 @@
 ﻿using JT808.Protocol.Enums;
 using JT808.Protocol.JT808Formatters;
 using JT808.Protocol.JT808Formatters.MessageBodyFormatters;
-using JT808.Protocol.MessageBodyReply;
-using JT808.Protocol.MessageBodyRequest;
-using JT808.Protocol.MessageBodyRequest.JT808LocationAttach;
+using JT808.Protocol.MessageBody;
+using JT808.Protocol.MessageBody;
+using JT808.Protocol.MessageBody.JT808LocationAttach;
 using System;
 using System.Text;
 

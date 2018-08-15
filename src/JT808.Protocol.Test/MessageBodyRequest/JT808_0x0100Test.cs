@@ -1,5 +1,5 @@
 ﻿using Xunit;
-using JT808.Protocol.MessageBodyRequest;
+using JT808.Protocol.MessageBody;
 using JT808.Protocol.Extensions;
 
 namespace JT808.Protocol.Test.MessageBodyRequest
@@ -24,7 +24,7 @@ namespace JT808.Protocol.Test.MessageBodyRequest
                  PlateColor=1,
                  PlateNo="粤A12345",
                  TerminalId="CHI123",
-                 TerminalType="smallchi123"
+                 TerminalModel="smallchi123"
             };
             var hex = JT808Serializer.Serialize(jT808_0X0100).ToHexString();
         }
@@ -45,7 +45,7 @@ namespace JT808.Protocol.Test.MessageBodyRequest
                 Assert.Equal(1, JT808Bodies.PlateColor);
                 Assert.Equal("粤A12345", JT808Bodies.PlateNo);
                 Assert.Equal("CHI1230", JT808Bodies.TerminalId);
-                Assert.Equal("smallchi123000000000", JT808Bodies.TerminalType);
+                Assert.Equal("smallchi123000000000", JT808Bodies.TerminalModel);
         }
     }
 }

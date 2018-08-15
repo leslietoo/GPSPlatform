@@ -1,5 +1,5 @@
 ﻿using JT808.Protocol.Enums;
-using JT808.Protocol.MessageBodySend;
+using JT808.Protocol.MessageBody;
 
 namespace JT808.Protocol.JT808PackageImpl.Send
 {

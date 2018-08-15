@@ -1,6 +1,6 @@
 ﻿using JT808.Protocol.Extensions;
-using JT808.Protocol.MessageBodyReply;
-using JT808.Protocol.MessageBodyRequest;
+using JT808.Protocol.MessageBody;
+using JT808.Protocol.MessageBody;
 using System;
 using System.Collections.Generic;
 using System.Text;

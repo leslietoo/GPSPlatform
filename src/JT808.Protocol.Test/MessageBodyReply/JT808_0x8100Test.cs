@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using JT808.Protocol.Enums;
 using Xunit;
-using JT808.Protocol.MessageBodyReply;
+using JT808.Protocol.MessageBody;
 using JT808.Protocol.Extensions;
 
 namespace JT808.Protocol.Test.MessageBodyReply

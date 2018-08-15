@@ -1,6 +1,6 @@
 ﻿using JT808.Protocol.Extensions;
-using JT808.Protocol.MessageBodyRequest;
-using JT808.Protocol.MessageBodyRequest.JT808_0x8900_0x0900_Body;
+using JT808.Protocol.MessageBody;
+using JT808.Protocol.MessageBody.JT808_0x8900_0x0900_Body;
 using System;
 
 namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters

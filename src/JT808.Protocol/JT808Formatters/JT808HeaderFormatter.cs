@@ -32,7 +32,7 @@ namespace JT808.Protocol.JT808Formatters
             //2.消息体属性
             offset = formatterResolver.GetFormatter<JT808HeaderMessageBodyProperty>().Serialize(ref bytes, offset, value.MessageBodyProperty, formatterResolver);
             // 3.终端手机号 (写死大陆手机号码)
-            offset += JT808BinaryExtensions.WriteBCDLittle(ref bytes, value.TerminalPhoneNo, offset, 6,12);
+            offset += JT808BinaryExtensions.WriteBCDLittle(ref bytes, offset, value.TerminalPhoneNo, 6, 12);
             //消息流水号
             offset += JT808BinaryExtensions.WriteUInt16Little(ref bytes, offset, value.MsgNum);
             if (value.MessageBodyProperty.IsPackge)

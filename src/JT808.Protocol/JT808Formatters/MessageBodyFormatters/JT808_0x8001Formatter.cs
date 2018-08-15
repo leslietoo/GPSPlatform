@@ -1,5 +1,5 @@
 ﻿using JT808.Protocol.Enums;
-using JT808.Protocol.MessageBodyReply;
+using JT808.Protocol.MessageBody;
 using JT808.Protocol.Extensions;
 using System;
 using System.Collections.Generic;

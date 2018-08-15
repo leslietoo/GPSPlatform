@@ -1,5 +1,5 @@
 ﻿using JT808.Protocol.Extensions;
-using JT808.Protocol.MessageBodySend;
+using JT808.Protocol.MessageBody;
 using System;
 
 namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters

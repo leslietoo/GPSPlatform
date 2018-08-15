@@ -1,4 +1,4 @@
-﻿using JT808.Protocol.MessageBodyRequest;
+﻿using JT808.Protocol.MessageBody;
 using JT808.Protocol.Extensions;
 using System;
 using System.Collections.Generic;

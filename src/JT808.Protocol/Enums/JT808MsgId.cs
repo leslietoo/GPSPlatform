@@ -1,7 +1,7 @@
 ﻿using JT808.Protocol.Attributes;
-using JT808.Protocol.MessageBodyReply;
-using JT808.Protocol.MessageBodyRequest;
-using JT808.Protocol.MessageBodySend;
+using JT808.Protocol.MessageBody;
+using JT808.Protocol.MessageBody;
+using JT808.Protocol.MessageBody;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -80,6 +80,18 @@ namespace JT808.Protocol.Enums
         查询终端属性 = 0x8107,
         [JT808BodiesType(typeof(JT808_0x0107))]
         查询终端属性应答 =0x0107,
+        [JT808BodiesType(typeof(JT808_0x8108))]
+        下发终端升级包 = 0x8108,
+        [JT808BodiesType(typeof(JT808_0x0108))]
+        终端升级结果通知 = 0x0108,
+        [JT808BodiesType(typeof(JT808_0x8202))]
+        临时位置跟踪控制 = 0x8202,
+        [JT808BodiesType(typeof(JT808_0x8500))]
+        车辆控制 = 0x8500,
+        [JT808BodiesType(typeof(JT808_0x0500))]
+        车辆控制应答 = 0x0500,
+        //[JT808BodiesType(typeof(JT808_0x8702))]
+        上报驾驶员身份信息请求 = 0x8702,
         /// <summary>
         /// 自定义统一下发消息
         /// </summary>

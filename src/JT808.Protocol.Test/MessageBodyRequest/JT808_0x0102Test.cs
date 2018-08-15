@@ -1,6 +1,6 @@
 
 using Xunit;
-using JT808.Protocol.MessageBodyRequest;
+using JT808.Protocol.MessageBody;
 using JT808.Protocol.Extensions;
 
 namespace JT808.Protocol.Test.MessageBodyRequest

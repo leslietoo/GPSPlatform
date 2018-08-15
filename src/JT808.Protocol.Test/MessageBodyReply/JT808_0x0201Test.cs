@@ -1,11 +1,11 @@
-﻿using JT808.Protocol.MessageBodyRequest;
-using JT808.Protocol.MessageBodyRequest.JT808LocationAttach;
+﻿using JT808.Protocol.MessageBody;
+using JT808.Protocol.MessageBody.JT808LocationAttach;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Xunit;
 using JT808.Protocol.Extensions;
-using JT808.Protocol.MessageBodyReply;
+using JT808.Protocol.MessageBody;
 
 namespace JT808.Protocol.Test.MessageBodyReply
 {

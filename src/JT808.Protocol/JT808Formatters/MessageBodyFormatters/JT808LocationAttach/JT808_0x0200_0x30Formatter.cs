@@ -1,4 +1,4 @@
-﻿using JT808.Protocol.MessageBodyRequest.JT808LocationAttach;
+﻿using JT808.Protocol.MessageBody.JT808LocationAttach;
 using JT808.Protocol.Extensions;
 using System;
 using System.Collections.Generic;

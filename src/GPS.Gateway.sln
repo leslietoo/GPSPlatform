@@ -35,13 +35,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPS.JT808SourcePackageDispa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPS.JT808DeviceMonitoringDispatcher", "GPS.Dispatchers\GPS.JT808DeviceMonitoringDispatcher\GPS.JT808DeviceMonitoringDispatcher.csproj", "{3C2DD431-D920-42AD-8DCF-3F2D8F5DEB47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPS.JT808PubSubToRabbitMQ", "GPS.PubSubs\GPS.JT808PubSubToRabbitMQ\GPS.JT808PubSubToRabbitMQ.csproj", "{FB2F4327-5843-4698-ABAD-145274F18F1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPS.JT808PubSubToRabbitMQ", "GPS.PubSubs\GPS.JT808PubSubToRabbitMQ\GPS.JT808PubSubToRabbitMQ.csproj", "{FB2F4327-5843-4698-ABAD-145274F18F1E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GPS.PubSubs.Tests", "GPS.PubSubs.Tests", "{71A119B8-1A11-4A41-B371-645C4A05169F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPS.JT808PubSubToRabbitMQ.Producer", "GPS.PubSubs.Tests\GPS.JT808PubSubToRabbitMQ.Producer\GPS.JT808PubSubToRabbitMQ.Producer.csproj", "{29BCF3B8-CF9D-4C50-8476-2CCAE69258BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPS.JT808PubSubToRabbitMQ.Producer", "GPS.PubSubs.Tests\GPS.JT808PubSubToRabbitMQ.Producer\GPS.JT808PubSubToRabbitMQ.Producer.csproj", "{29BCF3B8-CF9D-4C50-8476-2CCAE69258BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPS.JT808PubSubToRabbitMQ.Consumer", "GPS.PubSubs.Tests\GPS.JT808PubSubToRabbitMQ.Consumer\GPS.JT808PubSubToRabbitMQ.Consumer.csproj", "{9B5EFA33-B042-4AB0-AC07-82FF8EDA0E63}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPS.JT808PubSubToRabbitMQ.Consumer", "GPS.PubSubs.Tests\GPS.JT808PubSubToRabbitMQ.Consumer\GPS.JT808PubSubToRabbitMQ.Consumer.csproj", "{9B5EFA33-B042-4AB0-AC07-82FF8EDA0E63}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

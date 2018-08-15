@@ -1,7 +1,7 @@
 ﻿using JT808.Protocol;
 using JT808.Protocol.Enums;
 using JT808.Protocol.JT808PackageImpl.Reply;
-using JT808.Protocol.MessageBodyReply;
+using JT808.Protocol.MessageBody;
 using System;
 using System.Collections.Generic;
 using System.Linq;
