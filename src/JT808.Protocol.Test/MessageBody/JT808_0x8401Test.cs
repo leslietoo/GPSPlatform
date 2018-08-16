@@ -6,7 +6,7 @@ using Xunit;
 using JT808.Protocol.Extensions;
 using JT808.Protocol.JT808Properties;
 
-namespace JT808.Protocol.Test
+namespace JT808.Protocol.Test.MessageBody
 {
     public class JT808_0x8401Test
     {
