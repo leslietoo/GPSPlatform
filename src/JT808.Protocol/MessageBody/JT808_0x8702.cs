@@ -9,5 +9,6 @@ namespace JT808.Protocol.MessageBody
     /// </summary>
     public class JT808_0x8702:JT808Bodies
     {
+
     }
 }

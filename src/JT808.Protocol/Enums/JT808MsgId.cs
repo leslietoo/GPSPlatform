@@ -94,6 +94,8 @@ namespace JT808.Protocol.Enums
         电话回拨 =0x8400,
         [JT808BodiesType(typeof(JT808_0x8401))]
         设置电话本 = 0x8401,
+        [JT808BodiesType(typeof(JT808_0x8804))]
+        录音开始命令 = 0x8804,
         /// <summary>
         /// 自定义统一下发消息
         /// </summary>
