@@ -22,7 +22,7 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
                     jT808_0X0702.DriverUserName = JT808BinaryExtensions.ReadStringLittle(bytes, ref offset, jT808_0X0702.DriverUserNameLength);
                     jT808_0X0702.QualificationCode = JT808BinaryExtensions.ReadStringLittle(bytes, ref offset, 20);
                     jT808_0X0702.LicenseIssuingLength = JT808BinaryExtensions.ReadByteLittle(bytes, ref offset);
-                    jT808_0X0702.DriverUserName = JT808BinaryExtensions.ReadStringLittle(bytes, ref offset, jT808_0X0702.LicenseIssuingLength);
+                    jT808_0X0702.LicenseIssuing = JT808BinaryExtensions.ReadStringLittle(bytes, ref offset, jT808_0X0702.LicenseIssuingLength);
                     jT808_0X0702.CertificateExpiresDate = JT808BinaryExtensions.ReadDateLittle(bytes, ref offset);
                 }
             }
