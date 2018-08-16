@@ -90,8 +90,10 @@ namespace JT808.Protocol.Enums
         车辆控制 = 0x8500,
         [JT808BodiesType(typeof(JT808_0x0500))]
         车辆控制应答 = 0x0500,
-        //[JT808BodiesType(typeof(JT808_0x8702))]
+        [JT808BodiesType(typeof(JT808_0x8702))]
         上报驾驶员身份信息请求 = 0x8702,
+        [JT808BodiesType(typeof(JT808_0x8400))]
+        电话回拨 =0x8400,
         /// <summary>
         /// 自定义统一下发消息
         /// </summary>
