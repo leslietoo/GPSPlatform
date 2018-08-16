@@ -2,63 +2,37 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace JT808.Protocol.JT808RequestProperties
+namespace JT808.Protocol.JT808Properties
 {
     /// <summary>
-    /// 状态位
+    /// 报警标志位定义
     /// </summary>
-    public class JT808StatusProperty
+    public class JT808AlarmProperty
     {
+        private const int bitCount = 32;
         /// <summary>
-        /// 初始化读取状态位
+        /// 初始化读取报警标志位
         /// </summary>
         /// <param name="alarmStr"></param>
-        public JT808StatusProperty(string alarmStr)
+        public JT808AlarmProperty(string alarmStr)
         {
-            Bit0 = alarmStr[0];
-            Bit1 = alarmStr[1];
-            Bit2 = alarmStr[2];
-            Bit3 = alarmStr[3];
-            Bit4 = alarmStr[4];
-            Bit5 = alarmStr[5];
-            Bit6 = alarmStr[6];
-            Bit7 = alarmStr[7];
-            Bit8 = alarmStr[8];
-            Bit9 = alarmStr[9];
-            Bit10 = alarmStr[10];
-            Bit11 = alarmStr[11];
-            Bit12 = alarmStr[12];
-            Bit13 = alarmStr[13];
-            Bit14 = alarmStr[14];
-            Bit15 = alarmStr[15];
-            Bit16 = alarmStr[16];
-            Bit17 = alarmStr[17];
-            Bit18 = alarmStr[18];
-            Bit19 = alarmStr[19];
-            Bit20 = alarmStr[20];
-            Bit21 = alarmStr[21];
-            Bit22 = alarmStr[22];
-            Bit23 = alarmStr[23];
-            Bit24 = alarmStr[24];
-            Bit25 = alarmStr[25];
-            Bit26 = alarmStr[26];
-            Bit27 = alarmStr[27];
-            Bit28 = alarmStr[28];
-            Bit29 = alarmStr[29];
-            Bit30 = alarmStr[30];
-            Bit31 = alarmStr[31];
+            ReadOnlySpan<char> span = alarmStr.AsSpan();
+            for (int i=0;i< span.Length;i++)
+            {
+                this.GetType().GetProperty("Bit"+i.ToString()).SetValue(this, span[i]);
+            }
         }
 
         /// <summary>
-        /// 写入状态位
+        /// 写入报警标志位
         /// 从左开始写入，不满32位自动补'0'
         /// </summary>
         /// <param name="alarmChar"></param>
-        public JT808StatusProperty(params char[] alarmChar)
+        public JT808AlarmProperty(params char[] alarmChar)
         {
             if (alarmChar != null)
             {
-                ReadOnlySpan<char> span = alarmChar.ToString().PadRight(32, '0').AsSpan();
+                ReadOnlySpan<char> span = alarmChar.ToString().PadRight(bitCount, '0').AsSpan();
                 for (int i = 0; i < span.Length; i++)
                 {
                     this.GetType().GetProperty("Bit" + i.ToString()).SetValue(this, span[i] == '1');
@@ -67,144 +41,144 @@ namespace JT808.Protocol.JT808RequestProperties
         }
 
         /// <summary>
-        /// 0：ACC 关；1： ACC 开
+        /// 1:紧急报警，触动报警开关后触发    收到应答后清零
         /// </summary>
         public char Bit0 { get; set; }
         /// <summary>
-        /// 0：未定位；1：定位
+        /// 1:超速报警  标志维持至报警条件解除
         /// </summary>
         public char Bit1 { get; set; }
         /// <summary>
-        /// 0：北纬；1：南纬
+        /// 1:疲劳驾驶  标志维持至报警条件解除
         /// </summary>
         public char Bit2 { get; set; }
         /// <summary>
-        /// 0：东经；1：西经
+        /// 1:危险预警  收到应答后清零
         /// </summary>
         public char Bit3 { get; set; }
         /// <summary>
-        /// 0：运营状态；1：停运状态
+        /// GNSS模块发生故障  标志维持至报警条件解除
         /// </summary>
         public char Bit4 { get; set; }
         /// <summary>
-        /// 0：经纬度未经保密插件加密；1：经纬度已经保密插件加密
+        /// GNSS天线未接或被剪断   标志维持至报警条件解除
         /// </summary>
         public char Bit5 { get; set; }
         /// <summary>
-        /// 保留
+        /// GNSS天线短路    标志维持至报警条件解除
         /// </summary>
         public char Bit6 { get; set; }
         /// <summary>
-        /// 保留
+        /// 终端主电源欠压 标志维持至报警条件解除
         /// </summary>
         public char Bit7 { get; set; }
         /// <summary>
-        /// 00：空车；01：半载；10：保留；11：满载（可用于客车的空、重车及货车的空载、满载状态表示，人工输入或传感器获取）
+        /// 终端主电源掉电 标志维持至报警条件解除
         /// </summary>
         public char Bit8 { get; set; }
         /// <summary>
-        /// 00：空车；01：半载；10：保留；11：满载（可用于客车的空、重车及货车的空载、满载状态表示，人工输入或传感器获取）
+        /// 终端LCD或显示器故障 标志维持至报警条件解除
         /// </summary>
         public char Bit9 { get; set; }
         /// <summary>
-        /// 0：车辆油路正常；1：车辆油路断开
+        /// TTS模块故障 标志维持至报警条件解除
         /// </summary>
         public char Bit10 { get; set; }
         /// <summary>
-        /// 0：车辆电路正常；1：车辆电路断开
+        /// 摄像头故障   标志维持至报警条件解除
         /// </summary>
         public char Bit11 { get; set; }
         /// <summary>
-        /// 0：车门解锁；1：车门加锁
+        /// 道路运输证IC卡模块故障    标志维持至报警条件解除
         /// </summary>
         public char Bit12 { get; set; }
         /// <summary>
-        /// 0：门 1 关；1：门 1 开（前门）
+        /// 超速预警    标志维持至报警条件解除
         /// </summary>
         public char Bit13 { get; set; }
         /// <summary>
-        /// 0：门 2 关；1：门 2 开（中门）
+        /// 疲劳驾驶预警  标志维持至报警条件解除
         /// </summary>
         public char Bit14 { get; set; }
         /// <summary>
-        /// 0：门 3 关；1：门 3 开（后门）
+        /// 保留15
         /// </summary>
         public char Bit15 { get; set; }
         /// <summary>
-        /// 0：门 4 关；1：门 4 开（驾驶席门）
+        /// 保留16
         /// </summary>
         public char Bit16 { get; set; }
         /// <summary>
-        /// 0：门 5 关；1：门 5 开（自定义）
+        /// 保留17
         /// </summary>
         public char Bit17 { get; set; }
         /// <summary>
-        /// 0：未使用 GPS 卫星进行定位；1：使用 GPS 卫星进行定位
+        /// 当天累计驾驶超时    标志维持至报警条件解除
         /// </summary>
         public char Bit18 { get; set; }
         /// <summary>
-        /// 0：未使用北斗卫星进行定位；1：使用北斗卫星进行定位
+        /// 超时停车    标志维持至报警条件解除
         /// </summary>
         public char Bit19 { get; set; }
         /// <summary>
-        /// 0：未使用 GLONASS 卫星进行定位；1：使用 GLONASS 卫星进行定位
+        /// 进出区域    收到应答后清零
         /// </summary>
         public char Bit20 { get; set; }
         /// <summary>
-        /// 0：未使用 Galileo 卫星进行定位；1：使用 Galileo 卫星进行定位
+        /// 进出路线    收到应答后清零
         /// </summary>
         public char Bit21 { get; set; }
         /// <summary>
-        /// 保留
+        /// 路段行驶时间不足或过长 收到应答后清零
         /// </summary>
         public char Bit22 { get; set; }
         /// <summary>
-        /// 保留
+        /// 路线偏离报警  标志维持至报警条件解除
         /// </summary>
         public char Bit23 { get; set; }
         /// <summary>
-        /// 保留
+        /// 车辆VSS故障 标志维持至报警条件解除
         /// </summary>
         public char Bit24 { get; set; }
         /// <summary>
-        /// 保留
+        /// 车辆油量异常  标志维持至报警条件解除
         /// </summary>
         public char Bit25 { get; set; }
         /// <summary>
-        /// 保留
+        /// 车辆被盗通过车辆防盗器 标志维持至报警条件解除
         /// </summary>
         public char Bit26 { get; set; }
         /// <summary>
-        /// 保留
+        /// 车辆非法点火  
         /// </summary>
         public char Bit27 { get; set; }
         /// <summary>
-        /// 保留
+        /// 车辆非法位移  收到应答后清零
         /// </summary>
         public char Bit28 { get; set; }
         /// <summary>
-        /// 保留
+        /// 碰撞预警    标志维持至报警条件解除
         /// </summary>
         public char Bit29 { get; set; }
         /// <summary>
-        /// 保留
+        /// 侧翻预警    标志维持至报警条件解除
         /// </summary>
         public char Bit30 { get; set; }
         /// <summary>
-        /// 保留
+        /// 非法开门报警  （终端未设置区域时，不判断非法开门）收到应答后清零
         /// </summary>
         public char Bit31 { get; set; }
 
         /// <summary>
-        /// 状态位
+        /// 报警标志位
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            Span<char> span = new char[32];
+            Span<char> span = new char[bitCount];
             for (int i = 0; i < span.Length; i++)
             {
-                span[i] = (char)this.GetType().GetProperty("Bit" + i.ToString()).GetValue(this);
+                span[i]=(char)this.GetType().GetProperty("Bit" + i.ToString()).GetValue(this);
             }
             return span.ToString();
         }

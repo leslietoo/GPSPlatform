@@ -1,7 +1,5 @@
 ﻿using JT808.Protocol.Attributes;
 using JT808.Protocol.MessageBody;
-using JT808.Protocol.MessageBody;
-using JT808.Protocol.MessageBody;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -94,6 +92,8 @@ namespace JT808.Protocol.Enums
         上报驾驶员身份信息请求 = 0x8702,
         [JT808BodiesType(typeof(JT808_0x8400))]
         电话回拨 =0x8400,
+        [JT808BodiesType(typeof(JT808_0x8401))]
+        设置电话本 = 0x8401,
         /// <summary>
         /// 自定义统一下发消息
         /// </summary>

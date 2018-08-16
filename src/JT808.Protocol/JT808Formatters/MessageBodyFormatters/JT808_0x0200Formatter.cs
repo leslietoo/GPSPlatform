@@ -1,5 +1,5 @@
 ﻿using JT808.Protocol.Extensions;
-using JT808.Protocol.JT808RequestProperties;
+using JT808.Protocol.JT808Properties;
 using JT808.Protocol.MessageBody;
 using JT808.Protocol.MessageBody.JT808LocationAttach;
 using System;
