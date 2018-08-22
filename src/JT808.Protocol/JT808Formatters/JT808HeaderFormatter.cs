@@ -1,6 +1,7 @@
 ﻿using JT808.Protocol.Enums;
 using JT808.Protocol.Extensions;
 using System;
+using System.Buffers;
 
 namespace JT808.Protocol.JT808Formatters
 {
@@ -9,13 +10,14 @@ namespace JT808.Protocol.JT808Formatters
     /// </summary>
     public class JT808HeaderFormatter :  IJT808Formatter<JT808Header>
     {
-        public JT808Header Deserialize(ReadOnlySpan<byte> bytes, int offset, IJT808FormatterResolver formatterResolver, out int readSize)
+        public JT808Header Deserialize(ReadOnlySpan<byte> bytes, out int readSize)
         {
+            int offset = 0;
             JT808Header jT808Header = new JT808Header();
             // 1.消息ID
             jT808Header.MsgId = (JT808MsgId)JT808BinaryExtensions.ReadUInt16Little(bytes, ref offset); 
             // 2.消息体属性
-            jT808Header.MessageBodyProperty = formatterResolver.GetFormatter<JT808HeaderMessageBodyProperty>().Deserialize(bytes, offset, formatterResolver, out readSize);
+            jT808Header.MessageBodyProperty = JT808FormatterExtensions.GetFormatter<JT808HeaderMessageBodyProperty>().Deserialize(bytes.Slice(offset), out readSize);
             offset += readSize;
             // 3.终端手机号 (写死大陆手机号码)
             jT808Header.TerminalPhoneNo = JT808BinaryExtensions.ReadBCD(bytes,ref offset, 6).ToString().PadLeft(12, '0');
@@ -25,16 +27,16 @@ namespace JT808.Protocol.JT808Formatters
             return jT808Header;
         }
 
-        public int Serialize(ref byte[] bytes, int offset, JT808Header value, IJT808FormatterResolver formatterResolver)
+        public int Serialize(IMemoryOwner<byte> memoryOwner,int offset, JT808Header value)
         {
             // 1.消息ID
-            offset += JT808BinaryExtensions.WriteUInt16Little(ref bytes, offset, (ushort)value.MsgId);
+            offset += JT808BinaryExtensions.WriteUInt16Little(memoryOwner, offset, (ushort)value.MsgId);
             //2.消息体属性
-            offset = formatterResolver.GetFormatter<JT808HeaderMessageBodyProperty>().Serialize(ref bytes, offset, value.MessageBodyProperty, formatterResolver);
+            offset = JT808FormatterExtensions.GetFormatter<JT808HeaderMessageBodyProperty>().Serialize(memoryOwner, offset, value.MessageBodyProperty);
             // 3.终端手机号 (写死大陆手机号码)
-            offset += JT808BinaryExtensions.WriteBCDLittle(ref bytes, offset, value.TerminalPhoneNo, 6, 12);
+            offset += JT808BinaryExtensions.WriteBCDLittle(memoryOwner, offset, value.TerminalPhoneNo, 6, 12);
             //消息流水号
-            offset += JT808BinaryExtensions.WriteUInt16Little(ref bytes, offset, value.MsgNum);
+            offset += JT808BinaryExtensions.WriteUInt16Little(memoryOwner, offset, value.MsgNum);
             if (value.MessageBodyProperty.IsPackge)
             {
                 //消息总包数2位+包序号2位=4位

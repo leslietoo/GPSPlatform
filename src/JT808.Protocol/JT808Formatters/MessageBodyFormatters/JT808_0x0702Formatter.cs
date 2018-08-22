@@ -2,14 +2,15 @@
 using JT808.Protocol.Extensions;
 using JT808.Protocol.MessageBody;
 using System;
+using System.Buffers;
 
 namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
 {
     public class JT808_0x0702Formatter : IJT808Formatter<JT808_0x0702>
     {
-        public JT808_0x0702 Deserialize(ReadOnlySpan<byte> bytes, int offset, IJT808FormatterResolver formatterResolver, out int readSize)
+        public JT808_0x0702 Deserialize(ReadOnlySpan<byte> bytes,  out int readSize)
         {
-            offset = 0;
+            int offset = 0;
             JT808_0x0702 jT808_0X0702 = new JT808_0x0702();
             jT808_0X0702.IC_Card_Status = (JT808ICCardStatus)JT808BinaryExtensions.ReadByteLittle(bytes, ref offset);
             jT808_0X0702.IC_Card_PlugDateTime = JT808BinaryExtensions.ReadDateTimeLittle(bytes, ref offset);
@@ -30,21 +31,21 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
             return jT808_0X0702;
         }
 
-        public int Serialize(ref byte[] bytes, int offset, JT808_0x0702 value, IJT808FormatterResolver formatterResolver)
+        public int Serialize(IMemoryOwner<byte> memoryOwner, int offset, JT808_0x0702 value)
         {
-            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, (byte)value.IC_Card_Status);
-            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.IC_Card_PlugDateTime);
+            offset += JT808BinaryExtensions.WriteByteLittle(memoryOwner, offset, (byte)value.IC_Card_Status);
+            offset += JT808BinaryExtensions.WriteDateTime6Little(memoryOwner, offset, value.IC_Card_PlugDateTime);
             if(value.IC_Card_Status== JT808ICCardStatus.从业资格证IC卡插入_驾驶员上班)
             {
-                offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, (byte)value.IC_Card_ReadResult);
+                offset += JT808BinaryExtensions.WriteByteLittle(memoryOwner, offset, (byte)value.IC_Card_ReadResult);
                 if(value.IC_Card_ReadResult== JT808ICCardReadResult.IC卡读卡成功)
                 {
-                    offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, (byte)value.DriverUserName.Length);
-                    offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.DriverUserName);
-                    offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.QualificationCode.PadRight(20,'0'));
-                    offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, (byte)value.LicenseIssuing.Length);
-                    offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.LicenseIssuing);
-                    offset += JT808BinaryExtensions.WriteDateLittle(ref bytes, offset, value.CertificateExpiresDate);
+                    offset += JT808BinaryExtensions.WriteByteLittle(memoryOwner, offset, (byte)value.DriverUserName.Length);
+                    offset += JT808BinaryExtensions.WriteStringLittle(memoryOwner, offset, value.DriverUserName);
+                    offset += JT808BinaryExtensions.WriteStringLittle(memoryOwner, offset, value.QualificationCode.PadRight(20,'0'));
+                    offset += JT808BinaryExtensions.WriteByteLittle(memoryOwner, offset, (byte)value.LicenseIssuing.Length);
+                    offset += JT808BinaryExtensions.WriteStringLittle(memoryOwner, offset, value.LicenseIssuing);
+                    offset += JT808BinaryExtensions.WriteDateTime4Little(memoryOwner, offset, value.CertificateExpiresDate);
                 }
             }
             return offset;

@@ -3,6 +3,7 @@ using JT808.Protocol.Extensions;
 using JT808.Protocol.JT808Properties;
 using JT808.Protocol.MessageBody;
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,9 +11,9 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
 {
     public class JT808_0x8401Formatter : IJT808Formatter<JT808_0x8401>
     {
-        public JT808_0x8401 Deserialize(ReadOnlySpan<byte> bytes, int offset, IJT808FormatterResolver formatterResolver, out int readSize)
+        public JT808_0x8401 Deserialize(ReadOnlySpan<byte> bytes, out int readSize)
         {
-            offset = 0;
+            int offset = 0;
             JT808_0x8401 jT808_0X8401 = new JT808_0x8401();
             jT808_0X8401.SettingTelephoneBook = (JT808SettingTelephoneBook)JT808BinaryExtensions.ReadByteLittle(bytes, ref offset);
             jT808_0X8401.ContactCount= JT808BinaryExtensions.ReadByteLittle(bytes, ref offset);
@@ -32,17 +33,17 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
             return jT808_0X8401;
         }
 
-        public int Serialize(ref byte[] bytes, int offset, JT808_0x8401 value, IJT808FormatterResolver formatterResolver)
+        public int Serialize(IMemoryOwner<byte> memoryOwner, int offset, JT808_0x8401 value)
         {
-            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, (byte)value.SettingTelephoneBook);
-            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, (byte)value.JT808ContactProperties.Count);
+            offset += JT808BinaryExtensions.WriteByteLittle(memoryOwner, offset, (byte)value.SettingTelephoneBook);
+            offset += JT808BinaryExtensions.WriteByteLittle(memoryOwner, offset, (byte)value.JT808ContactProperties.Count);
             foreach(var item in value.JT808ContactProperties)
             {
-                offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, (byte)item.TelephoneBookContactType);
-                offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, (byte)item.PhoneNumber.Length);
-                offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, item.PhoneNumber);
-                offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, (byte)item.Contact.Length);
-                offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, item.Contact);
+                offset += JT808BinaryExtensions.WriteByteLittle(memoryOwner, offset, (byte)item.TelephoneBookContactType);
+                offset += JT808BinaryExtensions.WriteByteLittle(memoryOwner, offset, (byte)item.PhoneNumber.Length);
+                offset += JT808BinaryExtensions.WriteStringLittle(memoryOwner, offset, item.PhoneNumber);
+                offset += JT808BinaryExtensions.WriteByteLittle(memoryOwner, offset, (byte)item.Contact.Length);
+                offset += JT808BinaryExtensions.WriteStringLittle(memoryOwner, offset, item.Contact);
             }
             return offset;
         }

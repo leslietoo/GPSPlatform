@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Buffers.Binary;
+using System.Buffers;
 
 namespace JT808.Protocol.Extensions
 {
@@ -131,12 +132,32 @@ namespace JT808.Protocol.Extensions
             return 6;
         }
 
+        public static int WriteDateTime6Little(IMemoryOwner<byte> memoryOwner, int offset, DateTime date)
+        {
+            memoryOwner.Memory.Span[offset] = ((byte)(date.Year - DateLimitYear)).ToBcdByte();
+            memoryOwner.Memory.Span[offset + 1] = ((byte)(date.Month)).ToBcdByte();
+            memoryOwner.Memory.Span[offset + 2] = ((byte)(date.Day)).ToBcdByte();
+            memoryOwner.Memory.Span[offset + 3] = ((byte)(date.Hour)).ToBcdByte();
+            memoryOwner.Memory.Span[offset + 4] = ((byte)(date.Minute)).ToBcdByte();
+            memoryOwner.Memory.Span[offset + 5] = ((byte)(date.Second)).ToBcdByte();
+            return 6;
+        }
+
         public static int WriteDateLittle(ref byte[] write, int offset, DateTime date)
         {
             write[offset] = (byte)(date.Year >> 8);
             write[offset + 1] = (byte)date.Year;
             write[offset + 2] = ((byte)(date.Month)).ToBcdByte();
             write[offset + 3] = ((byte)(date.Day)).ToBcdByte();
+            return 4;
+        }
+
+        public static int WriteDateTime4Little(IMemoryOwner<byte> memoryOwner, int offset, DateTime date)
+        {
+            memoryOwner.Memory.Span[offset] = (byte)(date.Year >> 8);
+            memoryOwner.Memory.Span[offset + 1] = (byte)date.Year;
+            memoryOwner.Memory.Span[offset + 2] = ((byte)(date.Month)).ToBcdByte();
+            memoryOwner.Memory.Span[offset + 3] = ((byte)(date.Day)).ToBcdByte();
             return 4;
         }
 
@@ -149,6 +170,15 @@ namespace JT808.Protocol.Extensions
             return 4;
         }
 
+        public static int WriteInt32Little(IMemoryOwner<byte> memoryOwner, int offset, int data)
+        {
+            memoryOwner.Memory.Span[offset] = (byte)(data >> 24);
+            memoryOwner.Memory.Span[offset + 1] = (byte)(data >> 16);
+            memoryOwner.Memory.Span[offset + 2] = (byte)(data >> 8);
+            memoryOwner.Memory.Span[offset + 3] = (byte)data;
+            return 4;
+        }
+
         public static int WriteUInt16Little(ref byte[] write, int offset, ushort data)
         {
             write[offset] = (byte)(data >> 8);
@@ -156,10 +186,29 @@ namespace JT808.Protocol.Extensions
             return 2;
         }
 
+        public static int WriteUInt16Little(IMemoryOwner<byte> memoryOwner, int offset, ushort data)
+        {
+            memoryOwner.Memory.Span[offset] = (byte)(data >> 8);
+            memoryOwner.Memory.Span[offset + 1] = (byte)data;
+            return 2;
+        }
+
         public static int WriteLittle(ref byte[] write, int offset, byte data)
         {
             write[offset] = data;
             return 1;
+        }
+
+        public static int WriteByteLittle(IMemoryOwner<byte> memoryOwner, int offset, byte data)
+        {
+            memoryOwner.Memory.Span[offset] = data;
+            return 1;
+        }
+
+        public static int WriteBytesLittle(IMemoryOwner<byte> memoryOwner, int offset, byte[] data)
+        {
+            CopyTo(data, memoryOwner.Memory.Span, offset);
+            return data.Length;
         }
 
         public static int WriteLittle(ref byte[] write, int offset, byte[] data)
@@ -175,12 +224,29 @@ namespace JT808.Protocol.Extensions
             return codeBytes.Length;
         }
 
+        public static int WriteStringLittle(IMemoryOwner<byte> memoryOwner, int offset, string data)
+        {
+            byte[] codeBytes = encoding.GetBytes(data);
+            CopyTo(codeBytes, memoryOwner.Memory.Span, offset);
+            return codeBytes.Length;
+        }
+
         public static int WriteBCDLittle(ref byte[] write, int offset, string data, int digit, int len)
         {
             ReadOnlySpan<char> bcd = data.PadLeft(len, '0').AsSpan();
             for (int i = 0; i < digit; i++)
             {
                 write[offset + i] = Convert.ToByte(bcd.Slice(i * 2, 2).ToString(), 16);
+            }
+            return digit;
+        }
+
+        public static int WriteBCDLittle(IMemoryOwner<byte> memoryOwner, int offset, string data, int digit, int len)
+        {
+            ReadOnlySpan<char> bcd = data.PadLeft(len, '0').AsSpan();
+            for (int i = 0; i < digit; i++)
+            {
+                memoryOwner.Memory.Span[offset + i] = Convert.ToByte(bcd.Slice(i * 2, 2).ToString(), 16);
             }
             return digit;
         }
@@ -271,6 +337,14 @@ namespace JT808.Protocol.Extensions
         public static double ToLatLng(this int latlng)
         {
             return Math.Round(latlng / Math.Pow(10, 6), 6);
+        }
+
+        public static void CopyTo(Span<byte> source, Span<byte> destination, int offset)
+        {
+            for (int i = 0; i < source.Length; i++)
+            {
+                destination[offset + i] = source[i];
+            }
         }
 
         /// <summary>

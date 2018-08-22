@@ -4,7 +4,7 @@ using System.Text;
 using JT808.Protocol.Extensions;
 using JT808.Protocol.Exceptions;
 using JT808.Protocol.Attributes;
-
+using System.Buffers;
 
 namespace JT808.Protocol.JT808Formatters
 {
@@ -13,8 +13,9 @@ namespace JT808.Protocol.JT808Formatters
     /// </summary>
     public class JT808PackageFromatter : IJT808Formatter<JT808Package>
     {
-        public JT808Package Deserialize(ReadOnlySpan<byte> bytes, int offset, IJT808FormatterResolver formatterResolver, out int readSize)
+        public JT808Package Deserialize(ReadOnlySpan<byte> bytes,  out int readSize)
         {
+            int offset = 0;
             JT808Package jT808Package = new JT808Package();
             // 转义还原——>验证校验码——>解析消息
             // 1. 解码（转义还原）
@@ -36,7 +37,7 @@ namespace JT808.Protocol.JT808Formatters
             // 3.初始化消息头
             try
             {
-                jT808Package.Header = formatterResolver.GetFormatter<JT808Header>().Deserialize(buffer, offset, formatterResolver, out readSize);
+                jT808Package.Header = JT808FormatterExtensions.GetFormatter<JT808Header>().Deserialize(buffer.Slice(offset), out readSize);
             }
             catch (Exception ex)
             {
@@ -58,7 +59,7 @@ namespace JT808.Protocol.JT808Formatters
                         try
                         {
                             //5.处理消息体
-                            jT808Package.Bodies = JT808FormatterResolverExtensions.JT808DynamicDeserialize(formatterResolver.GetFormatterDynamic(jT808BodiesTypeAttribute.JT808BodiesType), buffer.Slice(offset, jT808Package.Header.MessageBodyProperty.DataLength).ToArray(), offset, formatterResolver, out readSize);
+                            jT808Package.Bodies = JT808FormatterResolverExtensions.JT808DynamicDeserialize(JT808FormatterExtensions.GetFormatter(jT808BodiesTypeAttribute.JT808BodiesType), buffer.Slice(offset+1, jT808Package.Header.MessageBodyProperty.DataLength),  out readSize);
                         }
                         catch (Exception ex)
                         {
@@ -72,15 +73,15 @@ namespace JT808.Protocol.JT808Formatters
             return jT808Package;
         }
 
-        public int Serialize(ref byte[] bytes, int offset, JT808Package value, IJT808FormatterResolver formatterResolver)
+        public int Serialize(IMemoryOwner<byte> memoryOwner, int offset, JT808Package value)
         {
             // 1. 先判断是否分包（理论下发不需分包，但为了统一还是加上分包处理）
             // 2. 先序列化数据体，根据数据体的长度赋值给头部，在序列化头部。
             int messageBodyOffset = 0;
             if (value.Header.MessageBodyProperty.IsPackge)
             {   //3. 先写入分包消息总包数、包序号 
-                messageBodyOffset += JT808BinaryExtensions.WriteUInt16Little(ref bytes, messageBodyOffset, value.Header.MessageBodyProperty.PackgeCount);
-                messageBodyOffset += JT808BinaryExtensions.WriteUInt16Little(ref bytes, messageBodyOffset, value.Header.MessageBodyProperty.PackageIndex);
+                messageBodyOffset += JT808BinaryExtensions.WriteUInt16Little(memoryOwner, messageBodyOffset, value.Header.MessageBodyProperty.PackgeCount);
+                messageBodyOffset += JT808BinaryExtensions.WriteUInt16Little(memoryOwner, messageBodyOffset, value.Header.MessageBodyProperty.PackageIndex);
             }
             // 4. 数据体 
             //JT808.Protocol.Enums.JT808MsgId 映射对应消息特性
@@ -90,31 +91,34 @@ namespace JT808.Protocol.JT808Formatters
                 if (value.Bodies != null)
                 {
                     // 4.1 处理数据体
-                    messageBodyOffset = JT808FormatterResolverExtensions.JT808DynamicSerialize(formatterResolver.GetFormatterDynamic(jT808BodiesTypeAttribute.JT808BodiesType),ref bytes, offset, value.Bodies, formatterResolver);
+                    messageBodyOffset = JT808FormatterResolverExtensions.JT808DynamicSerialize(JT808FormatterExtensions.GetFormatter(jT808BodiesTypeAttribute.JT808BodiesType), memoryOwner, offset, value.Bodies);
                 }
             }
-            byte[] messageBodyBytes = null;
+            Memory<byte> messageBodyBytes = null;
             if (messageBodyOffset != 0)
             {
-                messageBodyBytes = bytes.AsSpan().Slice(0, messageBodyOffset).ToArray();
+                messageBodyBytes = new Memory<byte>(new byte[messageBodyOffset]);
+                memoryOwner.Memory.Slice(0, messageBodyOffset).CopyTo(messageBodyBytes);
             }
             // ------------------------------------开始组包
             // 1.起始符
-            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.Begin);
+            offset += JT808BinaryExtensions.WriteByteLittle(memoryOwner, offset, value.Begin);
             // 2.赋值头数据长度
             value.Header.MessageBodyProperty.DataLength = messageBodyOffset;
-            offset = formatterResolver.GetFormatter<JT808Header>().Serialize(ref bytes, offset, value.Header, formatterResolver);
+            offset = JT808FormatterExtensions.GetFormatter<JT808Header>().Serialize(memoryOwner, offset, value.Header);
             if (messageBodyOffset != 0)
             {
-                Buffer.BlockCopy(messageBodyBytes, 0, bytes, offset, messageBodyOffset);
+                JT808BinaryExtensions.CopyTo(messageBodyBytes.Span, memoryOwner.Memory.Span, offset);
                 offset += messageBodyOffset;
+                messageBodyBytes = null;
             }
             // 4.校验码
-            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, bytes.ToXor(1, offset));
+            offset += JT808BinaryExtensions.WriteByteLittle(memoryOwner, offset, memoryOwner.Memory.Span.ToXor(1, offset));
             // 5.终止符
-            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.End);
-            byte[] temp = JT808Escape(bytes.AsSpan().Slice(0, offset));
-            Buffer.BlockCopy(temp, 0, bytes, 0, temp.Length);
+            offset += JT808BinaryExtensions.WriteByteLittle(memoryOwner, offset, value.End);
+            byte[] temp = JT808Escape(memoryOwner.Memory.Slice(0, offset).Span);
+            memoryOwner.Memory.Span.Clear();
+            JT808BinaryExtensions.CopyTo(temp, memoryOwner.Memory.Span, 0);
             return temp.Length;
         }
 

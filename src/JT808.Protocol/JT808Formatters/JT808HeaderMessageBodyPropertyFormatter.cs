@@ -1,6 +1,7 @@
 ﻿using JT808.Protocol.Enums;
 using JT808.Protocol.Extensions;
 using System;
+using System.Buffers;
 
 namespace JT808.Protocol.JT808Formatters
 {
@@ -9,10 +10,10 @@ namespace JT808.Protocol.JT808Formatters
     /// </summary>
     public class JT808HeaderMessageBodyPropertyFormatter : IJT808Formatter<JT808HeaderMessageBodyProperty>
     {
-        public JT808HeaderMessageBodyProperty Deserialize(ReadOnlySpan<byte> bytes, int offset, IJT808FormatterResolver formatterResolver, out int readSize)
+        public JT808HeaderMessageBodyProperty Deserialize(ReadOnlySpan<byte> bytes, out int readSize)
         {
+            int offset = 0;
             JT808HeaderMessageBodyProperty messageBodyProperty = new JT808HeaderMessageBodyProperty();
-
             ReadOnlySpan<char> msgMethod = Convert.ToString(JT808BinaryExtensions.ReadUInt16Little(bytes,ref offset), 2).PadLeft(16, '0').AsSpan();
             messageBodyProperty.DataLength = Convert.ToInt32(msgMethod.Slice(6, 10).ToString(), 2);
             //  2.2. 数据加密方式
@@ -41,7 +42,7 @@ namespace JT808.Protocol.JT808Formatters
             return messageBodyProperty;
         }
 
-        public int Serialize(ref byte[] bytes, int offset, JT808HeaderMessageBodyProperty value, IJT808FormatterResolver formatterResolver)
+        public int Serialize(IMemoryOwner<byte> memoryOwner, int offset, JT808HeaderMessageBodyProperty value)
         {
             // 2.消息体属性
             Span<char> msgMethod = new char[16];
@@ -75,7 +76,7 @@ namespace JT808.Protocol.JT808Formatters
             {
                 msgMethod[5 + i] = dataLen[i - 1];
             }
-            offset += JT808BinaryExtensions.WriteUInt16Little(ref bytes, offset, Convert.ToUInt16(msgMethod.ToString(), 2));
+            offset += JT808BinaryExtensions.WriteUInt16Little(memoryOwner, offset, Convert.ToUInt16(msgMethod.ToString(), 2));
             return offset;
         }
     }

@@ -3,15 +3,16 @@ using JT808.Protocol.JT808Properties;
 using JT808.Protocol.MessageBody;
 using JT808.Protocol.MessageBody.JT808LocationAttach;
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 
 namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
 {
     public class JT808_0x0200Formatter : IJT808Formatter<JT808_0x0200>
     {
-        public JT808_0x0200 Deserialize(ReadOnlySpan<byte> bytes, int offset, IJT808FormatterResolver formatterResolver, out int readSize)
+        public JT808_0x0200 Deserialize(ReadOnlySpan<byte> bytes, out int readSize)
         {
-            offset = 0;
+            int offset = 0;
             JT808_0x0200 jT808_0X0200 = new JT808_0x0200();
             jT808_0X0200.AlarmFlag = JT808BinaryExtensions.ReadInt32Little(bytes,ref offset);
             jT808_0X0200.StatusFlag = JT808BinaryExtensions.ReadInt32Little(bytes,ref offset);
@@ -49,8 +50,8 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
                             int attachContentLen = locationAttachSpan[attachOffset + 1];
                             int locationAttachTotalLen = attachId + attachLen + attachContentLen;
                             byte[] attachBuffer = locationAttachSpan.Slice(attachOffset, locationAttachTotalLen).ToArray();
-                            object attachImplObj = formatterResolver.GetFormatterDynamic(jT808LocationAttachType);
-                            dynamic attachImpl = JT808FormatterResolverExtensions.JT808DynamicDeserialize(attachImplObj, attachBuffer, attachOffset, formatterResolver,out readSize);
+                            object attachImplObj = JT808FormatterExtensions.GetFormatter(jT808LocationAttachType);
+                            dynamic attachImpl = JT808FormatterResolverExtensions.JT808DynamicDeserialize(attachImplObj, attachBuffer,out readSize);
                             attachOffset = attachOffset + locationAttachTotalLen;
                             jT808_0X0200.JT808LocationAttachData.Add(attachImpl.AttachInfoId, attachImpl);
                         }
@@ -74,24 +75,24 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
             return jT808_0X0200;
         }
 
-        public int Serialize(ref byte[] bytes, int offset, JT808_0x0200 value, IJT808FormatterResolver formatterResolver)
+        public int Serialize(IMemoryOwner<byte> memoryOwner, int offset, JT808_0x0200 value)
         {
-            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.AlarmFlag);
-            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.StatusFlag);
-            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.Lat);
-            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.Lng);
-            offset += JT808BinaryExtensions.WriteUInt16Little(ref bytes, offset, value.Altitude);
-            offset += JT808BinaryExtensions.WriteUInt16Little(ref bytes, offset, value.Speed);
-            offset += JT808BinaryExtensions.WriteUInt16Little(ref bytes, offset, value.Direction);
-            offset += JT808BinaryExtensions.WriteLittle(ref bytes, offset, value.GPSTime);
+            offset += JT808BinaryExtensions.WriteInt32Little(memoryOwner, offset, value.AlarmFlag);
+            offset += JT808BinaryExtensions.WriteInt32Little(memoryOwner, offset, value.StatusFlag);
+            offset += JT808BinaryExtensions.WriteInt32Little(memoryOwner, offset, value.Lat);
+            offset += JT808BinaryExtensions.WriteInt32Little(memoryOwner, offset, value.Lng);
+            offset += JT808BinaryExtensions.WriteUInt16Little(memoryOwner, offset, value.Altitude);
+            offset += JT808BinaryExtensions.WriteUInt16Little(memoryOwner, offset, value.Speed);
+            offset += JT808BinaryExtensions.WriteUInt16Little(memoryOwner, offset, value.Direction);
+            offset += JT808BinaryExtensions.WriteDateTime6Little(memoryOwner, offset, value.GPSTime);
             if (value.JT808LocationAttachData != null && value.JT808LocationAttachData.Count > 0)
             {
                 foreach (var item in value.JT808LocationAttachData)
                 {
                     try
                     {
-                        object attachImplObj = formatterResolver.GetFormatterDynamic(item.Value.GetType());
-                        offset = JT808FormatterResolverExtensions.JT808DynamicSerialize(attachImplObj, ref bytes, offset, item.Value, formatterResolver);
+                        object attachImplObj = JT808FormatterExtensions.GetFormatter(item.Value.GetType());
+                        offset = JT808FormatterResolverExtensions.JT808DynamicSerialize(attachImplObj, memoryOwner, offset, item.Value);
                     }
                     catch (Exception ex)
                     {

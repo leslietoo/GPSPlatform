@@ -1,57 +1,26 @@
 ﻿using JT808.Protocol.Exceptions;
-using JT808.Protocol.JT808Resolvers;
+using JT808.Protocol.Extensions;
 using System;
 using System.Buffers;
 using System.Text;
 
 namespace JT808.Protocol
 {
+    /// <summary>
+    /// 
+    ///  ref https://www.cnblogs.com/TianFang/p/9193881.html
+    /// </summary>
     public static class JT808Serializer
     {
-        static IJT808FormatterResolver defaultResolver;
-
-        static JT808Serializer()
-        {
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-        }
-
-        public static IJT808FormatterResolver DefaultResolver
-        {
-            get
-            {
-                if (defaultResolver == null)
-                {
-                    defaultResolver = JT808StandardResolver.Instance;
-                }
-                return defaultResolver;
-            }
-        }
-
-        public static bool IsInitialized
-        {
-            get
-            {
-               // System.Buffers.Binary.BinaryPrimitives.ReadInt16BigEndian()
-                return defaultResolver != null;
-            }
-        }
-
         public static byte[] Serialize(JT808Package jT808Package)
         {
-            return Serialize(jT808Package, defaultResolver);
-        }
-
-        public static byte[] Serialize(JT808Package jT808Package, IJT808FormatterResolver resolver)
-        {
-            if (resolver == null) resolver = DefaultResolver;
-            var formatter = resolver.GetFormatter<JT808Package>();
-            // ref https://www.cnblogs.com/TianFang/p/9193881.html
-            var pool = ArrayPool<byte>.Shared;
-            byte[] buffer = pool.Rent(65536);
+            var formatter = JT808FormatterExtensions.GetFormatter<JT808Package>();
+            var pool = MemoryPool<byte>.Shared;
+            IMemoryOwner<byte> buffer = pool.Rent(4096);
             try
             {
-                var len = formatter.Serialize(ref buffer, 0, jT808Package, DefaultResolver);
-                return buffer.AsSpan().Slice(0, len).ToArray();
+                var len = formatter.Serialize(buffer, 0, jT808Package);
+                return buffer.Memory.Slice(0, len).ToArray();
             }
             catch (JT808Exception ex)
             {
@@ -63,18 +32,20 @@ namespace JT808.Protocol
             }
             finally
             {
-                pool.Return(buffer, true);
+                // 源码：System.Memory.MemoryPool 
+                // private static readonly MemoryPool<T> s_shared = new ArrayMemoryPool<T>();
+                // 单例内存池 不需要手动释放资源
+                 buffer.Dispose();
             }
         }
 
-        public static JT808Package Deserialize(ReadOnlySpan<byte> bytes, IJT808FormatterResolver resolver)
+        public static JT808Package Deserialize(ReadOnlySpan<byte> bytes)
         {
             try
             {
-                if (resolver == null) resolver = DefaultResolver;
-                var formatter = resolver.GetFormatter<JT808Package>();
+                var formatter = JT808FormatterExtensions.GetFormatter<JT808Package>();
                 int readSize;
-                return formatter.Deserialize(bytes, 0, resolver, out readSize);
+                return formatter.Deserialize(bytes,out readSize);
             }
             catch (Exception ex)
             {
@@ -82,27 +53,15 @@ namespace JT808.Protocol
             }
         }
 
-        public static JT808Package Deserialize(ReadOnlySpan<byte> bytes)
-        {
-            return Deserialize(bytes, defaultResolver);
-        }
-
         public static byte[] Serialize<T>(T obj)
         {
-            return Serialize(obj, defaultResolver);
-        }
-
-        public static byte[] Serialize<T>(T obj, IJT808FormatterResolver resolver)
-        {
-            if (resolver == null) resolver = DefaultResolver;
-            var formatter = resolver.GetFormatter<T>();
-            // ref https://www.cnblogs.com/TianFang/p/9193881.html
-            var pool = ArrayPool<byte>.Shared;
-            byte[] buffer = pool.Rent(65536);
+            var formatter = JT808FormatterExtensions.GetFormatter<T>();
+            var pool = MemoryPool<byte>.Shared;
+            IMemoryOwner<byte> buffer = pool.Rent(10240);
             try
             {
-                var len = formatter.Serialize(ref buffer, 0, obj, DefaultResolver);
-                return buffer.AsSpan().Slice(0, len).ToArray();
+                var len = formatter.Serialize(buffer, 0, obj);
+                return buffer.Memory.Slice(0, len).ToArray();
             }
             catch (JT808Exception ex)
             {
@@ -114,23 +73,20 @@ namespace JT808.Protocol
             }
             finally
             {
-                pool.Return(buffer, true);
+                // 源码：System.Memory.MemoryPool 
+                // private static readonly MemoryPool<T> s_shared = new ArrayMemoryPool<T>();
+                // 单例内存池 不需要手动释放资源
+                buffer.Dispose();
             }
         }
 
         public static T Deserialize<T>(ReadOnlySpan<byte> bytes)
         {
-            return Deserialize<T>(bytes, defaultResolver);
-        }
-
-        public static T Deserialize<T>(ReadOnlySpan<byte> bytes, IJT808FormatterResolver resolver)
-        {
             try
             {
-                if (resolver == null) resolver = DefaultResolver;
-                var formatter = resolver.GetFormatter<T>();
+                var formatter = JT808FormatterExtensions.GetFormatter<T>();
                 int readSize;
-                return formatter.Deserialize(bytes, 0, resolver, out readSize);
+                return formatter.Deserialize(bytes,out readSize);
             }
             catch (Exception ex)
             {
