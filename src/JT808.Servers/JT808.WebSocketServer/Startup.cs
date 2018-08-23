@@ -7,6 +7,7 @@ using GPS.PubSub.Abstractions;
 using JT808.MsgId0x0200Services;
 using JT808.MsgId0x0200Services.Hubs;
 using JT808.WebSocketServer.Hubs;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -27,16 +28,28 @@ namespace JT808.WebSocketServer
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<ILoggerFactory, LoggerFactory>();
             services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
-            services.Configure<CookiePolicyOptions>(options =>
+            services.AddSignalR();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o =>
             {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
+                o.Events = new JwtBearerEvents()
+                {
+                    OnMessageReceived = context =>
+                    {
+                        //if (context.Request.Path.ToString().StartsWith("/HUB/"))
+                        //    context.Token = context.Request.Query["access_token"];
+                        var accessToken = context.Request.Query["access_token"];
+                        if (!string.IsNullOrEmpty(accessToken) && (context.HttpContext.WebSockets.IsWebSocketRequest || context.Request.Headers["Accept"] == "text/event-stream"))
+                        {
+                            context.Token = context.Request.Query["access_token"];
+                        }
+                        Console.WriteLine(context.Request.Query["access_token"]);
+                        return Task.CompletedTask;
+                    },
+                };
             });
             services.AddCors(options => options.AddPolicy("CorsPolicy",
                   builder =>
@@ -58,32 +71,18 @@ namespace JT808.WebSocketServer
                             { "enable.auto.commit", true },
                             { "bootstrap.servers", host }
                         }, loggerFactory)));
-            services.AddSignalR();
             services.AddSingleton<IHostedService, ToWebSocketService>();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-            }
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
-            app.UseCookiePolicy();
+            app.UseAuthentication();
             app.UseCors("CorsPolicy");
             app.UseSignalR(routes =>
             {
-                routes.MapHub<ChatHub>("/chatHub");
+                //routes.MapHub<ChatHub>("/chatHub");
                 routes.MapHub<AlarmHub>("/alarmHub");
             });
-            app.UseMvc();
         }
     }
 }

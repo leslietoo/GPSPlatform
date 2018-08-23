@@ -7,7 +7,7 @@
 // See Es5-chat.js for a Babel transpiled version of the following code:
 
 const connection = new signalR.HubConnectionBuilder()
-    .withUrl("/chatHub")
+    .withUrl("http://localhost:5000/chatHub")
     .build();
 
 connection.on("ReceiveMessage", (user, message) => {
