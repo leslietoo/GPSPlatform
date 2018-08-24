@@ -7,6 +7,7 @@ using GPS.PubSub.Abstractions;
 using JT808.MsgId0x0200Services;
 using JT808.MsgId0x0200Services.Hubs;
 using JT808.WebSocketServer.Hubs;
+using JT808.WebSocketServer.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,24 +34,6 @@ namespace JT808.WebSocketServer
             services.AddSingleton<ILoggerFactory, LoggerFactory>();
             services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
             services.AddSignalR();
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o =>
-            {
-                o.Events = new JwtBearerEvents()
-                {
-                    OnMessageReceived = context =>
-                    {
-                        //if (context.Request.Path.ToString().StartsWith("/HUB/"))
-                        //    context.Token = context.Request.Query["access_token"];
-                        var accessToken = context.Request.Query["access_token"];
-                        if (!string.IsNullOrEmpty(accessToken) && (context.HttpContext.WebSockets.IsWebSocketRequest || context.Request.Headers["Accept"] == "text/event-stream"))
-                        {
-                            context.Token = context.Request.Query["access_token"];
-                        }
-                        Console.WriteLine(context.Request.Query["access_token"]);
-                        return Task.CompletedTask;
-                    },
-                };
-            });
             services.AddCors(options => options.AddPolicy("CorsPolicy",
                   builder =>
                   {
@@ -76,11 +59,11 @@ namespace JT808.WebSocketServer
 
         public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
-            app.UseAuthentication();
+            app.UseJT808JwtVerify();
             app.UseCors("CorsPolicy");
             app.UseSignalR(routes =>
             {
-                //routes.MapHub<ChatHub>("/chatHub");
+                routes.MapHub<ChatHub>("/chatHub");
                 routes.MapHub<AlarmHub>("/alarmHub");
             });
         }
