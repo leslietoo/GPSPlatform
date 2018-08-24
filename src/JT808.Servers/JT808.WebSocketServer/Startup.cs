@@ -8,7 +8,6 @@ using JT808.MsgId0x0200Services;
 using JT808.MsgId0x0200Services.Hubs;
 using JT808.WebSocketServer.Hubs;
 using JT808.WebSocketServer.Middlewares;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
