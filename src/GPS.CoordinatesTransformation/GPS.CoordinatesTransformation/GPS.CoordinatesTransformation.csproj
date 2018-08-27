@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>GPS.CoordinatesTransformation</Authors>
+    <Company>GPS.CoordinatesTransformation</Company>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="resources.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="resources.txt" />
+  </ItemGroup>
+
+</Project>
