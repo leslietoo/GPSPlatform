@@ -7,17 +7,17 @@ namespace GPS.PubSub.Abstractions
 {
     public class ProducerFactory: IProducerFactory
     {
-        public IDictionary<ushort, IProducer> ProducerDict { get; }
+        public IDictionary<string, IProducer> ProducerDict { get; }
 
         public ProducerFactory(params IProducer[] producers)
         {
             if (producers != null)
             {
-                ProducerDict = producers.ToDictionary(key => key.CategoryId, value => value);
+                ProducerDict = producers.ToDictionary(key => key.TopicName, value => value);
             }
             else
             {
-                ProducerDict = new Dictionary<ushort, IProducer>();
+                ProducerDict = new Dictionary<string, IProducer>();
             }
         }
     }

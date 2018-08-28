@@ -20,6 +20,7 @@ namespace JT808.Protocol.Extensions
         {
             return Convert.ToInt32(t);
         }
+
         /// <summary>
         /// 转为Byte
         /// </summary>
@@ -29,6 +30,17 @@ namespace JT808.Protocol.Extensions
         public static byte ToByteValue<T>(this T t) where T : struct
         {
             return Convert.ToByte(t);
+        }
+
+        /// <summary>
+        /// 转为整型
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public static string ToValueString<T>(this T t) where T : struct
+        {
+            return Convert.ToInt32(t).ToString();
         }
 
         /// <summary>

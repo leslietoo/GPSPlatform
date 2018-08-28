@@ -5,6 +5,6 @@ namespace GPS.PubSub.Abstractions
 {
     public interface IProducerFactory
     {
-        IDictionary<ushort, IProducer> ProducerDict { get; }
+        IDictionary<string, IProducer> ProducerDict { get; }
     }
 }

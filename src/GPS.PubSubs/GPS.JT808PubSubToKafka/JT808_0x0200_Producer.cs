@@ -1,6 +1,8 @@
 ﻿using Confluent.Kafka;
 using Confluent.Kafka.Serialization;
+using JT808.Protocol.Extensions;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GPS.JT808PubSubToKafka
 {
@@ -20,7 +22,7 @@ namespace GPS.JT808PubSubToKafka
 
         public override void ProduceAsync(string key,byte[] data)
         {
-            producer.ProduceAsync(JT808MsgIdTopic, null, data);
+             producer.ProduceAsync(TopicName, null, data);
         }
 
         public override void Dispose()
@@ -28,7 +30,7 @@ namespace GPS.JT808PubSubToKafka
             producer.Dispose();
         }
 
-        public override ushort CategoryId  => (ushort)JT808.Protocol.Enums.JT808MsgId.位置信息汇报;
+        public override string TopicName  => JT808.Protocol.Enums.JT808MsgId.位置信息汇报.ToValueString();
 
 
     }

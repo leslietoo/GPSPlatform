@@ -2,6 +2,6 @@
 {
     public interface IPubSub
     {
-        ushort CategoryId { get; }
+        string TopicName { get; }
     }
 }

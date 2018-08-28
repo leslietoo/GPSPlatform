@@ -21,7 +21,7 @@ namespace GPS.JT808PubSubToRabbitMQ
             bus = RabbitHutch.CreateBus(ConnStr);
         }
 
-        public override ushort CategoryId => (ushort)JT808MsgId.自定义统一下发消息;
+        public override string TopicName => "UnificationSend";
 
         public override void Dispose()
         {
@@ -30,7 +30,7 @@ namespace GPS.JT808PubSubToRabbitMQ
 
         public override void ProduceAsync(string key,byte[] data)
         {
-            bus.PublishAsync(new JT808_UnificationSend_Message {Key=key,Data=data }, JT808MsgIdTopic);
+            bus.PublishAsync(new JT808_UnificationSend_Message {Key=key,Data=data }, TopicName);
         }
     }
 }

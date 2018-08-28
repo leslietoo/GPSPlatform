@@ -21,16 +21,16 @@ namespace GPS.JT808PubSubToKafka
             producer = new Producer<string, byte[]>(Config, new StringSerializer(Encoding.UTF8), new ByteArraySerializer());
         }
 
-        public override ushort CategoryId => (ushort)JT808MsgId.自定义统一下发消息;
-
         public override void Dispose()
         {
             producer.Dispose();
         }
 
+        public override string TopicName => "UnificationSend";
+
         public override void ProduceAsync(string key,byte[] data)
         {
-            producer.ProduceAsync(JT808MsgIdTopic, key, data);
+            producer.ProduceAsync(TopicName, key, data);
         }
     }
 }

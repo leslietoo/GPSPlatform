@@ -21,6 +21,7 @@ namespace GPS.JT808PubSubToKafka
 
         public CancellationTokenSource Cts { get; }
         protected abstract ILogger Logger { get; }
+
         public abstract void OnMessage(Action<(string Key, byte[] data)> callback);
         protected abstract void RegisterEvent();
         public abstract void Subscribe();

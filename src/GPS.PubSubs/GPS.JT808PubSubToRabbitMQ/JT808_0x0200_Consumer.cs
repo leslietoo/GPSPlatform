@@ -1,5 +1,6 @@
 ﻿using EasyNetQ;
 using EasyNetQ.Topology;
+using JT808.Protocol.Extensions;
 using Microsoft.Extensions.Logging;
 using System;
 
@@ -25,16 +26,16 @@ namespace GPS.JT808PubSubToRabbitMQ
             bus = RabbitHutch.CreateBus(ConnStr);
         }
 
-        public override ushort CategoryId => (ushort)JT808.Protocol.Enums.JT808MsgId.位置信息汇报;
+        public override string TopicName => JT808.Protocol.Enums.JT808MsgId.位置信息汇报.ToValueString();
 
         public override void OnMessage(Action<(string Key, byte[] data)> callback)
         {
-            var exchange = bus.Advanced.ExchangeDeclare(JT808MsgIdTopic, ExchangeType.Fanout);
-            IQueue queue= bus.Advanced.QueueDeclare(JT808MsgIdTopic+ ExchangeType.Fanout);
+            var exchange = bus.Advanced.ExchangeDeclare(TopicName, ExchangeType.Fanout);
+            IQueue queue= bus.Advanced.QueueDeclare(TopicName + ExchangeType.Fanout);
             bus.Advanced.Bind(exchange, queue, "");
             consumeDisposable=bus.Advanced.Consume<byte[]>(queue,(msg, mri)=> 
             {
-                callback((JT808MsgIdTopic + ExchangeType.Fanout, msg.Body));
+                callback((TopicName + ExchangeType.Fanout, msg.Body));
             });
         }
 

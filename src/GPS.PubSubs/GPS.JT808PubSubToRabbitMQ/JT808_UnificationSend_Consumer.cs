@@ -31,11 +31,11 @@ namespace GPS.JT808PubSubToRabbitMQ
             bus = RabbitHutch.CreateBus(ConnStr);
         }
 
-        public override ushort CategoryId =>(ushort) JT808MsgId.自定义统一下发消息;
+        public override string TopicName => JT808.Protocol.Enums.JT808MsgId.位置信息汇报.ToValueString();
 
         public override void OnMessage(Action<(string Key, byte[] data)> callback)
         {
-            subscriptionResult=bus.Subscribe<JT808_UnificationSend_Message>(JT808MsgIdTopic, (msg)=> 
+            subscriptionResult=bus.Subscribe<JT808_UnificationSend_Message>(TopicName, (msg)=> 
             {
                 callback((msg.Key, msg.Data));
             });

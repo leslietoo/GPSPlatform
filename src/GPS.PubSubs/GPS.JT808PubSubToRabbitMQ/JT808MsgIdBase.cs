@@ -17,9 +17,7 @@ namespace GPS.JT808PubSubToRabbitMQ
             ConnStr = "";
         }
 
-        public abstract ushort CategoryId { get;}
-
-        public string JT808MsgIdTopic => CategoryId.ToString();
+        public abstract string TopicName { get; }
 
         public string ConnStr { get;}
     }

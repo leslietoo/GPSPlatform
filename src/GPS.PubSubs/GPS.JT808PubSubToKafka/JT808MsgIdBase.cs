@@ -37,9 +37,7 @@ namespace GPS.JT808PubSubToKafka
             };
         }
 
-        public abstract ushort CategoryId { get;}
-
-        public string JT808MsgIdTopic => CategoryId.ToString();
+        public abstract string TopicName { get; }
 
         public Dictionary<string, object> Config { get;}
     }

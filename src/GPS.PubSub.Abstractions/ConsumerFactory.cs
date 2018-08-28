@@ -7,17 +7,17 @@ namespace GPS.PubSub.Abstractions
 {
    public class ConsumerFactory: IConsumerFactory
     {
-        public IDictionary<ushort, IConsumer> ConsumerDict { get; }
+        public IDictionary<string, IConsumer> ConsumerDict { get; }
 
         public ConsumerFactory(params IConsumer[] consumers)
         {
             if (consumers != null)
             {
-                ConsumerDict = consumers.ToDictionary(key => key.CategoryId, value => value);
+                ConsumerDict = consumers.ToDictionary(key => key.TopicName, value => value);
             }
             else
             {
-                ConsumerDict = new Dictionary<ushort, IConsumer>();
+                ConsumerDict = new Dictionary<string, IConsumer>();
             }
         }
     }

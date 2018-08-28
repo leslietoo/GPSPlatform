@@ -4,6 +4,6 @@ namespace GPS.PubSub.Abstractions
 {
     public interface IConsumerFactory
     {
-        IDictionary<ushort, IConsumer> ConsumerDict { get; }
+        IDictionary<string, IConsumer> ConsumerDict { get; }
     }
 }

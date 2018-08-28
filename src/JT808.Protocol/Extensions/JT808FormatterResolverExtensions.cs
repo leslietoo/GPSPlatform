@@ -13,6 +13,7 @@ namespace JT808.Protocol.Extensions
     /// 
     /// ref http://adamsitnik.com/Span/#span-must-not-be-a-generic-type-argument
     /// ref http://adamsitnik.com/Span/
+    /// ref:MessagePack.Formatters.DynamicObjectTypeFallbackFormatter
     /// </summary>
     public static class JT808FormatterResolverExtensions
     {
@@ -27,16 +28,6 @@ namespace JT808.Protocol.Extensions
         //T Deserialize(ReadOnlySpan<byte> bytes, out int readSize);
         //int Serialize(IMemoryOwner<byte> memoryOwner, int offset, T value);
 
-        /// <summary>
-        /// 
-        /// ref:MessagePack.Formatters.DynamicObjectTypeFallbackFormatter
-        /// </summary>
-        /// <param name="objFormatter"></param>
-        /// <param name="bytes"></param>
-        /// <param name="offset"></param>
-        /// <param name="bodiesImplValue"></param>
-        /// <param name="formatterResolver"></param>
-        /// <returns></returns>
         public static int JT808DynamicSerialize(object objFormatter, IMemoryOwner<byte> memoryOwner, int offset, dynamic value)
         {
             Type type = value.GetType();
@@ -66,16 +57,6 @@ namespace JT808.Protocol.Extensions
             return formatterAndDelegate.SerializeMethod(formatterAndDelegate.Value, memoryOwner, offset, value);
         }
 
-        /// <summary>
-        /// 
-        /// ref:MessagePack.Formatters.DynamicObjectTypeFallbackFormatter
-        /// </summary>
-        /// <param name="objFormatter"></param>
-        /// <param name="bytes"></param>
-        /// <param name="offset"></param>
-        /// <param name="formatterResolver"></param>
-        /// <param name="readSize"></param>
-        /// <returns></returns>
         public static dynamic JT808DynamicDeserialize(object objFormatter,ReadOnlySpan<byte> bytes, out int readSize)
         {
             var type = objFormatter.GetType();

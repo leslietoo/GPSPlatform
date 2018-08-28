@@ -1,6 +1,7 @@
 ﻿using EasyNetQ;
 using EasyNetQ.Topology;
 using GPS.PubSub.Abstractions;
+using JT808.Protocol.Extensions;
 using System.Collections.Generic;
 
 namespace GPS.JT808PubSubToRabbitMQ
@@ -23,7 +24,7 @@ namespace GPS.JT808PubSubToRabbitMQ
 
         public override void ProduceAsync(string key,byte[] data)
         {
-            var exchange = bus.Advanced.ExchangeDeclare(JT808MsgIdTopic, ExchangeType.Fanout);
+            var exchange = bus.Advanced.ExchangeDeclare(TopicName, ExchangeType.Fanout);
             bus.Advanced.Publish(exchange, "", false, new Message<byte[]>(data));
         }
 
@@ -32,7 +33,8 @@ namespace GPS.JT808PubSubToRabbitMQ
             bus.Dispose();
         }
 
-        public override ushort CategoryId  => (ushort)JT808.Protocol.Enums.JT808MsgId.位置信息汇报;
+        public override string TopicName => JT808.Protocol.Enums.JT808MsgId.位置信息汇报.ToValueString();
+
 
 
     }

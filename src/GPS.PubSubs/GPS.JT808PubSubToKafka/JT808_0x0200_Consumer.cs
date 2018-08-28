@@ -29,7 +29,7 @@ namespace GPS.JT808PubSubToKafka
             RegisterEvent();
         }
 
-        public override ushort CategoryId => (ushort)JT808.Protocol.Enums.JT808MsgId.位置信息汇报;
+        public override string TopicName => JT808.Protocol.Enums.JT808MsgId.位置信息汇报.ToValueString();
 
         public override void OnMessage(Action<(string Key, byte[] data)> callback)
         {
@@ -58,7 +58,7 @@ namespace GPS.JT808PubSubToKafka
                     }
                 }
             }, Cts.Token);
-            consumer.Subscribe(JT808MsgIdTopic);
+            consumer.Subscribe(TopicName);
         }
 
         public override void Unsubscribe()

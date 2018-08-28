@@ -2,21 +2,21 @@
 {
     public static class ConsumerFactoryExtensions
     {
-        public static IConsumer CreateConsumer(this IConsumerFactory factory,ushort categoryId)
+        public static IConsumer CreateConsumer(this IConsumerFactory factory, string topicName)
         {
-            return factory.ConsumerDict[categoryId];
+            return factory.ConsumerDict[topicName];
         }
 
-        public static IConsumer Subscribe(this IConsumerFactory factory, ushort categoryId)
+        public static IConsumer Subscribe(this IConsumerFactory factory, string topicName)
         {
-            var consumer = factory.ConsumerDict[categoryId];
+            var consumer = factory.ConsumerDict[topicName];
             consumer?.Subscribe();
             return consumer;
         }
 
-        public static IConsumerFactory Unsubscribe(this IConsumerFactory factory, ushort categoryId)
+        public static IConsumerFactory Unsubscribe(this IConsumerFactory factory, string topicName)
         {
-            factory.ConsumerDict[categoryId].Unsubscribe();
+            factory.ConsumerDict[topicName].Unsubscribe();
             return factory;
         }
 

@@ -1,5 +1,6 @@
 ﻿using GPS.PubSub.Abstractions;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace GPS.JT808PubSubToKafka
 {

@@ -41,7 +41,7 @@ namespace GPS.JT808PubSubToKafka
             };
         }
 
-        public override ushort CategoryId =>(ushort) JT808MsgId.自定义统一下发消息;
+        public override string TopicName => "UnificationSend";
 
         protected override ILogger Logger { get; }
 
@@ -72,7 +72,7 @@ namespace GPS.JT808PubSubToKafka
                     }
                 }
             }, Cts.Token);
-            consumer.Subscribe(JT808MsgIdTopic);
+            consumer.Subscribe(TopicName);
         }
 
         public override void Unsubscribe()

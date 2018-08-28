@@ -22,7 +22,7 @@ namespace JT808.MsgId0x0200Services
         public Task StartAsync(CancellationToken cancellationToken)
         {
             ConsumerFactory
-                .Subscribe((ushort)JT808.Protocol.Enums.JT808MsgId.位置信息汇报)
+                .Subscribe(((ushort)JT808.Protocol.Enums.JT808MsgId.位置信息汇报).ToString())
                 .OnMessage((msg) =>
                 {
                     logger.LogDebug($"{msg.Key},{ msg.data.ToHexString()}");
@@ -33,7 +33,7 @@ namespace JT808.MsgId0x0200Services
         public Task StopAsync(CancellationToken cancellationToken)
         {
             logger.LogInformation("Stop ...");
-            ConsumerFactory.Unsubscribe((ushort)JT808.Protocol.Enums.JT808MsgId.位置信息汇报);
+            ConsumerFactory.Unsubscribe(((ushort)JT808.Protocol.Enums.JT808MsgId.位置信息汇报).ToString());
             logger.LogInformation("Stop CompletedTask");
             return Task.CompletedTask;
         }
