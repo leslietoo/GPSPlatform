@@ -62,7 +62,7 @@ namespace GPS.Gateway.JT808SuperSocketServer
             try
             {
                 ConsumerFactory
-                            .Subscribe("UnificationSend")
+                            .Subscribe(PubSubConstants.UnificationSend)
                             .OnMessage(msg =>
                             {
                                 try

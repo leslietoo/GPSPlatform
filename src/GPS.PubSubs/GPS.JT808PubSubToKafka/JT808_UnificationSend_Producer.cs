@@ -1,5 +1,6 @@
 ﻿using Confluent.Kafka;
 using Confluent.Kafka.Serialization;
+using GPS.PubSub.Abstractions;
 using JT808.Protocol.Enums;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,7 @@ namespace GPS.JT808PubSubToKafka
             producer.Dispose();
         }
 
-        public override string TopicName => "UnificationSend";
+        public override string TopicName => PubSubConstants.UnificationSend;
 
         public override void ProduceAsync(string key,byte[] data)
         {

@@ -1,5 +1,6 @@
 ﻿using Confluent.Kafka;
 using Confluent.Kafka.Serialization;
+using GPS.PubSub.Abstractions;
 using JT808.Protocol.Enums;
 using JT808.Protocol.Extensions;
 using Microsoft.Extensions.Logging;
@@ -41,7 +42,7 @@ namespace GPS.JT808PubSubToKafka
             };
         }
 
-        public override string TopicName => "UnificationSend";
+        public override string TopicName => PubSubConstants.UnificationSend;
 
         protected override ILogger Logger { get; }
 

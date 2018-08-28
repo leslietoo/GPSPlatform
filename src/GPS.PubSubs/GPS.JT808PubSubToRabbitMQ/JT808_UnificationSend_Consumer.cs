@@ -1,5 +1,6 @@
 ﻿using EasyNetQ;
 using GPS.JT808PubSubToRabbitMQ.JT808RabbitMQMessage;
+using GPS.PubSub.Abstractions;
 using JT808.Protocol.Enums;
 using JT808.Protocol.Extensions;
 using Microsoft.Extensions.Logging;
@@ -21,17 +22,17 @@ namespace GPS.JT808PubSubToRabbitMQ
 
         public JT808_UnificationSend_Consumer(ILoggerFactory loggerFactory):base(loggerFactory)
         {
-            Logger = loggerFactory.CreateLogger<JT808_0x0200_Consumer>();
+            Logger = loggerFactory.CreateLogger<JT808_UnificationSend_Consumer>();
             bus = RabbitHutch.CreateBus(ConnStr);
         }
 
         public JT808_UnificationSend_Consumer(string connStr, ILoggerFactory loggerFactory) : base(connStr, loggerFactory)
         {
-            Logger = loggerFactory.CreateLogger<JT808_0x0200_Consumer>();
+            Logger = loggerFactory.CreateLogger<JT808_UnificationSend_Consumer>();
             bus = RabbitHutch.CreateBus(ConnStr);
         }
 
-        public override string TopicName => JT808.Protocol.Enums.JT808MsgId.位置信息汇报.ToValueString();
+        public override string TopicName => PubSubConstants.UnificationSend;
 
         public override void OnMessage(Action<(string Key, byte[] data)> callback)
         {

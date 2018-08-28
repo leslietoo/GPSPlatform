@@ -1,5 +1,6 @@
 ﻿using EasyNetQ;
 using GPS.JT808PubSubToRabbitMQ.JT808RabbitMQMessage;
+using GPS.PubSub.Abstractions;
 using JT808.Protocol.Enums;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace GPS.JT808PubSubToRabbitMQ
             bus = RabbitHutch.CreateBus(ConnStr);
         }
 
-        public override string TopicName => "UnificationSend";
+        public override string TopicName => PubSubConstants.UnificationSend;
 
         public override void Dispose()
         {
