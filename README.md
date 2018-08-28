@@ -33,7 +33,7 @@
 | 功能 | 说明 | 使用场景 |
 |:-------:|:-------:|:-------:|
 | IDeviceMonitoringDispatcher | 设备监控(点名）分发器 | 后台需要监控某一辆车的所有消息 |
-| ISourcePackageDispatcher | 源包分发器 | 需要将源数据转给其他平台 |
+| ISourcePackageDispatcher | 原包分发器 | 需要将源数据转给其他平台 |
 
 ##### 分发器(GPS.Dispatcher.Abstractions)功能实现：
 | 功能 | 实现方式 | 备注 |
