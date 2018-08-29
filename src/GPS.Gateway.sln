@@ -43,7 +43,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPS.JT808PubSubToRabbitMQ.P
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPS.JT808PubSubToRabbitMQ.Consumer", "GPS.PubSubs.Tests\GPS.JT808PubSubToRabbitMQ.Consumer\GPS.JT808PubSubToRabbitMQ.Consumer.csproj", "{9B5EFA33-B042-4AB0-AC07-82FF8EDA0E63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPS.IdentityServer4", "GPS.IdentityServer4\GPS.IdentityServer4.csproj", "{98165D33-45B0-4412-B54F-56EBCD7B132E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPS.IdentityServer4", "GPS.IdentityServer4\GPS.IdentityServer4.csproj", "{98165D33-45B0-4412-B54F-56EBCD7B132E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

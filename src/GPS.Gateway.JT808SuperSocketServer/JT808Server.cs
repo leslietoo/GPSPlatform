@@ -29,7 +29,7 @@ namespace GPS.Gateway.JT808SuperSocketServer
             IProducerFactory producerFactory,
             ISourcePackageDispatcher sourcePackageDispatcher,
             IDeviceMonitoringDispatcher deviceMonitoringDispatcher,
-            ILoggerFactory loggerFactory) 
+            ILoggerFactory loggerFactory)
             : base(new DefaultReceiveFilterFactory<JT808ReceiveFilter, JT808RequestInfo>())
         {
             JT808MsgIdHandler = jT808MsgIdHandler;
@@ -51,6 +51,19 @@ namespace GPS.Gateway.JT808SuperSocketServer
             JT808MsgIdHandler = jT808MsgIdHandler;
             ConsumerFactory = consumerFactory;
             ProducerFactory = producerFactory;
+            SourcePackageDispatcher = null;
+            DeviceMonitoringDispatcher = null;
+            log = loggerFactory.CreateLogger<JT808Server>();
+            log.LogDebug("Init JT808Server");
+        }
+
+        public JT808Server(JT808MsgIdHandler jT808MsgIdHandler,
+                            ILoggerFactory loggerFactory)
+                        : base(new DefaultReceiveFilterFactory<JT808ReceiveFilter, JT808RequestInfo>())
+        {
+            JT808MsgIdHandler = jT808MsgIdHandler;
+            ConsumerFactory = null;
+            ProducerFactory = null;
             SourcePackageDispatcher = null;
             DeviceMonitoringDispatcher = null;
             log = loggerFactory.CreateLogger<JT808Server>();
