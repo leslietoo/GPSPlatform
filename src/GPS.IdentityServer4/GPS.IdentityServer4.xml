@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GPS.IdentityServer4</name>
+    </assembly>
+    <members>
+        <member name="T:GPS.IdentityServer4.Controllers.IdentityController">
+            <summary>
+            Identity
+            </summary>
+        </member>
+        <member name="M:GPS.IdentityServer4.Controllers.IdentityController.GenerateToken(GPS.IdentityServer4.Dtos.JwtOptionsParameterDto)">
+            <summary>
+            
+            </summary>
+            <param name="jwtOptionsDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GPS.IdentityServer4.Controllers.IdentityController.VerifyToken(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="token"></param>
+        </member>
+        <member name="M:GPS.IdentityServer4.Controllers.IdentityController.RefreshToken(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="token"></param>
+            <returns></returns>
+        </member>
+        <member name="T:GPS.IdentityServer4.Dtos.Enums.JwtResultCode">
+            <summary>
+            返回状态
+            </summary>
+        </member>
+        <member name="F:GPS.IdentityServer4.Dtos.Enums.JwtResultCode.Ok">
+            <summary>
+            成功
+            </summary>
+        </member>
+        <member name="F:GPS.IdentityServer4.Dtos.Enums.JwtResultCode.TokenExpires">
+            <summary>
+            token过期
+            </summary>
+        </member>
+        <member name="F:GPS.IdentityServer4.Dtos.Enums.JwtResultCode.TokenInvalidSignature">
+            <summary>
+            token签名错误
+            </summary>
+        </member>
+        <member name="F:GPS.IdentityServer4.Dtos.Enums.JwtResultCode.Error">
+            <summary>
+            内部错误
+            </summary>
+        </member>
+        <member name="P:GPS.IdentityServer4.Dtos.JwtOptionsParameterDto.Claims">
+            <summary>
+            附加信息
+            </summary>
+        </member>
+        <member name="P:GPS.IdentityServer4.Dtos.JwtOptionsParameterDto.Interval">
+            <summary>
+            时间间隔
+            默认为（7天）
+            </summary>
+        </member>
+        <member name="P:GPS.IdentityServer4.Dtos.JwtOptionsResultDto.ResultCode">
+            <summary>
+            返回状态
+            </summary>
+        </member>
+        <member name="P:GPS.IdentityServer4.Dtos.JwtOptionsResultDto.Claims">
+            <summary>
+            附加信息
+            </summary>
+        </member>
+        <member name="P:GPS.IdentityServer4.Dtos.RefreshTokenResultDto.ResultCode">
+            <summary>
+            返回状态
+            </summary>
+        </member>
+        <member name="P:GPS.IdentityServer4.Dtos.RefreshTokenResultDto.Token">
+            <summary>
+            返回token
+            </summary>
+        </member>
+    </members>
+</doc>

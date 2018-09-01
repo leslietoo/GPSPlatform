@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace GPS.IdentityServer4.Controllers
 {
     [ApiController]
+    [Produces("application/json")]
     public class IdentityControllerBase : ControllerBase
     {
         protected static List<string> Tokens = new List<string>();
