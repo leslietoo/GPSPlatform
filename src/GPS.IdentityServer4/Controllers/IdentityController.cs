@@ -5,31 +5,57 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using GPS.IdentityServer4.Configs;
 using GPS.IdentityServer4.Dtos;
 using GPS.IdentityServer4.Dtos.Enums;
+using GPS.IdentityServer4.Models;
+using GPS.IdentityServer4.Providers;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using GPS.IdentityServer4.Extensions;
 
 namespace GPS.IdentityServer4.Controllers
 {
     /// <summary>
     /// Identity
     /// </summary>
+    [ApiController]
+    [Produces("application/json")]
     [Route("Identity")]
-    public class IdentityController : IdentityControllerBase
+    public class IdentityController : ControllerBase
     {
 
         private readonly SymmetricSecurityKey symmetricSecurityKey;
 
-        public IdentityController(IConfiguration configuration)
+        private readonly JwtOptions jwtOptions;
+
+        private readonly TokenValidationParameters tokenValidationParameters;
+
+        private readonly GPSIdentityServerDbContext gPSIdentityServerDbContext;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dbContext"></param>
+        /// <param name="options"></param>
+        public IdentityController(GPSIdentityServerDbContext dbContext, IOptions<JwtOptions> options)
         {
-            string key = configuration.GetValue<string>("SECRET_KEY");
-            if (key.Length < 16)
+            gPSIdentityServerDbContext = dbContext;
+            jwtOptions = options.Value;
+            symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SecretKEY));
+            tokenValidationParameters = new TokenValidationParameters
             {
-                throw new NotSupportedException("加密至少要16字符");
-            }
-            symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = symmetricSecurityKey,
+                //ValidateAudience = true,
+                ValidAudience = jwtOptions.Audience,
+                //ValidateIssuer = true,
+                ValidIssuer = jwtOptions.Issuer,
+                ValidateLifetime = true,
+                RequireExpirationTime = true,
+            };
         }
 
         /// <summary>
@@ -39,15 +65,10 @@ namespace GPS.IdentityServer4.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("GenerateToken")]
-        public string GenerateToken([FromBody] JwtOptionsParameterDto jwtOptionsDto)
+        public async Task<string> GenerateToken([FromBody] JwtOptionsParameterDto jwtOptionsDto)
         {
             jwtOptionsDto = new JwtOptionsParameterDto();
-            //DateTime expires = DateTime.UtcNow.AddDays(jwtOptionsDto.Interval);
-            DateTime expires = DateTime.UtcNow.AddSeconds(30);
-            //jwtOptionsDto.Issuer = "smallchi";
-            //jwtOptionsDto.Audience = "Web";
-            //jwtOptionsDto.ValidateAudience = true;
-            //jwtOptionsDto.ValidateIssuer = true;
+            DateTime expires = DateTime.UtcNow.AddDays(jwtOptionsDto.Interval);
             jwtOptionsDto.Claims = new Dictionary<string,string>
             {
                 { "interval",jwtOptionsDto.Interval.ToString()},
@@ -56,22 +77,18 @@ namespace GPS.IdentityServer4.Controllers
                 { "email","123456@qq.com" },
                 { "userid",Guid.NewGuid().ToString("N") },
             };
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = symmetricSecurityKey,
-                //ValidateAudience = jwtOptionsDto.ValidateAudience,
-                //ValidAudience = jwtOptionsDto.Audience,
-                //ValidateIssuer = jwtOptionsDto.ValidateIssuer,
-                //ValidIssuer = jwtOptionsDto.Issuer,
-                ValidateLifetime = true,
-                RequireExpirationTime = true
-            };
-            var jwtPayload = new JwtPayload("xiaochi", "xiaochi", jwtOptionsDto.Claims.Select(s => new Claim(s.Key, s.Value)).ToArray(), DateTime.UtcNow, expires);
+            var jwtPayload = new JwtPayload(jwtOptions.Issuer,jwtOptions.Audience, jwtOptionsDto.Claims.Select(s => new Claim(s.Key, s.Value)), DateTime.UtcNow, expires);
             var token = new JwtSecurityToken(new JwtHeader(new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256)), jwtPayload);
             try
             {
                 string jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
+                await gPSIdentityServerDbContext.AddAsync(new GPS_Token
+                {
+                    Token = jwtToken,
+                    ClaimsJson = JsonConvert.SerializeObject(jwtOptionsDto.Claims),
+                    ClientIp= Request.GetIp()
+                });
+                await gPSIdentityServerDbContext.SaveChangesAsync();
                 return jwtToken;
             }
             catch (Exception ex)
@@ -86,27 +103,8 @@ namespace GPS.IdentityServer4.Controllers
         /// <param name="token"></param>
         [HttpPost]
         [Route("VerifyToken")]
-        public JwtOptionsResultDto VerifyToken([FromBody] string token)
+        public async Task<JwtOptionsResultDto> VerifyToken([FromBody] string token)
         {
-            // 正确token
-            //token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjEyMzQ1NiIsInBhc3N3b3JkIjoiMTIzNDU2IiwiZW1haWwiOiIxMjM0NTZAcXEuY29tIiwidXNlcmlkIjoiMTg0ZmQyN2U4MmZiNGY5NmEwYzUxZmY5YWY4MTA2MzMiLCJuYmYiOjE1MzU4MDUwNTEsImV4cCI6MTUzNTg5MTQ0NywiaXNzIjoic21hbGxjaGkiLCJhdWQiOiJXZWIifQ.LDlDQ7ZcZUonJtE9pJcA8c1w7ZexU3rbD9vJtFTgrfU";
-            // 篡改token
-            //token = "eyJhbGciOfdddfdfIsInR5cCI6IkpXVCJ9.eyJ1c2VybmsdfdsffnBhc3N3b3JkIjoiMTIzNDU2IiwiZW1haWwiOiIxMjM0NTZAcXEuY29tIiwidXNlcmlkIjoiMTg0ZmQyN2U4MmZiNGY5NmEwYzUxZmY5YWY4MTA2MzMiLCJuYmYiOjE1MzU4MDUwNTEsImV4cCI6MTUzNTg5MTQ0NywiaXNzIjoic21hbGxjaGkiLCJhdWQiOiJXZWIifQ.LDlDQ7ZcZUonJtE9pJcA8c1w7ZexU3rbD";
-            // 验证过期时间30s
-            //token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjEyMzQ1NiIsInBhc3N3b3JkIjoiMTIzNDU2IiwiZW1haWwiOiIxMjM0NTZAcXEuY29tIiwidXNlcmlkIjoiMGFlZTcyNTA2MDI1NDU0ZTgzM2Q2MTkwYTcyMTViYmQiLCJuYmYiOjE1MzU4MDkxMDYsImV4cCI6MTUzNTgwOTEzNiwiaXNzIjoic21hbGxjaGkiLCJhdWQiOiJXZWIifQ.jMURs7gc3xeOPmvuUmAYeDFxDvQrmiI_d3ZxEApFJ8k";
-            //
-            //token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjEyMzQ1NiIsInBhc3N3b3JkIjoiMTIzNDU2IiwiZW1haWwiOiIxMjM0NTZAcXEuY29tIiwidXNlcmlkIjoiMDJjZGM4ZjNjODcwNDI0YWE5MWY1OTQ4YjhiODFlMjciLCJuYmYiOjE1MzU4MTAwODMsImV4cCI6MTUzNTg5NjQ4MywiaXNzIjoieGlhb2NoaSIsImF1ZCI6InhpYW9jaGkifQ.oMC6qHhKzHqeS9f6KwquXZa-zFfdQFWWFWftaO77ZKo";
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = symmetricSecurityKey,
-                //ValidateAudience = true,
-                ValidAudience = "xiaochi",
-                //ValidateIssuer = true,
-                ValidIssuer = "xiaochi",
-                ValidateLifetime = true,
-                RequireExpirationTime=true,
-            };
             JwtOptionsResultDto jwtOptionsResultDto = new JwtOptionsResultDto();
             try
             {
@@ -126,6 +124,14 @@ namespace GPS.IdentityServer4.Controllers
             {
                 jwtOptionsResultDto.ResultCode = JwtResultCode.Error;
             }
+            await gPSIdentityServerDbContext.AddAsync(new GPS_VerifyToken
+            {
+                Token = token,
+                ClaimsJson = JsonConvert.SerializeObject(jwtOptionsResultDto.Claims),
+                ClientIp = Request.GetIp(),
+                ResultCode= (int)jwtOptionsResultDto.ResultCode
+            });
+            await gPSIdentityServerDbContext.SaveChangesAsync();
             return jwtOptionsResultDto;
         }
 
@@ -136,23 +142,16 @@ namespace GPS.IdentityServer4.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("RefreshToken")]
-        public RefreshTokenResultDto RefreshToken([FromBody] string token)
+        public async Task<RefreshTokenResultDto> RefreshToken([FromBody] string token)
         {
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = symmetricSecurityKey,
-                //ValidateAudience = true,
-                ValidAudience = "xiaochi",
-                //ValidateIssuer = true,
-                ValidIssuer = "xiaochi",
-                ValidateLifetime = true,
-                RequireExpirationTime = true,
-            };
             RefreshTokenResultDto refreshTokenResultDto = new RefreshTokenResultDto();
+            GPS_RefreshToken gPS_RefreshToken = new GPS_RefreshToken();
+            gPS_RefreshToken.ClientIp = Request.GetIp();
+            gPS_RefreshToken.OldToken = token;
             try
             {
                 var jwtSecurity2 = new JwtSecurityTokenHandler().ValidateToken(token, tokenValidationParameters, out var securityToken);
+                gPS_RefreshToken.OldClaimsJson = JsonConvert.SerializeObject(jwtSecurity2.Claims.ToDictionary(key => key.Type, value => value.Value));
                 List<Claim> claims = new List<Claim>();
                 DateTime expires = DateTime.UtcNow.AddDays(7);
                 foreach (var claim in jwtSecurity2.Claims)
@@ -165,11 +164,13 @@ namespace GPS.IdentityServer4.Controllers
                     if(claims.Exists(e=>e.Type== claim.Type)) continue;
                     claims.Add(claim);
                 }
-                var jwtPayload = new JwtPayload("xiaochi", "xiaochi", claims, DateTime.UtcNow, expires);
+                gPS_RefreshToken.ClaimsJson = JsonConvert.SerializeObject(claims.ToDictionary(key => key.Type, value => value.Value));
+                var jwtPayload = new JwtPayload(jwtOptions.Issuer, jwtOptions.Audience, claims, DateTime.UtcNow, expires);
                 var jwtSecurityToken = new JwtSecurityToken(new JwtHeader(new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256)), jwtPayload);
                 string jwtToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
                 refreshTokenResultDto.ResultCode = JwtResultCode.Ok;
                 refreshTokenResultDto.Token = jwtToken;
+                gPS_RefreshToken.Token = jwtToken;
             }
             catch (Microsoft.IdentityModel.Tokens.SecurityTokenInvalidSignatureException ex)
             {
@@ -183,6 +184,8 @@ namespace GPS.IdentityServer4.Controllers
             {
                 refreshTokenResultDto.ResultCode = JwtResultCode.Error;
             }
+            await gPSIdentityServerDbContext.AddAsync(gPS_RefreshToken);
+            await gPSIdentityServerDbContext.SaveChangesAsync();
             return refreshTokenResultDto;
         }
     }

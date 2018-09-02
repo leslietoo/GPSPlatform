@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using GPS.IdentityServer4.Configs;
+using GPS.IdentityServer4.Providers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -27,7 +29,9 @@ namespace GPS.IdentityServer4
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<GPSIdentityServerDbContext>();
             services.AddSingleton(Configuration);
+            services.Configure<JwtOptions>(Configuration.GetSection("JwtOptions"));
             services.AddSingleton<ILoggerFactory, LoggerFactory>();
             services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
             services.AddCors(options => options.AddPolicy("CorsPolicy",

@@ -51,18 +51,15 @@
 ### 基于SignalR的JT808.WebSocketServer服务：
 
 > 推送平台：Web平台、App、IOS、及微信小程序。【注意：正式请使用HTTPS】
+
 > 使用场景：推送设备报警状态、胎压预警等
 
 ### 基于IdentityServer4的GPS.IdentityServer4统一用户鉴权（使用JWT方式）：
 
 > 不同平台（Web平台、App、IOS、及微信小程序）请求认证服务器。
 
-| 功能 | 说明 |
-|:-------:|:-------:|
-| GenerateToken | 颁发令牌 |
-| VerifyToken | 认证令牌 |
-| RefreshToken | 刷新令牌 |
-
-
-
-
+| 功能 | 说明 | 完成情况 |
+|:-------:|:-------:|:-------:|
+| GenerateToken | 颁发令牌 | √ |
+| VerifyToken | 认证令牌 | √ |
+| RefreshToken | 刷新令牌 | √ |

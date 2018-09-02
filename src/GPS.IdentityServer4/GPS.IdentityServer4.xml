@@ -4,10 +4,23 @@
         <name>GPS.IdentityServer4</name>
     </assembly>
     <members>
+        <member name="P:GPS.IdentityServer4.Configs.JwtOptions.SecretKEY">
+            <summary>
+            加密
+            至少要16字符
+            </summary>
+        </member>
         <member name="T:GPS.IdentityServer4.Controllers.IdentityController">
             <summary>
             Identity
             </summary>
+        </member>
+        <member name="M:GPS.IdentityServer4.Controllers.IdentityController.#ctor(GPS.IdentityServer4.Providers.GPSIdentityServerDbContext,Microsoft.Extensions.Options.IOptions{GPS.IdentityServer4.Configs.JwtOptions})">
+            <summary>
+            
+            </summary>
+            <param name="dbContext"></param>
+            <param name="options"></param>
         </member>
         <member name="M:GPS.IdentityServer4.Controllers.IdentityController.GenerateToken(GPS.IdentityServer4.Dtos.JwtOptionsParameterDto)">
             <summary>
@@ -83,6 +96,23 @@
         <member name="P:GPS.IdentityServer4.Dtos.RefreshTokenResultDto.Token">
             <summary>
             返回token
+            </summary>
+        </member>
+        <member name="T:GPS.IdentityServer4.Extensions.HttpRequestExtensions">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:GPS.IdentityServer4.Extensions.HttpRequestExtensions.GetIp(Microsoft.AspNetCore.Http.HttpRequest)">
+            <summary>
+            获取IP地址
+            </summary>
+            <param name="httpRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="T:GPS.IdentityServer4.Providers.GPSIdentityServerDbContext">
+            <summary>
+            
             </summary>
         </member>
     </members>
