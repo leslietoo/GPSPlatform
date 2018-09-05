@@ -59,12 +59,13 @@
 | alarm.html demo| js | √ |
 | index_vue.html demo| vue | √ |
 
-### 基于IdentityServer4的GPS.IdentityServer4统一用户鉴权（使用JWT方式）：
+### 基于[Orleans](https://github.com/dotnet/orleans)实现GPS.IdentityServer4统一用户鉴权（使用JWT方式）：
 
 > 不同平台（Web平台、App、IOS、及微信小程序）请求认证服务器。
 
-| 功能 | 说明 | 完成情况 |
+| 项目 | 说明 | 完成情况 |
 |:-------:|:-------:|:-------:|
-| GenerateToken | 颁发令牌 | √ |
-| VerifyToken | 认证令牌 | √ |
-| RefreshToken | 刷新令牌 | √ |
+| GPS.IdentityServer4IGrain | 认证接口（颁发令牌、认证令牌、刷新令牌） | √ |
+| GPS.IdentityServer4Grain | 认证接口实现 | √ |
+| GPS.IdentityServer4GrainServer | 认证服务器 | √ |
+| GPS.IdentityServer4GrainClient | 客户端demo | √ |
