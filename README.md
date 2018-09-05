@@ -54,6 +54,11 @@
 
 > 使用场景：推送设备报警状态、胎压预警等
 
+| 功能 | 说明 | 完成情况 |
+|:-------:|:-------:|:-------:|
+| alarm.html demo| js | √ |
+| index_vue.html demo| vue | √ |
+
 ### 基于IdentityServer4的GPS.IdentityServer4统一用户鉴权（使用JWT方式）：
 
 > 不同平台（Web平台、App、IOS、及微信小程序）请求认证服务器。

@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 
 namespace JT808.WebSocketServer.Middlewares
 {
-    public class JT808Jwtiddleware 
+    public class JT808JwtMiddleware
     {
         private readonly RequestDelegate next;
 
         private readonly ILogger logger;
 
-        public JT808Jwtiddleware(RequestDelegate next,ILoggerFactory loggerFactory)
+        public JT808JwtMiddleware(RequestDelegate next,ILoggerFactory loggerFactory)
         {
             this.next = next;
-            logger = loggerFactory.CreateLogger<JT808Jwtiddleware>();
+            logger = loggerFactory.CreateLogger<JT808JwtMiddleware>();
         }
 
         public async Task Invoke(HttpContext context) 
@@ -28,24 +28,26 @@ namespace JT808.WebSocketServer.Middlewares
             sb.Append(",");
             sb.Append(getBrowser(context));
             sb.Append(",");
-            if (context.Request.Headers["Connection"] == "Upgrade")
+            if(context.Request.Query.TryGetValue("access_token", out var token))
             {
-                if(context.Request.Query.TryGetValue("access_token", out var token))
+                if (token == "")
                 {
-                    if (token == "")
-                    {
-                        context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                    }
-                    else
-                    {
-                        sb.Append(token);
-                    }
-#warning 去认证服务器请求结果
-                    // 去认证服务器请求结果
+                    context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 }
+                else
+                {
+                    sb.Append(token);
+                }
+#warning 去认证服务器请求结果
+                // 去认证服务器请求结果
+                logger.LogInformation(sb.ToString());
+                await next(context);
             }
-            logger.LogInformation(sb.ToString());
-            await next(context);
+            else
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                await context.Response.WriteAsync("auth error");
+            }  
         }
 
         private string getIp(HttpContext context)

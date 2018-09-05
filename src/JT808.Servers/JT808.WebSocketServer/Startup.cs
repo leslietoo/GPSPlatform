@@ -6,7 +6,6 @@ using GPS.JT808PubSubToKafka;
 using GPS.PubSub.Abstractions;
 using JT808.MsgId0x0200Services;
 using JT808.MsgId0x0200Services.Hubs;
-using JT808.WebSocketServer.Hubs;
 using JT808.WebSocketServer.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -62,7 +61,6 @@ namespace JT808.WebSocketServer
             app.UseCors("CorsPolicy");
             app.UseSignalR(routes =>
             {
-                routes.MapHub<ChatHub>("/chatHub");
                 routes.MapHub<AlarmHub>("/alarmHub");
             });
         }
