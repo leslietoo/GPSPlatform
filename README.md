@@ -26,6 +26,8 @@
 |:-------:|:-------:|:-------:|
 | JT808_UnificationSend | 统一下发设备消息 | √ |
 | JT808_0x0200 | 位置信息汇报 | √ |
+| JT808_DeviceMonitoringDispatcher| 设备监控分发器 | √ |
+| JT808_UnificationPushToWebSocket| 统一推送WebSocket | √ |
 
 #### GPS.JT808PubSubToRabbitMQ已实现的功能：
 
@@ -47,18 +49,31 @@
 |:-------:|:-------:|:-------:|
 | GPS.JT808DeviceMonitoringDispatcher | 通过kafka实现 | 可选择合适的方式实现 |
 | GPS.JT808SourcePackageDispatcher | 通过kafka实现 | 可选择合适的方式实现 |
-| GPS.JT808SampleDeviceMonitoring | 简单设备点名监控打印原数据 | - |
+| GPS.JT808SampleDeviceMonitoring | 简单设备点名监控打印原数据 | GPS.JT808DeviceMonitoringDispatcher 消费者 |
 
 ### 基于SignalR的JT808.WebSocketServer服务：
 
 > 推送平台：Web平台、App、IOS、及微信小程序。【注意：正式请使用HTTPS】
 
-> 使用场景：推送设备报警状态、胎压预警等
+> 推送客户端demo：
 
 | 功能 | 说明 | 完成情况 |
 |:-------:|:-------:|:-------:|
 | alarm.html demo| js | √ |
 | index_vue.html demo| vue | √ |
+
+> 推送场景：
+
+| 功能 | 说明 | 完成情况 |
+|:-------:|:-------:|:-------:|
+| 最新定位数据 | - | × |
+| 围栏报警 | - | × |
+| 胎压报警 | - | × |
+| 疲劳驾驶报警 | - | × |
+| 超速报警 | - | × |
+| 急加速报警 | - | × |
+| 急减速报警 | - | × |
+| 急转弯报警 | - | × |
 
 ### 基于[Orleans](https://github.com/dotnet/orleans)实现GPS.IdentityServer4统一用户鉴权（使用JWT方式）：
 

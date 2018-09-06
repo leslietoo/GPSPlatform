@@ -1,5 +1,4 @@
-﻿using JT808.MsgId0x0200Services.Hubs;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
@@ -9,8 +8,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using JT808.Protocol.Extensions;
 using GPS.PubSub.Abstractions;
+using JT808.WebSocketServer.Hubs;
 
-namespace JT808.MsgId0x0200Services
+namespace JT808.WebSocketServer
 {
     public  class ToWebSocketService: IHostedService
     {
@@ -34,13 +34,12 @@ namespace JT808.MsgId0x0200Services
             try
             {
                 ConsumerFactory
-                        .Subscribe(JT808.Protocol.Enums.JT808MsgId.位置信息汇报.ToValueString())
+                        .Subscribe(PubSubConstants.UnificationPushToWebSocket)
                         .OnMessage((msg) =>
                         {
                             try
                             {
-                                _hubContext.Clients.All.SendAsync("ReceiveMessage", $"Home page loaded at: {DateTime.Now}");
-                                _hubContext.Clients.All.SendAsync("ReceiveMessage", msg.data.ToHexString());
+                                _hubContext.Clients.All.SendAsync("ReceiveMessage", msg.Key, Encoding.UTF8.GetString(msg.data));
                             }
                             catch (Exception ex)
                             {
@@ -58,7 +57,7 @@ namespace JT808.MsgId0x0200Services
         public Task StopAsync(CancellationToken cancellationToken)
         {
             logger.LogInformation("Stop ...");
-            ConsumerFactory.Unsubscribe(((ushort)JT808.Protocol.Enums.JT808MsgId.位置信息汇报).ToString());
+            ConsumerFactory.Unsubscribe(PubSubConstants.UnificationPushToWebSocket);
             logger.LogInformation("Stop CompletedTask");
             return Task.CompletedTask;
         }

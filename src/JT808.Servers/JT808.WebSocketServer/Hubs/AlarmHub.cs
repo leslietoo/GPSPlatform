@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 
 
-namespace JT808.MsgId0x0200Services.Hubs
+namespace JT808.WebSocketServer.Hubs
 {
     public class AlarmHub : Hub
     {

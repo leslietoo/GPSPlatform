@@ -4,8 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GPS.JT808PubSubToKafka;
 using GPS.PubSub.Abstractions;
-using JT808.MsgId0x0200Services;
-using JT808.MsgId0x0200Services.Hubs;
+using JT808.WebSocketServer.Hubs;
 using JT808.WebSocketServer.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -45,10 +44,10 @@ namespace JT808.WebSocketServer
             var loggerFactory = services.BuildServiceProvider().GetRequiredService<ILoggerFactory>();
             services.AddSingleton(typeof(IConsumerFactory),
                 new ConsumerFactory(
-                    new GPS.JT808PubSubToKafka.JT808_0x0200_Consumer(
+                    new GPS.JT808PubSubToKafka.JT808_UnificationPushToWebSocket_Consumer(
                         new Dictionary<string, object>
                         {
-                            { "group.id", "JT808_0x0200_WebSocket_Alarm" },
+                            { "group.id", "JT808_WebSocket" },
                             { "enable.auto.commit", true },
                             { "bootstrap.servers", host }
                         }, loggerFactory)));
