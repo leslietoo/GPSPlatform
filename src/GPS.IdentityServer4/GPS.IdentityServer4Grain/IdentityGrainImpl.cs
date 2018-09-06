@@ -45,7 +45,7 @@ namespace GPS.IdentityServer4Grain
             };
         }
 
-        public  Task<string> GenerateToken(JwtOptionsParameterDto jwtOptionsDto)
+        public async Task<string> GenerateToken(JwtOptionsParameterDto jwtOptionsDto)
         {
             jwtOptionsDto = new JwtOptionsParameterDto();
             DateTime expires = DateTime.UtcNow.AddDays(jwtOptionsDto.Interval);
@@ -62,26 +62,24 @@ namespace GPS.IdentityServer4Grain
             try
             {
                 string jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
-                //await gPSIdentityServerDbContext.AddAsync(new GPS_Token
-                //{
-                //    Token = jwtToken,
-                //    ClaimsJson = JsonConvert.SerializeObject(jwtOptionsDto.Claims),
-                //    ClientIp = Request.GetIp()
-                //});
-                //await gPSIdentityServerDbContext.SaveChangesAsync();
-                return Task.FromResult(jwtToken);
+                await gPSIdentityServerDbContext.AddAsync(new GPS_Token
+                {
+                    Token = jwtToken,
+                    ClaimsJson = JsonConvert.SerializeObject(jwtOptionsDto.Claims),
+                });
+                await gPSIdentityServerDbContext.SaveChangesAsync();
+                return jwtToken;
             }
             catch (Exception ex)
             {
-                return Task.FromResult("");
+                return "";
             }
         }
 
-        public Task<RefreshTokenResultDto> RefreshToken(string token)
+        public async Task<RefreshTokenResultDto> RefreshToken(string token)
         {
             RefreshTokenResultDto refreshTokenResultDto = new RefreshTokenResultDto();
             GPS_RefreshToken gPS_RefreshToken = new GPS_RefreshToken();
-            //gPS_RefreshToken.ClientIp = Request.GetIp();
             gPS_RefreshToken.OldToken = token;
             try
             {
@@ -119,12 +117,12 @@ namespace GPS.IdentityServer4Grain
             {
                 refreshTokenResultDto.ResultCode = JwtResultCode.Error;
             }
-            //await gPSIdentityServerDbContext.AddAsync(gPS_RefreshToken);
-            //await gPSIdentityServerDbContext.SaveChangesAsync();
-            return Task.FromResult(refreshTokenResultDto);
+            await gPSIdentityServerDbContext.AddAsync(gPS_RefreshToken);
+            await gPSIdentityServerDbContext.SaveChangesAsync();
+            return refreshTokenResultDto;
         }
 
-        public Task<JwtOptionsResultDto> VerifyToken(string token)
+        public async Task<JwtOptionsResultDto> VerifyToken(string token)
         {
             JwtOptionsResultDto jwtOptionsResultDto = new JwtOptionsResultDto();
             try
@@ -145,15 +143,14 @@ namespace GPS.IdentityServer4Grain
             {
                 jwtOptionsResultDto.ResultCode = JwtResultCode.Error;
             }
-            //await gPSIdentityServerDbContext.AddAsync(new GPS_VerifyToken
-            //{
-            //    Token = token,
-            //    ClaimsJson = JsonConvert.SerializeObject(jwtOptionsResultDto.Claims),
-            //    ClientIp = Request.GetIp(),
-            //    ResultCode = (int)jwtOptionsResultDto.ResultCode
-            //});
-            //await gPSIdentityServerDbContext.SaveChangesAsync();
-            return Task.FromResult(jwtOptionsResultDto);
+            await gPSIdentityServerDbContext.AddAsync(new GPS_VerifyToken
+            {
+                Token = token,
+                ClaimsJson = JsonConvert.SerializeObject(jwtOptionsResultDto.Claims),
+                ResultCode = (int)jwtOptionsResultDto.ResultCode
+            });
+            await gPSIdentityServerDbContext.SaveChangesAsync();
+            return jwtOptionsResultDto;
         }
     }
 }

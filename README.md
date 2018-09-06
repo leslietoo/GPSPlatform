@@ -69,3 +69,10 @@
 | GPS.IdentityServer4Grain | 认证接口实现 | √ |
 | GPS.IdentityServer4GrainServer | 认证服务器 | √ |
 | GPS.IdentityServer4GrainClient | 客户端demo | √ |
+
+##### Orleans 集群管理说明：
+| 使用方式 |  Nuget包 | 说明 |
+|:-------:|:-------:|:-------:|
+| UseLocalhostClustering | - | 本地集群用户开发环境 |
+| UseConsulClustering | [Microsoft.Orleans.OrleansConsulUtils](https://www.nuget.org/packages/Microsoft.Orleans.OrleansConsulUtils/2.0.0) | 基于consul集群 |
+| UseZooKeeperClustering| [Microsoft.Orleans.OrleansZooKeeperUtils](https://www.nuget.org/packages/Microsoft.Orleans.OrleansZooKeeperUtils) | 基于zookeeper集群 |

@@ -9,6 +9,8 @@ namespace GPS.IdentityServer4Grain.Providers
 {
     /// <summary>
     /// 
+    /// Add-Migration Init
+    /// Update-Database
     /// </summary>
     public class GPSIdentityServerDbContext:DbContext
     {
@@ -19,8 +21,8 @@ namespace GPS.IdentityServer4Grain.Providers
         public DbSet<GPS_VerifyToken> GPS_VerifyToken { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlite("Data Source=data/datagps_identity_server.db");
+        {//../GPS.IdentityServer4GrainServer
+            optionsBuilder.UseSqlite("Data Source=../GPS.IdentityServer4GrainServer/data/datagps_identity_server.db");
             // 测试使用内存数据库
             //optionsBuilder.UseInMemoryDatabase("datagps_identity_server");
         }

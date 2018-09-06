@@ -10,6 +10,7 @@ using Orleans.Hosting;
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using Orleans.Runtime;
 
 namespace GPS.IdentityServer4GrainServer
 {
@@ -18,20 +19,22 @@ namespace GPS.IdentityServer4GrainServer
         public static async Task Main(string[] args)
         {
             var serverHostBuilder = new SiloHostBuilder()
-                        .UseLocalhostClustering()
+                         .UseLocalhostClustering()
+                        //.UseConsulClustering(configureOptions => configureOptions.Address = new Uri("http://172.16.19.120:8500"))
                         .ConfigureAppConfiguration((hostingContext, config) =>
                             {
                                 config.SetBasePath(AppDomain.CurrentDomain.BaseDirectory);
                                 config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                                    .AddJsonFile($"appsettings.{ hostingContext.HostingEnvironment}.json", optional: true, reloadOnChange: true);
+                                      .AddJsonFile($"appsettings.{ hostingContext.HostingEnvironment}.json", optional: true, reloadOnChange: true);
                                 config.AddEnvironmentVariables();
                             })
+                       
                         .Configure<ClusterOptions>(options =>
                           {
                               options.ClusterId = "dev";
                               options.ServiceId = "IdentityGrainApp";
                           })
-                        .Configure<EndpointOptions>(options => options.AdvertisedIPAddress = IPAddress.Loopback)
+                        .ConfigureEndpoints(IPAddress.Parse("172.16.19.120"), EndpointOptions.DEFAULT_SILO_PORT, EndpointOptions.DEFAULT_GATEWAY_PORT)
                         .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IdentityGrainImpl).Assembly).WithReferences())
                         .ConfigureLogging(logging => logging.AddConsole())
                         .ConfigureServices((hostContext, services) => 

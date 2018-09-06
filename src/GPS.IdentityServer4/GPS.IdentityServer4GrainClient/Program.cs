@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Orleans;
 using Orleans.Configuration;
+using Orleans.Hosting;
 using Orleans.Runtime;
 using System;
 using System.Collections.Generic;
@@ -29,8 +30,8 @@ namespace GPS.IdentityServer4GrainClient
                 try
                 {
                     client = new ClientBuilder()
-                        .UseStaticClustering(new System.Net.IPEndPoint(IPAddress.Parse("127.0.0.1"),11111))
                         .UseLocalhostClustering()
+                        //.UseConsulClustering(configureOptions => configureOptions.Address = new Uri("http://172.16.19.120:8500"))
                         .Configure<ClusterOptions>(options =>
                         {
                             options.ClusterId = "dev";
@@ -38,7 +39,6 @@ namespace GPS.IdentityServer4GrainClient
                         })
                         .ConfigureLogging(logging => logging.AddConsole())
                         .Build();
-
                     await client.Connect(RetryFilter);
                     Console.WriteLine("Client successfully connect to silo host");
                     break;

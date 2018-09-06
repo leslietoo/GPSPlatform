@@ -13,8 +13,6 @@ namespace GPS.IdentityServer4Grain.Models
 
         public string Token { get; set; }
 
-        public string ClientIp { get; set; }
-
         public string ClaimsJson { get; set; }
 
         public string Remark { get; set; }
