@@ -46,12 +46,12 @@ namespace JT808.Protocol.Test.MessageBodyRequest
         {
             byte[] bodys = "00 00 00 01 00 00 00 02 00 BA 7F 0E 07 E4 F1 1C 00 28 00 3C 00 00 18 07 15 10 10 10 01 04 00 00 00 64 02 02 00 37".ToHexBytes();
             JT808_0x0200 jT808UploadLocationRequest = JT808Serializer.Deserialize<JT808_0x0200>(bodys);
-            Assert.Equal(1, jT808UploadLocationRequest.AlarmFlag);
+            Assert.Equal((uint)1, jT808UploadLocationRequest.AlarmFlag);
             Assert.Equal(DateTime.Parse("2018-07-15 10:10:10"), jT808UploadLocationRequest.GPSTime);
             Assert.Equal(12222222, jT808UploadLocationRequest.Lat);
             Assert.Equal(132444444, jT808UploadLocationRequest.Lng);
             Assert.Equal(60, jT808UploadLocationRequest.Speed);
-            Assert.Equal(2, jT808UploadLocationRequest.StatusFlag);
+            Assert.Equal((uint)2, jT808UploadLocationRequest.StatusFlag);
             Assert.Equal(100, ((JT808LocationAttachImpl0x01)jT808UploadLocationRequest.JT808LocationAttachData[JT808LocationAttachBase.AttachId0x01]).Mileage);
             Assert.Equal(55, ((JT808LocationAttachImpl0x02)jT808UploadLocationRequest.JT808LocationAttachData[JT808LocationAttachBase.AttachId0x02]).Oil);
         }
@@ -114,12 +114,12 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             // 1.添加自定义附加信息扩展 AddJT808LocationAttachMethod 
             byte[] bodys = "00 00 00 01 00 00 00 02 00 BA 7F 0E 07 E4 F1 1C 00 28 00 3C 00 00 18 07 15 10 10 10 01 04 00 00 00 64 02 02 00 37 06 0D 00 00 00 12 01 73 6D 61 6C 6C 63 68 69".ToHexBytes();
             JT808_0x0200 jT808UploadLocationRequest = JT808Serializer.Deserialize<JT808_0x0200>(bodys);
-            Assert.Equal(1, jT808UploadLocationRequest.AlarmFlag);
+            Assert.Equal((uint)1, jT808UploadLocationRequest.AlarmFlag);
             Assert.Equal(DateTime.Parse("2018-07-15 10:10:10"), jT808UploadLocationRequest.GPSTime);
             Assert.Equal(12222222, jT808UploadLocationRequest.Lat);
             Assert.Equal(132444444, jT808UploadLocationRequest.Lng);
             Assert.Equal(60, jT808UploadLocationRequest.Speed);
-            Assert.Equal(2, jT808UploadLocationRequest.StatusFlag);
+            Assert.Equal((uint)2, jT808UploadLocationRequest.StatusFlag);
             Assert.Equal(100, ((JT808LocationAttachImpl0x01)jT808UploadLocationRequest.JT808LocationAttachData[JT808LocationAttachBase.AttachId0x01]).Mileage);
             Assert.Equal(55, ((JT808LocationAttachImpl0x02)jT808UploadLocationRequest.JT808LocationAttachData[JT808LocationAttachBase.AttachId0x02]).Oil);
             Assert.Equal(18, ((JT808LocationAttachImpl0x06)jT808UploadLocationRequest.JT808LocationAttachData[0x06]).Age);
@@ -199,12 +199,12 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             Assert.Equal(JT808EncryptMethod.None, jT808Package.Header.MessageBodyProperty.Encrypt);
 
             JT808_0x0200 jT808UploadLocationRequest = (JT808_0x0200)jT808Package.Bodies;
-            Assert.Equal(1, jT808UploadLocationRequest.AlarmFlag);
+            Assert.Equal((uint)1, jT808UploadLocationRequest.AlarmFlag);
             Assert.Equal(DateTime.Parse("2018-07-15 10:10:10"), jT808UploadLocationRequest.GPSTime);
             Assert.Equal(12222222, jT808UploadLocationRequest.Lat);
             Assert.Equal(132444444, jT808UploadLocationRequest.Lng);
             Assert.Equal(60, jT808UploadLocationRequest.Speed);
-            Assert.Equal(2, jT808UploadLocationRequest.StatusFlag);
+            Assert.Equal((uint)2, jT808UploadLocationRequest.StatusFlag);
             Assert.Equal(100, ((JT808LocationAttachImpl0x01)jT808UploadLocationRequest.JT808LocationAttachData[JT808LocationAttachBase.AttachId0x01]).Mileage);
             Assert.Equal(55, ((JT808LocationAttachImpl0x02)jT808UploadLocationRequest.JT808LocationAttachData[JT808LocationAttachBase.AttachId0x02]).Oil);
         }

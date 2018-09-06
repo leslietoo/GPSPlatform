@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 
 namespace JT808.Protocol.Extensions
@@ -149,6 +150,25 @@ namespace JT808.Protocol.Extensions
             {
                 return default;
             }
+        }
+
+        /// <summary>
+        /// 解析报警状态
+        /// </summary>
+        /// <param name="alarmStatus"></param>
+        /// <returns></returns>
+        public static IEnumerable<JT808.Protocol.Enums.JT808Alarm> ParseAlarmStatus(uint alarmStatus)
+        {
+            List<JT808.Protocol.Enums.JT808Alarm> alarmValue = new List<JT808.Protocol.Enums.JT808Alarm>();
+            for (int i = 0; i < 32; i++)
+            {
+                if (Math.Pow(2, i) <= alarmStatus) continue;
+                alarmValue.Add((JT808.Protocol.Enums.JT808Alarm)((uint)Math.Pow(2, i - 1)));
+                alarmStatus = alarmStatus - (uint)Math.Pow(2, i - 1);
+                i = 0;
+                if (alarmStatus <= 0) break;
+            }
+            return alarmValue;
         }
     }
 }

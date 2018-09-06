@@ -14,8 +14,8 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
         {
             int offset = 0;
             JT808_0x0200 jT808_0X0200 = new JT808_0x0200();
-            jT808_0X0200.AlarmFlag = JT808BinaryExtensions.ReadInt32Little(bytes,ref offset);
-            jT808_0X0200.StatusFlag = JT808BinaryExtensions.ReadInt32Little(bytes,ref offset);
+            jT808_0X0200.AlarmFlag = JT808BinaryExtensions.ReadUInt32Little(bytes,ref offset);
+            jT808_0X0200.StatusFlag = JT808BinaryExtensions.ReadUInt32Little(bytes,ref offset);
             jT808_0X0200.Lat = JT808BinaryExtensions.ReadInt32Little(bytes,ref offset);
             jT808_0X0200.Lng = JT808BinaryExtensions.ReadInt32Little(bytes,ref offset);
             JT808StatusProperty jT808StatusProperty = new JT808StatusProperty(Convert.ToString(jT808_0X0200.StatusFlag, 2).PadLeft(32, '0'));
@@ -77,8 +77,8 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
 
         public int Serialize(IMemoryOwner<byte> memoryOwner, int offset, JT808_0x0200 value)
         {
-            offset += JT808BinaryExtensions.WriteInt32Little(memoryOwner, offset, value.AlarmFlag);
-            offset += JT808BinaryExtensions.WriteInt32Little(memoryOwner, offset, value.StatusFlag);
+            offset += JT808BinaryExtensions.WriteUInt32Little(memoryOwner, offset,value.AlarmFlag);
+            offset += JT808BinaryExtensions.WriteUInt32Little(memoryOwner, offset, value.StatusFlag);
             offset += JT808BinaryExtensions.WriteInt32Little(memoryOwner, offset, value.Lat);
             offset += JT808BinaryExtensions.WriteInt32Little(memoryOwner, offset, value.Lng);
             offset += JT808BinaryExtensions.WriteUInt16Little(memoryOwner, offset, value.Altitude);

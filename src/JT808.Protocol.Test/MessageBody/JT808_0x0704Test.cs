@@ -123,23 +123,23 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             Assert.Equal(2, JT808Bodies.Count);
             Assert.Equal(JT808_0x0704.BatchLocationType.正常位置批量汇报, JT808Bodies.LocationType);
 
-            Assert.Equal(1, JT808Bodies.Positions[0].AlarmFlag);
+            Assert.Equal((uint)1, JT808Bodies.Positions[0].AlarmFlag);
             Assert.Equal(DateTime.Parse("2018-07-15 10:10:10"), JT808Bodies.Positions[0].GPSTime);
             Assert.Equal(12222222, JT808Bodies.Positions[0].Lat);
             Assert.Equal(132444444, JT808Bodies.Positions[0].Lng);
             Assert.Equal(0, JT808Bodies.Positions[0].Direction);
             Assert.Equal(60, JT808Bodies.Positions[0].Speed);
-            Assert.Equal(2, JT808Bodies.Positions[0].StatusFlag);
+            Assert.Equal((uint)2, JT808Bodies.Positions[0].StatusFlag);
             Assert.Equal(100, ((JT808LocationAttachImpl0x01)JT808Bodies.Positions[0].JT808LocationAttachData[JT808LocationAttachBase.AttachId0x01]).Mileage);
             Assert.Equal(55, ((JT808LocationAttachImpl0x02)JT808Bodies.Positions[0].JT808LocationAttachData[JT808LocationAttachBase.AttachId0x02]).Oil);
 
-            Assert.Equal(2, JT808Bodies.Positions[1].AlarmFlag);
+            Assert.Equal((uint)2, JT808Bodies.Positions[1].AlarmFlag);
             Assert.Equal(DateTime.Parse("2018-07-15 10:10:30"), JT808Bodies.Positions[1].GPSTime);
             Assert.Equal(13333333, JT808Bodies.Positions[1].Lat);
             Assert.Equal(132555555, JT808Bodies.Positions[1].Lng);
             Assert.Equal(54, JT808Bodies.Positions[1].Speed);
             Assert.Equal(120, JT808Bodies.Positions[1].Direction);
-            Assert.Equal(1, JT808Bodies.Positions[1].StatusFlag);
+            Assert.Equal((uint)1, JT808Bodies.Positions[1].StatusFlag);
             Assert.Equal(96, ((JT808LocationAttachImpl0x01)JT808Bodies.Positions[1].JT808LocationAttachData[JT808LocationAttachBase.AttachId0x01]).Mileage);
             Assert.Equal(66, ((JT808LocationAttachImpl0x02)JT808Bodies.Positions[1].JT808LocationAttachData[JT808LocationAttachBase.AttachId0x02]).Oil);
         }

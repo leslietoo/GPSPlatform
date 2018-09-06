@@ -99,6 +99,12 @@ namespace JT808.Protocol.Extensions
             offset = offset + 4;
             return value;
         }
+        public static uint ReadUInt32Little(ReadOnlySpan<byte> read, ref int offset)
+        {
+            uint value =(uint) ((read[offset] << 24) | (read[offset + 1] << 16) | (read[offset + 2] << 8) | read[offset + 3]);
+            offset = offset + 4;
+            return value;
+        }
 
         public static ushort ReadUInt16Little(ReadOnlySpan<byte> read, ref int offset)
         {
@@ -171,6 +177,14 @@ namespace JT808.Protocol.Extensions
         }
 
         public static int WriteInt32Little(IMemoryOwner<byte> memoryOwner, int offset, int data)
+        {
+            memoryOwner.Memory.Span[offset] = (byte)(data >> 24);
+            memoryOwner.Memory.Span[offset + 1] = (byte)(data >> 16);
+            memoryOwner.Memory.Span[offset + 2] = (byte)(data >> 8);
+            memoryOwner.Memory.Span[offset + 3] = (byte)data;
+            return 4;
+        }
+        public static int WriteUInt32Little(IMemoryOwner<byte> memoryOwner, int offset, uint data)
         {
             memoryOwner.Memory.Span[offset] = (byte)(data >> 24);
             memoryOwner.Memory.Span[offset + 1] = (byte)(data >> 16);

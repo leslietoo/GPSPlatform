@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using JT808.Protocol.JT808Formatters.MessageBodyFormatters;
 using JT808.Protocol.MessageBody.JT808LocationAttach;
 using JT808.Protocol.Attributes;
+using JT808.Protocol.Enums;
 
 namespace JT808.Protocol.MessageBody
 {
@@ -15,11 +16,11 @@ namespace JT808.Protocol.MessageBody
         /// <summary>
         /// 报警标志 
         /// </summary>
-        public int AlarmFlag { get; set; }
+        public uint AlarmFlag { get; set; }
         /// <summary>
         /// 状态位标志
         /// </summary>
-        public int StatusFlag { get; set; }
+        public uint StatusFlag { get; set; }
         /// <summary>
         /// 纬度
         /// 以度为单位的纬度值乘以 10 的 6 次方，精确到百万分之一度

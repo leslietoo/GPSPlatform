@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Text;
 using Xunit;
 using JT808.Protocol.Extensions;
-using JT808.Protocol.MessageBody;
 
 namespace JT808.Protocol.Test.MessageBodyReply
 {
@@ -55,12 +54,12 @@ namespace JT808.Protocol.Test.MessageBodyReply
             JT808Package jT808Package = JT808Serializer.Deserialize(bytes);
             JT808_0x0201 jT808_0X0201 = (JT808_0x0201) jT808Package.Bodies;
             Assert.Equal(12345, jT808_0X0201.MsgNum);
-            Assert.Equal(1, jT808_0X0201.Position.AlarmFlag);
+            Assert.Equal((uint)1, jT808_0X0201.Position.AlarmFlag);
             Assert.Equal(DateTime.Parse("2018-07-15 10:10:10"), jT808_0X0201.Position.GPSTime);
             Assert.Equal(12222222, jT808_0X0201.Position.Lat);
             Assert.Equal(132444444, jT808_0X0201.Position.Lng);
             Assert.Equal(60, jT808_0X0201.Position.Speed);
-            Assert.Equal(2, jT808_0X0201.Position.StatusFlag);
+            Assert.Equal((uint)2, jT808_0X0201.Position.StatusFlag);
             Assert.Equal(100, ((JT808LocationAttachImpl0x01)jT808_0X0201.Position.JT808LocationAttachData[JT808LocationAttachBase.AttachId0x01]).Mileage);
             Assert.Equal(55, ((JT808LocationAttachImpl0x02)jT808_0X0201.Position.JT808LocationAttachData[JT808LocationAttachBase.AttachId0x02]).Oil);
         }
