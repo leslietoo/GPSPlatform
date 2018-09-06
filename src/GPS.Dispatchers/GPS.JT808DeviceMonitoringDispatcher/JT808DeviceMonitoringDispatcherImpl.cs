@@ -1,4 +1,5 @@
 ﻿using GPS.Dispatcher.Abstractions;
+using GPS.PubSub.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,9 +9,17 @@ namespace GPS.JT808DeviceMonitoringDispatcher
 {
     public class JT808DeviceMonitoringDispatcherImpl : IDeviceMonitoringDispatcher
     {
-        public async Task SendAsync(string deviceKey, byte[] data)
+        private readonly IProducerFactory _producerFactory;
+
+        public JT808DeviceMonitoringDispatcherImpl(IProducerFactory producerFactory)
         {
-            await Task.CompletedTask;
+            _producerFactory = producerFactory;
+        }
+
+        public Task SendAsync(string deviceKey, byte[] data)
+        {
+            _producerFactory.CreateProducer(DispatcherConstants.DeviceMonitoringTopic).ProduceAsync(deviceKey, data);
+            return Task.CompletedTask;
         }
     }
 }

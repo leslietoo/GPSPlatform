@@ -47,6 +47,7 @@
 |:-------:|:-------:|:-------:|
 | GPS.JT808DeviceMonitoringDispatcher | 通过kafka实现 | 可选择合适的方式实现 |
 | GPS.JT808SourcePackageDispatcher | 通过kafka实现 | 可选择合适的方式实现 |
+| GPS.JT808SampleDeviceMonitoring | 简单设备点名监控打印原数据 | - |
 
 ### 基于SignalR的JT808.WebSocketServer服务：
 

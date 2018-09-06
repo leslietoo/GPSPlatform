@@ -55,6 +55,11 @@ namespace GPS.Gateway.JT808SuperSocketServer
                                             new Dictionary<string, object>
                                             {
                                                 { "bootstrap.servers", host }
+                                            }),
+                                       new GPS.JT808PubSubToKafka.JT808_DeviceMonitoringDispatcher_Producer(
+                                            new Dictionary<string, object>
+                                            {
+                                                { "bootstrap.servers", host }
                                             })
                                 ));
                                 services.AddSingleton(typeof(IConsumerFactory),

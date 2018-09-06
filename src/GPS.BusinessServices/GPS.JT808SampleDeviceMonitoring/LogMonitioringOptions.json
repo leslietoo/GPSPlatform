@@ -1,0 +1,7 @@
+{
+  "LogMonitioringOptions": {
+    "Data": "013510260001", //以逗号隔开
+    "MonitoringTime": 1, //默认1小时
+    "MonitoringStatus": false //监控状态
+  }
+}

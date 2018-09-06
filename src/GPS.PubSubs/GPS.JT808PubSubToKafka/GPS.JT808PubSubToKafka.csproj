@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\GPS.Dispatcher.Abstractions\GPS.Dispatcher.Abstractions.csproj" />
     <ProjectReference Include="..\..\GPS.PubSub.Abstractions\GPS.PubSub.Abstractions.csproj" />
     <ProjectReference Include="..\..\JT808.Protocol\JT808.Protocol.csproj" />
   </ItemGroup>
