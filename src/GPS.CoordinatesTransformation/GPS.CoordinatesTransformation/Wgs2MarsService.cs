@@ -7,6 +7,9 @@ using System.Text;
 
 namespace GPS.CoordinatesTransformation
 {
+    /// <summary>
+    /// wgs84-gcj02服务
+    /// </summary>
     public class Wgs2MarsService
     {
         private readonly static double[] Lx = new double[297000];
