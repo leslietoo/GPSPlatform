@@ -12,6 +12,7 @@ using GPS.PubSub.Abstractions;
 using GPS.JT808DeviceMonitoringDispatcher;
 using GPS.JT808SourcePackageDispatcher;
 using GPS.Dispatcher.Abstractions;
+using SuperSocket.SocketBase.Config;
 
 namespace GPS.Gateway.JT808SuperSocketServer
 {
@@ -48,8 +49,9 @@ namespace GPS.Gateway.JT808SuperSocketServer
                                 services.AddSingleton<ILogFactory, SuperSocketNLogFactoryExtensions>();
                                 var host = hostContext.Configuration.GetSection("KafkaOptions").GetValue<string>("bootstrap.servers");
                                 KafkaMonoConfig.Load(hostContext.Configuration.GetSection("KafkaOptions").GetValue<string>("MonoRuntimePath"));
-                                services.Configure<SuperSocketOptions>(hostContext.Configuration.GetSection("SuperSocketOptions"));
-                                services.AddSingleton(typeof(IProducerFactory), 
+                                services.Configure<ServerConfig>(hostContext.Configuration.GetSection("SuperSocketOptions"));
+                                services.AddSingleton<ILogFactory, SuperSocketNLogFactoryExtensions>();
+                                services.AddSingleton(typeof(IProducerFactory),
                                     new ProducerFactory(
                                         new GPS.JT808PubSubToKafka.JT808_0x0200_Producer(
                                             new Dictionary<string, object>
@@ -63,16 +65,17 @@ namespace GPS.Gateway.JT808SuperSocketServer
                                             })
                                 ));
                                 services.AddSingleton(typeof(IConsumerFactory),
-                                 //  Kafka
+                                       new ConsumerFactory(
                                      new GPS.JT808PubSubToKafka.JT808_UnificationSend_Consumer(
                                          new Dictionary<string, object>
                                          {
                                              { "group.id", "GatewayUnificationSend" },
                                              { "enable.auto.commit", true },
                                              { "bootstrap.servers", host }
-                                         }, loggerFactory));
+                                         }, loggerFactory)));
+                                services.AddSingleton<IDeviceMonitoringDispatcher, JT808DeviceMonitoringDispatcherImpl>();
                                 services.AddSingleton<JT808Server>();
-                                services.AddScoped<IHostedService, JT808Service>();
+                                services.AddSingleton<IHostedService, JT808Service>();
                             });
                 await serverHostBuilder.RunConsoleAsync();
             }

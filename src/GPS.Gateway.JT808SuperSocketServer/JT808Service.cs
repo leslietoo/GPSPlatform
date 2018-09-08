@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using SuperSocket.SocketBase.Config;
 using SuperSocket.SocketBase.Logging;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,17 +15,17 @@ namespace GPS.Gateway.JT808SuperSocketServer
 
         private readonly ILogger<JT808Service> log;
 
-        private readonly SuperSocketOptions SuperSocketOptions;
-
         private readonly ILogFactory LogFactory;
 
+        private readonly ServerConfig serverConfig;
+
         public JT808Service(JT808Server jT808Server,
-                            IOptions<SuperSocketOptions> superSocketOptions,
+                            IOptions<ServerConfig> serverConfigAccessor,
                             ILogFactory logFactory,
                             ILoggerFactory loggerFactory)
         {
             JT808Server = jT808Server;
-            SuperSocketOptions = superSocketOptions.Value;
+            this.serverConfig = serverConfigAccessor.Value;
             LogFactory = logFactory;
             log = loggerFactory.CreateLogger<JT808Service>();
         }
@@ -33,7 +35,7 @@ namespace GPS.Gateway.JT808SuperSocketServer
         public Task StartAsync(CancellationToken cancellationToken)
         {
             log.LogInformation("Start:" + ServiceName);
-            if (!JT808Server.Setup(SuperSocketOptions.IP, SuperSocketOptions.Port,null,null, LogFactory, null))
+            if (!JT808Server.Setup(serverConfig, null,null, LogFactory, null))
             {
                 log.LogError("Failed to initialize SuperSocket ServiceEngine! Please check error log for more information!");
                 return Task.CompletedTask;
@@ -43,14 +45,14 @@ namespace GPS.Gateway.JT808SuperSocketServer
                 log.LogInformation("Start Error");
                 return Task.CompletedTask;
             }
-            log.LogInformation("Start Listener:" + SuperSocketOptions.ToString());
+            log.LogInformation("Start Listener:" + JsonConvert.SerializeObject(serverConfig));
             return Task.CompletedTask;
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
             log.LogInformation("Stop:" + ServiceName);
-            log.LogInformation("Stop Listener:" + SuperSocketOptions.ToString());
+            log.LogInformation("Stop Listener:" + JsonConvert.SerializeObject(serverConfig));
             JT808Server.Stop();
             return Task.CompletedTask;
         }

@@ -201,7 +201,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SuperSocketNLogFactoryExtensions.cs" />
     <Compile Include="SuperSocketNLogExtensions.cs" />
-    <Compile Include="SuperSocketOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
