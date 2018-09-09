@@ -1,0 +1,15 @@
+﻿syntax = "proto3";
+
+package GPS.ServiceGrpcBase;
+
+// 统一回复
+message ResultReply{
+	enum StatusCode{
+		Success = 0;
+		Failure = 1;
+		Unauthorized=2;
+		InnerError = 3;
+	}
+    StatusCode Code=1;
+    string Msg=2;
+}

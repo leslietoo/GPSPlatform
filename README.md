@@ -75,20 +75,19 @@
 | 急减速报警 | - | × |
 | 急转弯报警 | - | × |
 
-### 基于[Orleans](https://github.com/dotnet/orleans)实现GPS.IdentityServer4统一用户鉴权（使用JWT方式）：
+### 基于GRPC实现内部系统调用：
+
+| 功能 | 说明 |
+|:-------:|:-------:|
+| GPS.GrpcProtocol | 消息协议 |
+| GPS.GrpcServiceBase | 消息接口服务 |
+
+#### 基于GRPC实现GPS.IdentityServer4GrpcServer统一用户鉴权（使用JWT方式）
 
 > 不同平台（Web平台、App、IOS、及微信小程序）请求认证服务器。
 
 | 项目 | 说明 | 完成情况 |
 |:-------:|:-------:|:-------:|
-| GPS.IdentityServer4IGrain | 认证接口（颁发令牌、认证令牌、刷新令牌） | √ |
-| GPS.IdentityServer4Grain | 认证接口实现 | √ |
-| GPS.IdentityServer4GrainServer | 认证服务器 | √ |
-| GPS.IdentityServer4GrainClient | 客户端demo | √ |
-
-##### Orleans 集群管理说明：
-| 使用方式 |  Nuget包 | 说明 |
-|:-------:|:-------:|:-------:|
-| UseLocalhostClustering | - | 本地集群用户开发环境 |
-| UseConsulClustering | [Microsoft.Orleans.OrleansConsulUtils](https://www.nuget.org/packages/Microsoft.Orleans.OrleansConsulUtils/2.0.0) | 基于consul集群 |
-| UseZooKeeperClustering| [Microsoft.Orleans.OrleansZooKeeperUtils](https://www.nuget.org/packages/Microsoft.Orleans.OrleansZooKeeperUtils) | 基于zookeeper集群 |
+| GenerateToken | 颁发令牌 | √ |
+| VerifyToken  | 认证令牌 | √ |
+| RefreshToken | 刷新令牌 | √ |

@@ -17,29 +17,13 @@ namespace GPS.Service.Abstractions
 
         private readonly CancellationTokenSource _stoppingCts =new CancellationTokenSource();
 
-        private Task CheckHealthTask;
-
         Task IHostedService.StartAsync(CancellationToken cancellationToken)
         {
-            Task.Run(() => {
-                while (!_stoppingCts.IsCancellationRequested)
-                {
-
-                }
-            }, _stoppingCts.Token);
             return StartAsync(cancellationToken);
         }
 
         Task IHostedService.StopAsync(CancellationToken cancellationToken)
         {
-            try
-            {
-                _stoppingCts.Cancel();
-            }
-            finally
-            {
-   
-            }
             return StopAsync(cancellationToken);
         }
 

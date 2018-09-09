@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package GPS.IdentityServer4GrpcServiceBase;
+
+import "ResultReply.proto";
+
+service IdentityServer4ServiceGrpc {
+	// 颁布令牌
+	rpc GenerateToken (GenerateTokenRequest) returns (GenerateTokenReply) {}
+	// 认证令牌
+	rpc VerifyToken(VerifyTokenRequest) returns (VerifyTokenReply) {}
+	// 刷新令牌
+	rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenReply) {}
+}
+
+message GenerateTokenRequest{
+	// 附加信息
+    map<string, string> Claims=1;
+	// 时间间隔 默认为（7天）
+    int32 Interval=2;
+}
+
+message GenerateTokenReply{
+    string Token=1;
+	GPS.ServiceGrpcBase.ResultReply ResultReply=2;
+}
+
+message VerifyTokenRequest{
+	string Token=1;
+}
+
+enum JwtResultCode{
+	// 成功
+	Ok=0;
+	// token过期
+	TokenExpires=1;
+	// token签名错误
+	TokenInvalidSignature=2;
+	// token错误
+	Error=9;
+}
+
+message VerifyTokenReply{
+	// 附加信息
+    map<string, string> Claims=1;
+	// 返回状态
+	JwtResultCode ResultCode=2;
+	GPS.ServiceGrpcBase.ResultReply ResultReply=3;
+}
+
+message RefreshTokenRequest{
+	string Token=1;
+}
+
+message RefreshTokenReply{
+	// 附加信息
+    string Token=1;
+	// 返回状态
+	JwtResultCode ResultCode=2;
+	GPS.ServiceGrpcBase.ResultReply ResultReply=3;
+}
