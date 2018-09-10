@@ -31,7 +31,7 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             {
                  MsgId= Enums.JT808MsgId.ÖÕ¶Ë¼øÈ¨,
                  MsgNum=12345,
-                 TerminalPhoneNo="012345678900",
+                 TerminalPhoneNo="12345678900",
             };
             jT808LoginRequest.Bodies = new JT808_0x0102
             {
@@ -47,7 +47,7 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             JT808Package jT808LoginRequest = JT808Serializer.Deserialize<JT808Package>(bodys);
             Assert.Equal(Enums.JT808MsgId.ÖÕ¶Ë¼øÈ¨, jT808LoginRequest.Header.MsgId);
             Assert.Equal(12345, jT808LoginRequest.Header.MsgNum);
-            Assert.Equal("012345678900", jT808LoginRequest.Header.TerminalPhoneNo);
+            Assert.Equal("12345678900", jT808LoginRequest.Header.TerminalPhoneNo);
 
             JT808_0x0102 JT808Bodies = (JT808_0x0102)jT808LoginRequest.Bodies;
             Assert.Equal("456121111", JT808Bodies.Code);

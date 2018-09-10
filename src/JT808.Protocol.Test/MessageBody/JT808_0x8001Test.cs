@@ -15,7 +15,7 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             {
                 MsgId = Enums.JT808MsgId.平台通用应答,
                 MsgNum = 10,
-                TerminalPhoneNo = "012345678900",
+                TerminalPhoneNo = "12345678900",
             };
             jT808Package.Bodies = new JT808_0x8001
             {
@@ -43,7 +43,7 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             JT808Package jT808Package = JT808Serializer.Deserialize<JT808Package>(bytes);
             Assert.Equal(Enums.JT808MsgId.平台通用应答, jT808Package.Header.MsgId);
             Assert.Equal(10, jT808Package.Header.MsgNum);
-            Assert.Equal("012345678900", jT808Package.Header.TerminalPhoneNo);
+            Assert.Equal("12345678900", jT808Package.Header.TerminalPhoneNo);
 
             JT808_0x8001 JT808Bodies = (JT808_0x8001)jT808Package.Bodies;
             Assert.Equal(Enums.JT808MsgId.位置信息汇报, JT808Bodies.MsgId);

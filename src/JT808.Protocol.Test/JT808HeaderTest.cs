@@ -27,7 +27,7 @@ namespace JT808.Protocol.Test
         public void Test1()
         {
             JT808Header jT808HeaderProperty = new JT808Header();
-            jT808HeaderProperty.TerminalPhoneNo = "013812345678";
+            jT808HeaderProperty.TerminalPhoneNo = "13812345678";
             jT808HeaderProperty.MessageBodyProperty.DataLength = 5;
             jT808HeaderProperty.MsgNum = 135;
             jT808HeaderProperty.MsgId = JT808MsgId.终端鉴权;
@@ -42,7 +42,7 @@ namespace JT808.Protocol.Test
             byte[] headerBytes = "01 02 00 05 01 38 12 34 56 78 00 87".ToHexBytes();
             JT808Header jT808Header = JT808Serializer.Deserialize<JT808Header>(headerBytes);
             Assert.Equal(135, jT808Header.MsgNum);
-            Assert.Equal("013812345678", jT808Header.TerminalPhoneNo);
+            Assert.Equal("13812345678", jT808Header.TerminalPhoneNo);
             Assert.False(jT808Header.MessageBodyProperty.IsPackge);
             Assert.Equal(JT808MsgId.终端鉴权, jT808Header.MsgId);
             Assert.Equal(5, jT808Header.MessageBodyProperty.DataLength);
@@ -52,7 +52,7 @@ namespace JT808.Protocol.Test
         public void Test5()
         {
             JT808Header jT808HeaderProperty = new JT808Header();
-            jT808HeaderProperty.TerminalPhoneNo = "013812345678";
+            jT808HeaderProperty.TerminalPhoneNo = "13812345678";
             jT808HeaderProperty.MessageBodyProperty.DataLength = 5;
             jT808HeaderProperty.MsgNum = 135;
             jT808HeaderProperty.MsgId = JT808MsgId.终端鉴权;
@@ -68,7 +68,7 @@ namespace JT808.Protocol.Test
             byte[] headerBytes = "01 02 00 05 01 38 12 34 56 78 00 87".ToHexBytes();
             JT808Header jT808Header = JT808Serializer.Deserialize<JT808Header>(headerBytes);
             Assert.Equal(135, jT808Header.MsgNum);
-            Assert.Equal("013812345678", jT808Header.TerminalPhoneNo);
+            Assert.Equal("13812345678", jT808Header.TerminalPhoneNo);
             Assert.False(jT808Header.MessageBodyProperty.IsPackge);
             Assert.Equal(JT808MsgId.终端鉴权, jT808Header.MsgId);
             Assert.Equal(5, jT808Header.MessageBodyProperty.DataLength);

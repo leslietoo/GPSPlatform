@@ -20,7 +20,7 @@ namespace JT808.Protocol.JT808Formatters
             jT808Header.MessageBodyProperty = JT808FormatterExtensions.GetFormatter<JT808HeaderMessageBodyProperty>().Deserialize(bytes.Slice(offset), out readSize);
             offset += readSize;
             // 3.终端手机号 (写死大陆手机号码)
-            jT808Header.TerminalPhoneNo = JT808BinaryExtensions.ReadBCD(bytes,ref offset, 6).ToString().PadLeft(12, '0');
+            jT808Header.TerminalPhoneNo = JT808BinaryExtensions.ReadBCD(bytes,ref offset, 6).ToString();
             // 4.消息流水号
             jT808Header.MsgNum = JT808BinaryExtensions.ReadUInt16Little(bytes,ref offset);
             readSize = offset;

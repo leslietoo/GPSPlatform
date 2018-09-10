@@ -36,7 +36,7 @@ namespace JT808.Protocol.Test.MessageBodyRequest
                 JT808Package jT808_0X0100 = JT808Serializer.Deserialize<JT808Package>(bytes);
                 Assert.Equal(Enums.JT808MsgId.终端注册, jT808_0X0100.Header.MsgId);
                 Assert.Equal(10, jT808_0X0100.Header.MsgNum);
-                Assert.Equal("000123456789", jT808_0X0100.Header.TerminalPhoneNo);
+                Assert.Equal("123456789", jT808_0X0100.Header.TerminalPhoneNo);
 
                 JT808_0x0100 JT808Bodies = (JT808_0x0100)jT808_0X0100.Bodies;
                 Assert.Equal(40, JT808Bodies.AreaID);

@@ -43,7 +43,7 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             JT808Package jT808Package = JT808Serializer.Deserialize<JT808Package>(bytes);
             Assert.Equal(Enums.JT808MsgId.终端注册应答, jT808Package.Header.MsgId);
             Assert.Equal(10, jT808Package.Header.MsgNum);
-            Assert.Equal("012345678900", jT808Package.Header.TerminalPhoneNo);
+            Assert.Equal("12345678900", jT808Package.Header.TerminalPhoneNo);
 
             JT808_0x8100 JT808Bodies = (JT808_0x8100)jT808Package.Bodies;
             Assert.Equal("123456", JT808Bodies.Code);
@@ -59,7 +59,7 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             {
                 MsgId = Enums.JT808MsgId.终端注册应答,
                 MsgNum = 10,
-                TerminalPhoneNo = "012345678900",
+                TerminalPhoneNo = "12345678900",
             };
             jT808Package.Bodies = new JT808_0x8100
             {
@@ -86,7 +86,7 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             JT808Package jT808Package = JT808Serializer.Deserialize<JT808Package>(bytes);
             Assert.Equal(Enums.JT808MsgId.终端注册应答, jT808Package.Header.MsgId);
             Assert.Equal(10, jT808Package.Header.MsgNum);
-            Assert.Equal("012345678900", jT808Package.Header.TerminalPhoneNo);
+            Assert.Equal("12345678900", jT808Package.Header.TerminalPhoneNo);
 
             JT808_0x8100 JT808Bodies = (JT808_0x8100)jT808Package.Bodies;
             Assert.Null(JT808Bodies.Code);
@@ -103,7 +103,7 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             {
                 MsgId = Enums.JT808MsgId.终端注册应答,
                 MsgNum = 10,
-                TerminalPhoneNo = "012345678900",
+                TerminalPhoneNo = "12345678900",
             };
             jT808Package.Bodies = new JT808_0x8100
             {
@@ -122,7 +122,7 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             JT808Package jT808Package = JT808Serializer.Deserialize<JT808Package>(bytes);
             Assert.Equal(Enums.JT808MsgId.终端注册应答, jT808Package.Header.MsgId);
             Assert.Equal(10, jT808Package.Header.MsgNum);
-            Assert.Equal("012345678900", jT808Package.Header.TerminalPhoneNo);
+            Assert.Equal("12345678900", jT808Package.Header.TerminalPhoneNo);
 
             JT808_0x8100 JT808Bodies = (JT808_0x8100)jT808Package.Bodies;
             Assert.Equal("zssdaf23124sfdsc", JT808Bodies.Code);

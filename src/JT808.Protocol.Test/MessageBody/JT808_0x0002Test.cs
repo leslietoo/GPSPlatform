@@ -16,7 +16,7 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             {
                  MsgId= Enums.JT808MsgId.终端心跳,
                  MsgNum=10,
-                 TerminalPhoneNo="012345678900",
+                 TerminalPhoneNo="12345678900",
             };
             //"7E 00 02 00 00 01 23 45 67 89 00 00 0A 81 7E"
             var hex = JT808Serializer.Serialize(jT808Package).ToHexString();
@@ -29,7 +29,7 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             JT808Package jT808Package = JT808Serializer.Deserialize<JT808Package>(bytes);
             Assert.Equal(Enums.JT808MsgId.终端心跳, jT808Package.Header.MsgId);
             Assert.Equal(10, jT808Package.Header.MsgNum);
-            Assert.Equal("012345678900", jT808Package.Header.TerminalPhoneNo);
+            Assert.Equal("12345678900", jT808Package.Header.TerminalPhoneNo);
             Assert.Null(jT808Package.Bodies);
         }
     }
