@@ -53,9 +53,11 @@ namespace GPS.JT808NettyServer.Handlers
                             logger.LogDebug("send>>>" + jT808PackageImpl.JT808Package.Header.MsgId.ToString() + "-" + JT808Serializer.Serialize(jT808PackageImpl.JT808Package).ToHexString());
                             logger.LogDebug("send>>>" + jT808PackageImpl.JT808Package.Header.MsgId.ToString() + "-" + JsonConvert.SerializeObject(jT808PackageImpl.JT808Package));
                         }
-                        // 需要注意:亲测有效
-                        // 下发应答必须要在类中重写 ChannelReadComplete 不然客户端接收不到消息
-                        context.Channel.WriteAsync(Unpooled.WrappedBuffer(JT808Serializer.Serialize(jT808PackageImpl.JT808Package)));
+                        // 需要注意：
+                        // 1.下发应答必须要在类中重写 ChannelReadComplete 不然客户端接收不到消息
+                        // context.WriteAsync(Unpooled.WrappedBuffer(JT808Serializer.Serialize(jT808PackageImpl.JT808Package)));
+                        // 2.直接发送
+                        context.WriteAndFlushAsync(Unpooled.WrappedBuffer(JT808Serializer.Serialize(jT808PackageImpl.JT808Package)));
                     }
                 }
             }
@@ -69,6 +71,6 @@ namespace GPS.JT808NettyServer.Handlers
             }
         }
 
-        public override void ChannelReadComplete(IChannelHandlerContext context) => context.Flush();
+        //public override void ChannelReadComplete(IChannelHandlerContext context) => context.Flush();
     }
 }

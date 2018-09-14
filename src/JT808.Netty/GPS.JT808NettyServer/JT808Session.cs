@@ -14,11 +14,6 @@ namespace GPS.JT808NettyServer
             SessionID = Channel.Id.AsShortText();
         }
 
-        public JT808Session(IChannel channel) : this(channel,"")
-        {
-            
-        }
-
         /// <summary>
         /// 终端手机号
         /// </summary>

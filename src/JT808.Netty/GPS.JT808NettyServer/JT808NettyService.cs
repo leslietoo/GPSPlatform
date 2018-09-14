@@ -70,7 +70,7 @@ namespace GPS.JT808NettyServer
                            InitChannel(channel);
                        }))
                        .Option(ChannelOption.SoBacklog, 65535);
-                boundChannel = bootstrap.BindAsync(6566).Result;
+                boundChannel = bootstrap.BindAsync(6565).Result;
             }
             catch (Exception ex)
             {
