@@ -18,7 +18,13 @@ namespace GPS.Gateway.JT808SuperSocketServer
 
         protected override JT808RequestInfo ProcessMatchedRequest(byte[] readBuffer, int offset, int length)
         {
-             return new JT808RequestInfo(readBuffer);
+            // 防止socket字节流攻击  
+            if (length < 3)
+            {
+                base.Reset();
+                return null;
+            }
+            return new JT808RequestInfo(readBuffer);
         }
     }
 }
