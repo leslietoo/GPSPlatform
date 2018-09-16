@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace GPS.JT808NettyServer.Handlers
 {
@@ -21,41 +22,32 @@ namespace GPS.JT808NettyServer.Handlers
             logger = loggerFactory.CreateLogger<JT808DecodeHandler>();
         }
 
+        private static long MsgSuccessCount = 0;
+
+        private static long MsgFailCount = 0;
+
         protected override void Decode(IChannelHandlerContext context, IByteBuffer input, List<object> output)
         {
-            //解决TCP粘包、拆包
-            if (input.ReadableBytes <= 3)
-            {
-                input.ResetReaderIndex();
-                return;
-            }
             string msg = string.Empty;
+            byte[] buffer = null;
             try
             {
-                input.MarkReaderIndex();
-                int length = 0;
-                if (input.ReadByte() != JT808Package.BeginFlag || (length = input.BytesBefore(JT808Package.EndFlag)) == -1)
-                {
-                    input.ResetReaderIndex();
-                    return;
-                }
-                input.ResetReaderIndex();
-                msg = ByteBufferUtil.HexDump(input);
+                buffer = new byte[input.Capacity + 2];
+                input.ReadBytes(buffer,1, input.Capacity);
+                buffer[0] = JT808.Protocol.JT808Package.BeginFlag;
+                buffer[input.Capacity + 1] = JT808.Protocol.JT808Package.EndFlag;
+                output.Add(new JT808RequestInfo(buffer));
+                Interlocked.Increment(ref MsgSuccessCount);
                 if (logger.IsEnabled(LogLevel.Debug))
                 {
-                    logger.LogDebug("accept msg<<<" + msg);
+                    logger.LogDebug("accept package success count<<<" + MsgSuccessCount.ToString());
                 }
-                // 解析消息
-                IByteBuffer message = Unpooled.Buffer(length + 2);
-                var data = new byte[message.Array.Length];
-                input.ReadBytes(data);
-                // throw new Exception("test");
-                output.Add(new JT808RequestInfo(data));
             }
             catch (Exception ex)
             {
+                Interlocked.Increment(ref MsgFailCount);
+                logger.LogError("accept package fail count<<<" + MsgFailCount.ToString());
                 logger.LogError(ex, "accept msg<<<" + msg);
-                input.ResetReaderIndex();
                 return;
             }
         }

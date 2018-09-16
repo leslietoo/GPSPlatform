@@ -208,5 +208,17 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             Assert.Equal(100, ((JT808LocationAttachImpl0x01)jT808UploadLocationRequest.JT808LocationAttachData[JT808LocationAttachBase.AttachId0x01]).Mileage);
             Assert.Equal(55, ((JT808LocationAttachImpl0x02)jT808UploadLocationRequest.JT808LocationAttachData[JT808LocationAttachBase.AttachId0x02]).Oil);
         }
+
+
+        [Fact]
+        public void Test6()
+        {
+            //7E 02 00 00 3C 04 00 21 68 20 87 1D 0C 00 00 00 00 00 0C 00 C2 01 5B 6C 6E 06 C8 56 98 00 1E 00 00 00 E0 18 09 16 10 35 37 01 04 00 05 4C 7D 01 02 02 00 00 03 02 00 00 25 04 00 00 00 00 2B 04 00 00 00 00 30 01 1D 31 01 0D 97 7E
+
+            byte[] bytes = "7E 02 00 00 3C 04 00 21 68 20 87 1D 0C 00 00 00 00 00 0C 00 C2 01 5B 6C 6E 06 C8 56 98 00 1E 00 00 00 E0 18 09 16 10 35 37 01 04 00 05 4C 7D 01 02 02 00 00 03 02 00 00 25 04 00 00 00 00 2B 04 00 00 00 00 30 01 1D 31 01 0D 97 7E".ToHexBytes();
+            var jT808Package = JT808Serializer.Deserialize<JT808Package>(bytes);
+            
+        }
+        
     }
 }

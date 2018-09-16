@@ -32,5 +32,16 @@ namespace JT808.Protocol.Test.MessageBodyRequest
             Assert.Equal("12345678900", jT808Package.Header.TerminalPhoneNo);
             Assert.Null(jT808Package.Bodies);
         }
+
+        [Fact]
+        public void Test3()
+        {
+            var bytes = "7E 00 02 00 00 04 00 21 67 92 87 00 2B 7D 02 7E".ToHexBytes();
+            JT808Package jT808Package = JT808Serializer.Deserialize<JT808Package>(bytes);
+            Assert.Equal(Enums.JT808MsgId.终端心跳, jT808Package.Header.MsgId);
+            Assert.Equal(43, jT808Package.Header.MsgNum);
+            Assert.Equal("12345678900", jT808Package.Header.TerminalPhoneNo);
+            Assert.Null(jT808Package.Bodies);
+        }
     }
 }

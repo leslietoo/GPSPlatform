@@ -68,7 +68,7 @@ namespace JT808.Protocol.JT808Formatters
                     }
                 }
             }
-            jT808Package.End = buffer[bytes.Length - 1];
+            jT808Package.End = buffer[buffer.Length - 1];
             readSize = buffer.Length;
             return jT808Package;
         }

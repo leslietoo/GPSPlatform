@@ -17,7 +17,6 @@ namespace JT808.Protocol.JT808PackageImpl
         {
             get
             {
-                if (_SNumId >= 65535) _SNumId = 0;
                 return _SNumId++;
             }
         }

@@ -27,8 +27,11 @@ namespace GPS.JT808NettyServer
                 while (!cancellationTokenSource.IsCancellationRequested)
                 {
                     logger.LogInformation($"Online Count>>>{SessionCount}");
-                    logger.LogInformation($"SessionIds>>>{string.Join(",", SessionIdDict.Select(s => s.Key))}");
-                    logger.LogInformation($"TerminalPhoneNos>>>{string.Join(",", TerminalPhoneNo_SessionId_Dict.Select(s => $"{s.Key}-{s.Value}"))}");
+                    if (SessionCount > 0)
+                    {
+                        logger.LogInformation($"SessionIds>>>{string.Join(",", SessionIdDict.Select(s => s.Key))}");
+                        logger.LogInformation($"TerminalPhoneNos>>>{string.Join(",", TerminalPhoneNo_SessionId_Dict.Select(s => $"{s.Key}-{s.Value}"))}");
+                    }
                     Thread.Sleep(timeout);
                 }
             }, cancellationTokenSource.Token);

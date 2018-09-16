@@ -1,9 +1,13 @@
-﻿using DotNetty.Transport.Channels;
+﻿using DotNetty.Common.Internal.Logging;
+using DotNetty.Transport.Channels;
+using GPS.JT808NettyServer.Configs;
 using GPS.JT808NettyServer.Handlers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
+using NLog.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
@@ -13,6 +17,7 @@ namespace GPS.JT808NettyServer
     {
         static async Task Main(string[] args)
         {
+            //Environment.SetEnvironmentVariable("io.netty.allocator.numDirectAremas","0");
             var serverHostBuilder = new HostBuilder()
                     .UseEnvironment(args[0].Split('=')[1])
                     .ConfigureAppConfiguration((hostingContext, config) =>
@@ -23,15 +28,16 @@ namespace GPS.JT808NettyServer
                     })
                     .ConfigureLogging((context, logging) =>
                     {
-                        logging.AddConsole();
-                        //NLog.LogManager.LoadConfiguration("Configs/nlog.config");
-                        //logging.AddNLog(new NLogProviderOptions { CaptureMessageTemplates = true, CaptureMessageProperties = true });
+                        //logging.AddConsole();
+                        NLog.LogManager.LoadConfiguration("Configs/nlog.config");
+                        logging.AddNLog(new NLogProviderOptions { CaptureMessageTemplates = true, CaptureMessageProperties = true });
                         logging.SetMinimumLevel(LogLevel.Trace);
                     })
                     .ConfigureServices((hostContext, services) =>
                     {
                         services.AddSingleton<ILoggerFactory, LoggerFactory>();
                         services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
+                        services.Configure<NettyOptions>(hostContext.Configuration.GetSection("NettyOptions"));
                         services.AddSingleton(services.BuildServiceProvider());
                         services.AddSingleton<SessionManager, SessionManager>();
                         services.AddSingleton<JT808MsgIdHandler, JT808MsgIdHandler>();

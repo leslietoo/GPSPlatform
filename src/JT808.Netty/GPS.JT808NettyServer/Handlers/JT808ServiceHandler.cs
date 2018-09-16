@@ -10,6 +10,7 @@ using DotNetty.Common.Utilities;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using JT808.Protocol.Exceptions;
+using System.Threading;
 
 namespace GPS.JT808NettyServer.Handlers
 {
@@ -33,31 +34,34 @@ namespace GPS.JT808NettyServer.Handlers
 
         public override void ChannelRead(IChannelHandlerContext context, object message)
         {
-            var buffer = (JT808RequestInfo)message;
-            string receive = buffer.OriginalBuffer.ToHexString();
-            if (logger.IsEnabled(LogLevel.Debug))
-            {
-                logger.LogDebug("receive<<<"+receive);
-            }
+            var jT808RequestInfo = (JT808RequestInfo)message;
+            string receive = string.Empty;
             try
             {
-                Func<JT808RequestInfo,IJT808Package> handlerFunc;
-                if (jT808MsgIdHandler.HandlerDict.TryGetValue(buffer.JT808Package.Header.MsgId,  out handlerFunc))
+                if (logger.IsEnabled(LogLevel.Debug))
                 {
-                    sessionManager.RegisterSession(new JT808Session(context.Channel, buffer.JT808Package.Header.TerminalPhoneNo));
-                    IJT808Package jT808PackageImpl = handlerFunc(buffer);
-                    if (jT808PackageImpl != null)
+                    receive = jT808RequestInfo.OriginalBuffer.ToHexString();
+                }
+                Func<JT808RequestInfo,IJT808Package> handlerFunc;
+                if (jT808RequestInfo.JT808Package != null)
+                {
+                    if (jT808MsgIdHandler.HandlerDict.TryGetValue(jT808RequestInfo.JT808Package.Header.MsgId, out handlerFunc))
                     {
-                        if (logger.IsEnabled(LogLevel.Debug))
+                        sessionManager.RegisterSession(new JT808Session(context.Channel, jT808RequestInfo.JT808Package.Header.TerminalPhoneNo));
+                        IJT808Package jT808PackageImpl = handlerFunc(jT808RequestInfo);
+                        if (jT808PackageImpl != null)
                         {
-                            logger.LogDebug("send>>>" + jT808PackageImpl.JT808Package.Header.MsgId.ToString() + "-" + JT808Serializer.Serialize(jT808PackageImpl.JT808Package).ToHexString());
-                            logger.LogDebug("send>>>" + jT808PackageImpl.JT808Package.Header.MsgId.ToString() + "-" + JsonConvert.SerializeObject(jT808PackageImpl.JT808Package));
+                            if (logger.IsEnabled(LogLevel.Debug))
+                            {
+                                logger.LogDebug("send>>>" + jT808PackageImpl.JT808Package.Header.MsgId.ToString() + "-" + JT808Serializer.Serialize(jT808PackageImpl.JT808Package).ToHexString());
+                                //logger.LogDebug("send>>>" + jT808PackageImpl.JT808Package.Header.MsgId.ToString() + "-" + JsonConvert.SerializeObject(jT808PackageImpl.JT808Package));
+                            }
+                            // 需要注意：
+                            // 1.下发应答必须要在类中重写 ChannelReadComplete 不然客户端接收不到消息
+                            // context.WriteAsync(Unpooled.WrappedBuffer(JT808Serializer.Serialize(jT808PackageImpl.JT808Package)));
+                            // 2.直接发送
+                            context.WriteAndFlushAsync(Unpooled.WrappedBuffer(JT808Serializer.Serialize(jT808PackageImpl.JT808Package)));
                         }
-                        // 需要注意：
-                        // 1.下发应答必须要在类中重写 ChannelReadComplete 不然客户端接收不到消息
-                        // context.WriteAsync(Unpooled.WrappedBuffer(JT808Serializer.Serialize(jT808PackageImpl.JT808Package)));
-                        // 2.直接发送
-                        context.WriteAndFlushAsync(Unpooled.WrappedBuffer(JT808Serializer.Serialize(jT808PackageImpl.JT808Package)));
                     }
                 }
             }

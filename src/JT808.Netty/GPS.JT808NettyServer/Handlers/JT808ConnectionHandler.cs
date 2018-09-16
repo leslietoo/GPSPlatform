@@ -24,20 +24,20 @@ namespace GPS.JT808NettyServer.Handlers
 
         public override void ChannelActive(IChannelHandlerContext context)
         {
-            logger.LogDebug("<<<客户端连接服务器成功");
+            logger.LogDebug("<<<Successful client connection to server");
             base.ChannelActive(context);
         }
 
         public override void ChannelInactive(IChannelHandlerContext context)
         {
-            logger.LogDebug("<<<客户端与服务器断开连接");
+            logger.LogDebug("<<<The client disconnects from the server");
             sessionManager.RemoveSessionByID(context.Channel.Id.AsShortText());
             base.ChannelInactive(context);
         }
 
         public override Task CloseAsync(IChannelHandlerContext context)
         {
-            logger.LogDebug(">>>服务器断开与客户端的连接");
+            logger.LogDebug(">>>The server disconnects from the client");
             return base.CloseAsync(context);
         }
     }
