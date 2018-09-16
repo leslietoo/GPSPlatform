@@ -116,10 +116,18 @@ namespace GPS.JT808SampleDeviceMonitoring
 #endif
                                 }
                                 var keys = optionsMonitor.CurrentValue.Data.Split(',').ToList();
-                                if (keys.Contains(msg.Key))
-                                {
-                                    LogMonitoringLogger.LogDebug(msg.Key + ","+msg.data.ToHexString());
+                                if (keys.Contains("all"))
+                                {   //输出所有设备日志
+                                    LogMonitoringLogger.LogDebug(msg.Key + "," + msg.data.ToHexString());
                                 }
+                                else
+                                {
+                                    if (keys.Contains(msg.Key))
+                                    {
+                                        LogMonitoringLogger.LogDebug(msg.Key + "," + msg.data.ToHexString());
+                                    }
+                                }
+                      
                             }
                         }
                         catch (Exception ex)
