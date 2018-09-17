@@ -11,6 +11,13 @@
 3. 分久必合，合久必分的服务化思想
 4. 站在巨人的肩膀上搬砖
 
+### GPS网关
+
+| 功能 | 说明 | 完成情况 |
+|:-------:|:-------:|:-------:|
+| GPS.Gateway.JT808SuperSocketServer | 使用SuperSocket实现 | √ |
+| GPS.JT808NettyServer| 使用DotNetty实现 | √ |
+
 ### 发布/订阅(GPS.PubSub.Abstractions)：
 
 | 功能 | 说明 | 完成情况 |
