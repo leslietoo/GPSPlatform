@@ -1,6 +1,7 @@
 ﻿using DotNetty.Buffers;
 using DotNetty.Codecs;
 using DotNetty.Transport.Channels;
+using GPS.JT808NettyServer;
 using JT808.Protocol;
 using Microsoft.Extensions.Logging;
 using System;
@@ -22,9 +23,9 @@ namespace GPS.JT808NettyServer.Handlers
             logger = loggerFactory.CreateLogger<JT808DecodeHandler>();
         }
 
-        private static long MsgSuccessCount = 0;
+        private static readonly AtomicCounter MsgSuccessCounter = new AtomicCounter();
 
-        private static long MsgFailCount = 0;
+        private static readonly AtomicCounter MsgFailCounter = new AtomicCounter();
 
         protected override void Decode(IChannelHandlerContext context, IByteBuffer input, List<object> output)
         {
@@ -37,16 +38,16 @@ namespace GPS.JT808NettyServer.Handlers
                 buffer[0] = JT808.Protocol.JT808Package.BeginFlag;
                 buffer[input.Capacity + 1] = JT808.Protocol.JT808Package.EndFlag;
                 output.Add(new JT808RequestInfo(buffer));
-                Interlocked.Increment(ref MsgSuccessCount);
+                MsgSuccessCounter.Increment();
                 if (logger.IsEnabled(LogLevel.Debug))
                 {
-                    logger.LogDebug("accept package success count<<<" + MsgSuccessCount.ToString());
+                    logger.LogDebug("accept package success count<<<" + MsgSuccessCounter.Count.ToString());
                 }
             }
             catch (Exception ex)
             {
-                Interlocked.Increment(ref MsgFailCount);
-                logger.LogError("accept package fail count<<<" + MsgFailCount.ToString());
+                MsgFailCounter.Increment();
+                logger.LogError("accept package fail count<<<" + MsgFailCounter.Count.ToString());
                 logger.LogError(ex, "accept msg<<<" + msg);
                 return;
             }

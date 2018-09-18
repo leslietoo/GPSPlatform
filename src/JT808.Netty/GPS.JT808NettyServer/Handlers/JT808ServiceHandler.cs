@@ -18,17 +18,13 @@ namespace GPS.JT808NettyServer.Handlers
     {
         private readonly ILogger<JT808ServiceHandler> logger;
 
-        private readonly SessionManager sessionManager;
-
         private readonly JT808MsgIdHandler jT808MsgIdHandler;
 
         public JT808ServiceHandler(
             JT808MsgIdHandler jT808MsgIdHandler,
-            SessionManager sessionManager,
             ILoggerFactory loggerFactory)
         {
             this.jT808MsgIdHandler = jT808MsgIdHandler;
-            this.sessionManager = sessionManager;
             logger = loggerFactory.CreateLogger<JT808ServiceHandler>();
         }
 
@@ -42,13 +38,12 @@ namespace GPS.JT808NettyServer.Handlers
                 {
                     receive = jT808RequestInfo.OriginalBuffer.ToHexString();
                 }
-                Func<JT808RequestInfo,IJT808Package> handlerFunc;
+                Func<JT808RequestInfo, IChannelHandlerContext,IJT808Package> handlerFunc;
                 if (jT808RequestInfo.JT808Package != null)
                 {
                     if (jT808MsgIdHandler.HandlerDict.TryGetValue(jT808RequestInfo.JT808Package.Header.MsgId, out handlerFunc))
                     {
-                        sessionManager.RegisterSession(new JT808Session(context.Channel, jT808RequestInfo.JT808Package.Header.TerminalPhoneNo));
-                        IJT808Package jT808PackageImpl = handlerFunc(jT808RequestInfo);
+                        IJT808Package jT808PackageImpl = handlerFunc(jT808RequestInfo, context);
                         if (jT808PackageImpl != null)
                         {
                             if (logger.IsEnabled(LogLevel.Debug))
@@ -67,14 +62,16 @@ namespace GPS.JT808NettyServer.Handlers
             }
             catch (JT808Exception ex)
             {
-                logger.LogError(ex, "JT808Exception receive<<<" + receive);
+                if (logger.IsEnabled(LogLevel.Error))
+                    logger.LogError(ex, "JT808Exception receive<<<" + receive);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Exception receive<<<" + receive);
+                if (logger.IsEnabled(LogLevel.Error))
+                    logger.LogError(ex, "Exception receive<<<" + receive);
             }
         }
 
-        //public override void ChannelReadComplete(IChannelHandlerContext context) => context.Flush();
+        public override void ChannelReadComplete(IChannelHandlerContext context) => context.Flush();
     }
 }

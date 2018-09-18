@@ -59,7 +59,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPS.GrpcServiceBase", "GPS.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JT808.Netty", "JT808.Netty", "{DB5E0611-BEFC-4CEC-86E5-4F2ECEE90848}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPS.JT808NettyServer", "JT808.Netty\GPS.JT808NettyServer\GPS.JT808NettyServer.csproj", "{1710F402-E560-4DA8-888F-AABC4839622F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPS.JT808NettyServer", "JT808.Netty\GPS.JT808NettyServer\GPS.JT808NettyServer.csproj", "{1710F402-E560-4DA8-888F-AABC4839622F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

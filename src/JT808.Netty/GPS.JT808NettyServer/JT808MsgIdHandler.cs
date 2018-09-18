@@ -1,4 +1,5 @@
-﻿using JT808.Protocol;
+﻿using DotNetty.Transport.Channels;
+using JT808.Protocol;
 using JT808.Protocol.Enums;
 using JT808.Protocol.JT808PackageImpl.Reply;
 using JT808.Protocol.MessageBody;
@@ -19,7 +20,7 @@ namespace GPS.JT808NettyServer
         public JT808MsgIdHandler(SessionManager sessionManager)
         {
             this.sessionManager = sessionManager;
-            HandlerDict = new Dictionary<JT808MsgId, Func<JT808RequestInfo,IJT808Package>>
+            HandlerDict = new Dictionary<JT808MsgId, Func<JT808RequestInfo, IChannelHandlerContext,IJT808Package>>
             {
                 {JT808MsgId.终端鉴权, Msg0x0102},
                 {JT808MsgId.终端心跳, Msg0x0002},
@@ -30,10 +31,11 @@ namespace GPS.JT808NettyServer
             };
         }
 
-        public Dictionary<JT808MsgId, Func<JT808RequestInfo, IJT808Package>> HandlerDict { get; }
+        public Dictionary<JT808MsgId, Func<JT808RequestInfo, IChannelHandlerContext, IJT808Package>> HandlerDict { get; }
 
-        private IJT808Package Msg0x0102(JT808RequestInfo requestInfo)
+        private IJT808Package Msg0x0102(JT808RequestInfo requestInfo, IChannelHandlerContext context)
         {
+            sessionManager.RegisterSession(new JT808Session(context.Channel, requestInfo.JT808Package.Header.TerminalPhoneNo));
             return new JT808_0x8001Package(requestInfo.JT808Package.Header, new JT808_0x8001()
             {
                 MsgId = requestInfo.JT808Package.Header.MsgId,
@@ -42,7 +44,7 @@ namespace GPS.JT808NettyServer
             });
         }
 
-        private IJT808Package Msg0x0002(JT808RequestInfo requestInfo)
+        private IJT808Package Msg0x0002(JT808RequestInfo requestInfo, IChannelHandlerContext context)
         {
             sessionManager.Heartbeat(requestInfo.JT808Package.Header.TerminalPhoneNo);
             return new JT808_0x8001Package(requestInfo.JT808Package.Header, new JT808_0x8001()
@@ -53,9 +55,9 @@ namespace GPS.JT808NettyServer
             });
         }
 
-        private IJT808Package Msg0x0003(JT808RequestInfo requestInfo)
+        private IJT808Package Msg0x0003(JT808RequestInfo requestInfo, IChannelHandlerContext context)
         {
-            sessionManager.RemoveSessionByID(requestInfo.JT808Package.Header.TerminalPhoneNo);
+            sessionManager.RemoveSessionByTerminalPhoneNo(requestInfo.JT808Package.Header.TerminalPhoneNo);
             return new JT808_0x8001Package(requestInfo.JT808Package.Header, new JT808_0x8001()
             {
                 MsgId = requestInfo.JT808Package.Header.MsgId,
@@ -64,7 +66,7 @@ namespace GPS.JT808NettyServer
             });
         }
 
-        private IJT808Package Msg0x0100(JT808RequestInfo requestInfo)
+        private IJT808Package Msg0x0100(JT808RequestInfo requestInfo, IChannelHandlerContext context)
         {
             return new JT808_0x8100Package(requestInfo.JT808Package.Header, new JT808_0x8100()
             {
@@ -74,7 +76,7 @@ namespace GPS.JT808NettyServer
             });
         }
 
-        private IJT808Package Msg0x0200(JT808RequestInfo requestInfo)
+        private IJT808Package Msg0x0200(JT808RequestInfo requestInfo, IChannelHandlerContext context)
         {
             return new JT808_0x8001Package(requestInfo.JT808Package.Header, new JT808_0x8001()
             {
@@ -84,7 +86,7 @@ namespace GPS.JT808NettyServer
             });
         }
 
-        private IJT808Package Msg0x0704(JT808RequestInfo requestInfo)
+        private IJT808Package Msg0x0704(JT808RequestInfo requestInfo, IChannelHandlerContext context)
         {
             return new JT808_0x8001Package(requestInfo.JT808Package.Header, new JT808_0x8001()
             {

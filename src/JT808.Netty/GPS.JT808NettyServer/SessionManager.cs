@@ -60,11 +60,12 @@ namespace GPS.JT808NettyServer
 
         public void RegisterSession(JT808Session appSession)
         {
-            if (SessionIdDict.ContainsKey(appSession.SessionID) && TerminalPhoneNo_SessionId_Dict.ContainsKey(appSession.TerminalPhoneNo))
+            if (TerminalPhoneNo_SessionId_Dict.ContainsKey(appSession.TerminalPhoneNo))
             {
                 return;
             }
-            if (SessionIdDict.TryAdd(appSession.SessionID, appSession) && TerminalPhoneNo_SessionId_Dict.TryAdd(appSession.TerminalPhoneNo, appSession.SessionID))
+            if (SessionIdDict.TryAdd(appSession.SessionID, appSession) && 
+                TerminalPhoneNo_SessionId_Dict.TryAdd(appSession.TerminalPhoneNo, appSession.SessionID))
             {
                 return;
             }
@@ -176,6 +177,25 @@ namespace GPS.JT808NettyServer
             catch (Exception ex)
             {
                 logger.LogError(ex, $"{sessionID} Session Remove Exception");
+            }
+        }
+
+        public void RemoveSessionByTerminalPhoneNo(string terminalPhoneNo)
+        {
+            if (terminalPhoneNo == null) return;
+            try
+            {
+                if (TerminalPhoneNo_SessionId_Dict.TryRemove(terminalPhoneNo, out string sessionid))
+                {
+                    if (SessionIdDict.TryRemove(sessionid, out JT808Session session))
+                    {
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, $"{terminalPhoneNo} Session Remove Exception");
             }
         }
     }

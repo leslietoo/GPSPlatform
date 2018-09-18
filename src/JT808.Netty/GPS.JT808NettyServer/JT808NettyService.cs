@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using GPS.JT808NettyServer.Configs;
 using Microsoft.Extensions.Options;
+using DotNetty.Handlers.Timeout;
 
 namespace GPS.JT808NettyServer
 {
@@ -75,7 +76,7 @@ namespace GPS.JT808NettyServer
                        {
                            InitChannel(channel);
                        }))
-                       .Option(ChannelOption.SoBacklog, 65535);
+                       .Option(ChannelOption.SoBacklog, 1048576);
                 if (nettyOptions.Host == "")
                 {
                     boundChannel = bootstrap.BindAsync(nettyOptions.Port).Result;
@@ -103,6 +104,7 @@ namespace GPS.JT808NettyServer
         private void InitChannel(IChannel channel)
         {
             var scope=serviceProvider.CreateScope();
+            
             channel.Pipeline.AddLast("jt808Connection", scope.ServiceProvider.GetRequiredService<JT808ConnectionHandler>());
             channel.Pipeline.AddLast("jt808Buffer",new DelimiterBasedFrameDecoder(int.MaxValue, Unpooled.CopiedBuffer(new byte[] { JT808.Protocol.JT808Package.BeginFlag }),Unpooled.CopiedBuffer(new byte[] { JT808.Protocol.JT808Package.EndFlag })));
             channel.Pipeline.AddLast("jt808Decode", scope.ServiceProvider.GetRequiredService<JT808DecodeHandler>());
