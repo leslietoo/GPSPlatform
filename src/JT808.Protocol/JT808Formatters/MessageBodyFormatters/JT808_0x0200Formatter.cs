@@ -49,7 +49,7 @@ namespace JT808.Protocol.JT808Formatters.MessageBodyFormatters
                         {
                             int attachContentLen = locationAttachSpan[attachOffset + 1];
                             int locationAttachTotalLen = attachId + attachLen + attachContentLen;
-                            byte[] attachBuffer = locationAttachSpan.Slice(attachOffset, locationAttachTotalLen).ToArray();
+                            ReadOnlySpan<byte> attachBuffer = locationAttachSpan.Slice(attachOffset, locationAttachTotalLen);
                             object attachImplObj = JT808FormatterExtensions.GetFormatter(jT808LocationAttachType);
                             dynamic attachImpl = JT808FormatterResolverExtensions.JT808DynamicDeserialize(attachImplObj, attachBuffer,out readSize);
                             attachOffset = attachOffset + locationAttachTotalLen;

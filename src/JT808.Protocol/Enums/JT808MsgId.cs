@@ -98,5 +98,7 @@ namespace JT808.Protocol.Enums
         录音开始命令 = 0x8804,
         [JT808BodiesType(typeof(JT808_0x8805))]
         单条存储多媒体数据检索上传命令 = 0x8805,
+        [JT808BodiesType(typeof(JT808_0x0900))]
+        数据上行透传 = 0x0900,
     }
 }

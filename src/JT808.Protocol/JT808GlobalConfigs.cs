@@ -26,17 +26,5 @@ namespace JT808.Protocol
         {
             JT808LocationAttachBase.AddJT808LocationAttachMethod<TJT808LocationAttach>(attachInfoId);
         }
-
-        public static void Register_JT808_0x8900<TJT808_0x8900_Body>(byte passthroughType)
-                    where TJT808_0x8900_Body : JT808_0x8900_BodyBase
-        {
-            JT808_0x8900_BodyBase.AddJT808LocationAttachMethod<TJT808_0x8900_Body>(passthroughType);
-        }
-
-        public static void Register_JT808_0x0900<TJT808_0x0900_Body>(byte passthroughType)
-            where TJT808_0x0900_Body : JT808_0x0900_BodyBase
-        {
-            JT808_0x0900_BodyBase.AddJT808LocationAttachMethod<TJT808_0x0900_Body>(passthroughType);
-        }
     }
 }
