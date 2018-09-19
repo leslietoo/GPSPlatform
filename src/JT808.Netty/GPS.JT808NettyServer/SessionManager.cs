@@ -170,13 +170,22 @@ namespace GPS.JT808NettyServer
                 {
                     if (session.TerminalPhoneNo != null)
                     {
-                        TerminalPhoneNo_SessionId_Dict.TryRemove(session.TerminalPhoneNo, out string sessionid);
+                        if(TerminalPhoneNo_SessionId_Dict.TryRemove(session.TerminalPhoneNo, out string sessionid))
+                        {
+                            logger.LogInformation($">>>{sessionID}-{session.TerminalPhoneNo} Session Remove.");
+                        }
                     }
+                    else
+                    {
+                        logger.LogInformation($">>>{sessionID} Session Remove.");
+                    }
+                    // call GPS.JT808NettyServer.Handlers.JT808ConnectionHandler.CloseAsync
+                    session.Channel.CloseAsync();
                 }
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, $"{sessionID} Session Remove Exception");
+                logger.LogError(ex, $">>>{sessionID} Session Remove Exception");
             }
         }
 
@@ -189,13 +198,17 @@ namespace GPS.JT808NettyServer
                 {
                     if (SessionIdDict.TryRemove(sessionid, out JT808Session session))
                     {
-
+                        logger.LogInformation($">>>{terminalPhoneNo}-{sessionid} TerminalPhoneNo Remove.");
+                    }
+                    else
+                    {
+                        logger.LogInformation($">>>{terminalPhoneNo} TerminalPhoneNo Remove.");
                     }
                 }
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, $"{terminalPhoneNo} Session Remove Exception");
+                logger.LogError(ex, $">>>{terminalPhoneNo} TerminalPhoneNo Remove Exception.");
             }
         }
     }

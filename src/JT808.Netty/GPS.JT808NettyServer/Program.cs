@@ -24,7 +24,7 @@ namespace GPS.JT808NettyServer
                     {
                         config.SetBasePath(AppDomain.CurrentDomain.BaseDirectory);
                         config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                              .AddJsonFile($"appsettings.{ hostingContext.HostingEnvironment}.json", optional: true, reloadOnChange: true);
+                              .AddJsonFile($"appsettings.{ hostingContext.HostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: true);
                     })
                     .ConfigureLogging((context, logging) =>
                     {
@@ -38,6 +38,7 @@ namespace GPS.JT808NettyServer
                         services.AddSingleton<ILoggerFactory, LoggerFactory>();
                         services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
                         services.Configure<NettyOptions>(hostContext.Configuration.GetSection("NettyOptions"));
+                        services.Configure<NettyIdleStateOptions>(hostContext.Configuration.GetSection("NettyIdleStateOptions"));
                         services.AddSingleton(services.BuildServiceProvider());
                         services.AddSingleton<SessionManager, SessionManager>();
                         services.AddSingleton<JT808MsgIdHandler, JT808MsgIdHandler>();

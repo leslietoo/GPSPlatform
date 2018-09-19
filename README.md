@@ -18,6 +18,16 @@
 | GPS.Gateway.JT808SuperSocketServer | 使用SuperSocket实现 | √ |
 | GPS.JT808NettyServer| 使用DotNetty实现 | √ |
 
+#### GPS.JT808NettyServer网关已实现的功能：
+
+| 功能 | 说明 | 完成情况 |
+|:-------:|:-------:|:-------:|
+| IdleStateHandler（系统自带） | 心跳机制 | √ |
+| JT808ConnectionHandler | JT808(超时策略、ip白名单) | √ |
+| DelimiterBasedFrameDecoder（系统自带） | JT808消息边界（防止粘包、半包） | √ |
+| JT808DecodeHandler | JT808解码器 | √ |
+| JT808ServiceHandler | JT808业务处理 | √ |
+
 ### 发布/订阅(GPS.PubSub.Abstractions)：
 
 | 功能 | 说明 | 完成情况 |
