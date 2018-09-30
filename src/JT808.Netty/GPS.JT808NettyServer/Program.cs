@@ -1,7 +1,10 @@
 ﻿using DotNetty.Common.Internal.Logging;
 using DotNetty.Transport.Channels;
+using GPS.Dispatcher.Abstractions;
 using GPS.JT808NettyServer.Configs;
 using GPS.JT808NettyServer.Handlers;
+using GPS.JT808SourcePackageDispatcher;
+using GPS.JT808SourcePackageDispatcher.Configs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -38,13 +41,15 @@ namespace GPS.JT808NettyServer
                         services.AddSingleton<ILoggerFactory, LoggerFactory>();
                         services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
                         services.Configure<NettyOptions>(hostContext.Configuration.GetSection("NettyOptions"));
-                       // services.Configure<NettyIdleStateOptions>(hostContext.Configuration.GetSection("NettyIdleStateOptions"));
-                       // services.AddSingleton(services.BuildServiceProvider());
+                        services.Configure<RemoteServerOptions>(hostContext.Configuration.GetSection("RemoteServerOptions"));
+                        // services.Configure<NettyIdleStateOptions>(hostContext.Configuration.GetSection("NettyIdleStateOptions"));
+                        // services.AddSingleton(services.BuildServiceProvider());
                         services.AddSingleton<SessionManager, SessionManager>();
                         services.AddSingleton<JT808MsgIdHandler, JT808MsgIdHandler>();
                         services.AddScoped<JT808ConnectionHandler, JT808ConnectionHandler>();
                         services.AddScoped<JT808DecodeHandler, JT808DecodeHandler>();
                         services.AddScoped<JT808ServiceHandler, JT808ServiceHandler>();
+                        services.AddSingleton<ISourcePackageDispatcher, JT808SourcePackageDispatcherImpl>();
                         services.AddSingleton<IHostedService, JT808NettyService>(); 
                     });
 
