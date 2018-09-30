@@ -38,8 +38,8 @@ namespace GPS.JT808NettyServer
                         services.AddSingleton<ILoggerFactory, LoggerFactory>();
                         services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
                         services.Configure<NettyOptions>(hostContext.Configuration.GetSection("NettyOptions"));
-                        services.Configure<NettyIdleStateOptions>(hostContext.Configuration.GetSection("NettyIdleStateOptions"));
-                        services.AddSingleton(services.BuildServiceProvider());
+                       // services.Configure<NettyIdleStateOptions>(hostContext.Configuration.GetSection("NettyIdleStateOptions"));
+                       // services.AddSingleton(services.BuildServiceProvider());
                         services.AddSingleton<SessionManager, SessionManager>();
                         services.AddSingleton<JT808MsgIdHandler, JT808MsgIdHandler>();
                         services.AddScoped<JT808ConnectionHandler, JT808ConnectionHandler>();
