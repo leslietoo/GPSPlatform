@@ -42,15 +42,14 @@ namespace GPS.JT808NettyServer
                         services.AddSingleton(typeof(ILogger<>), typeof(Logger<>));
                         services.Configure<NettyOptions>(hostContext.Configuration.GetSection("NettyOptions"));
                         services.Configure<RemoteServerOptions>(hostContext.Configuration.GetSection("RemoteServerOptions"));
-                        // services.Configure<NettyIdleStateOptions>(hostContext.Configuration.GetSection("NettyIdleStateOptions"));
-                        // services.AddSingleton(services.BuildServiceProvider());
+                        services.Configure<NettyIdleStateOptions>(hostContext.Configuration.GetSection("NettyIdleStateOptions"));
                         services.AddSingleton<SessionManager, SessionManager>();
                         services.AddSingleton<JT808MsgIdHandler, JT808MsgIdHandler>();
                         services.AddScoped<JT808ConnectionHandler, JT808ConnectionHandler>();
                         services.AddScoped<JT808DecodeHandler, JT808DecodeHandler>();
                         services.AddScoped<JT808ServiceHandler, JT808ServiceHandler>();
                         services.AddSingleton<ISourcePackageDispatcher, JT808SourcePackageDispatcherImpl>();
-                        services.AddSingleton<IHostedService, JT808NettyService>(); 
+                        services.AddSingleton<IHostedService, JT808NettyService>();  
                     });
 
             await serverHostBuilder.RunConsoleAsync();
