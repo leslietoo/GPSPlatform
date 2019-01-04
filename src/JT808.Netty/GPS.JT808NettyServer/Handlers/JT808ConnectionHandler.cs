@@ -3,6 +3,7 @@ using DotNetty.Transport.Channels;
 using GPS.JT808NettyServer.Configs;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace GPS.JT808NettyServer.Handlers
@@ -35,7 +36,7 @@ namespace GPS.JT808NettyServer.Handlers
         {
             if (optionsMonitor.CurrentValue.IpWhiteListDisabled)
             {
-                string ip = context.Channel.RemoteAddress.ToString();
+                var ip = ((IPEndPoint)context.Channel.RemoteAddress).Address.ToString();
                 string channelId = context.Channel.Id.AsShortText();
                 if (!optionsMonitor.CurrentValue.IpWhiteList.Contains(ip))
                 {

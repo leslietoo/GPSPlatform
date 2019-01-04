@@ -17,6 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\GPS.Dispatcher.Abstractions\GPS.Dispatcher.Abstractions.csproj" />
+    <ProjectReference Include="..\..\GPS.Dispatchers\GPS.JT808SourcePackageDispatcher\GPS.JT808SourcePackageDispatcher.csproj" />
     <ProjectReference Include="..\..\GPS.Service.Abstractions\GPS.Service.Abstractions.csproj" />
     <ProjectReference Include="..\..\JT808.Protocol\JT808.Protocol.csproj" />
   </ItemGroup>

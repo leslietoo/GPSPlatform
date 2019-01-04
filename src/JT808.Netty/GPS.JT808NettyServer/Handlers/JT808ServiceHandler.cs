@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using JT808.Protocol.Exceptions;
 using System.Threading;
+using GPS.Dispatcher.Abstractions;
 
 namespace GPS.JT808NettyServer.Handlers
 {
@@ -19,18 +20,22 @@ namespace GPS.JT808NettyServer.Handlers
         private readonly ILogger<JT808ServiceHandler> logger;
 
         private readonly JT808MsgIdHandler jT808MsgIdHandler;
+        private readonly ISourcePackageDispatcher SourcePackageDispatcher;
 
         public JT808ServiceHandler(
             JT808MsgIdHandler jT808MsgIdHandler,
+            ISourcePackageDispatcher SourcePackageDispatcher,
             ILoggerFactory loggerFactory)
         {
             this.jT808MsgIdHandler = jT808MsgIdHandler;
+            this.SourcePackageDispatcher = SourcePackageDispatcher;
             logger = loggerFactory.CreateLogger<JT808ServiceHandler>();
         }
 
         public override void ChannelRead(IChannelHandlerContext context, object message)
         {
             var jT808RequestInfo = (JT808RequestInfo)message;
+            SourcePackageDispatcher?.SendAsync(jT808RequestInfo.OriginalBuffer);
             string receive = string.Empty;
             try
             {
