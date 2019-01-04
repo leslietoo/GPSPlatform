@@ -266,10 +266,6 @@
       <Project>{fb2f4327-5843-4698-abad-145274f18f1e}</Project>
       <Name>GPS.JT808PubSubToRabbitMQ</Name>
     </ProjectReference>
-    <ProjectReference Include="..\JT808.Protocol\JT808.Protocol.csproj">
-      <Project>{0eb9471e-c040-4ef0-bbdf-239f04736612}</Project>
-      <Name>JT808.Protocol</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
