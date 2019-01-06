@@ -5,14 +5,26 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Confluent.Kafka" Version="0.11.5" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.1.0" />
+    <Compile Remove="JT808MsgIdBase.cs" />
+    <Compile Remove="JT808MsgIdConsumerBase.cs" />
+    <Compile Remove="JT808MsgIdProducerBase.cs" />
+    <Compile Remove="JT808_0x0200_Consumer.cs" />
+    <Compile Remove="JT808_0x0200_Producer.cs" />
+    <Compile Remove="JT808_DeviceMonitoringDispatcher_Consumer.cs" />
+    <Compile Remove="JT808_DeviceMonitoringDispatcher_Producer.cs" />
+    <Compile Remove="JT808_UnificationSend_Consumer.cs" />
+    <Compile Remove="JT808_UnificationSend_Producer.cs" />
+    <Compile Remove="KafkaMonoConfig.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\GPS.Dispatcher.Abstractions\GPS.Dispatcher.Abstractions.csproj" />
+    <PackageReference Include="Confluent.Kafka" Version="1.0.0-beta2" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\GPS.PubSub.Abstractions\GPS.PubSub.Abstractions.csproj" />
-    <ProjectReference Include="..\..\JT808.Protocol\JT808.Protocol.csproj" />
   </ItemGroup>
 
 </Project>

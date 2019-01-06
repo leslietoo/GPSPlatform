@@ -4,7 +4,7 @@ using System.Text;
 
 namespace GPS.PubSub.Abstractions
 {
-    public static class PubSubConstants
+    public static class JT808PubSubConstants
     {
         /// <summary>
         /// 统一下发
@@ -14,5 +14,9 @@ namespace GPS.PubSub.Abstractions
         /// 统一推送WebSocket
         /// </summary>
         public const string UnificationPushToWebSocket = "UnificationPushToWebSocket";
+        /// <summary>
+        /// 统一jt808主题
+        /// </summary>
+        public const string JT808TopicName = "jt808";
     }
 }

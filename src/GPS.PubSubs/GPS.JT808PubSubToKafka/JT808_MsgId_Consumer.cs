@@ -3,24 +3,26 @@ using GPS.PubSub.Abstractions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace GPS.JT808PubSubToKafka
 {
-    public class JT808_UnificationPushToWebSocket_Consumer : IJT808Consumer
+    public class JT808_MsgId_Consumer : IJT808Consumer
     {
         public CancellationTokenSource Cts => new CancellationTokenSource();
 
         public string TopicName => JT808PubSubConstants.JT808TopicName;
 
-        private readonly ILogger<JT808_UnificationPushToWebSocket_Consumer> logger;
+        private readonly ILogger<JT808_MsgId_Consumer> logger;
 
         private Consumer<string, byte[]> consumer;
 
-        public JT808_UnificationPushToWebSocket_Consumer(IOptions<ConsumerConfig> consumerConfigAccessor, ILoggerFactory loggerFactory)
+        public JT808_MsgId_Consumer(IOptions<ConsumerConfig> consumerConfigAccessor, ILoggerFactory loggerFactory)
         {
-            logger = loggerFactory.CreateLogger<JT808_UnificationPushToWebSocket_Consumer>();
+            logger = loggerFactory.CreateLogger<JT808_MsgId_Consumer>();
             consumer = new Consumer<string, byte[]>(consumerConfigAccessor.Value);
             consumer.OnError += (_, e) =>
             {
@@ -28,7 +30,7 @@ namespace GPS.JT808PubSubToKafka
             };
         }
 
-        public void OnMessage(string key,Action<(string Key, byte[] data)> callback)
+        public void OnMessage(string key, Action<(string Key, byte[] data)> callback)
         {
             Task.Run(() =>
             {
@@ -37,11 +39,14 @@ namespace GPS.JT808PubSubToKafka
                     try
                     {
                         var data = consumer.Consume(Cts.Token);
-                        if (logger.IsEnabled(LogLevel.Debug))
+                        if(logger.IsEnabled(LogLevel.Debug))
                         {
-                            logger.LogDebug($"Topic: {data.Topic} Partition: {data.Partition} Offset: {data.Offset} Data:{string.Join("", data.Value)} TopicPartitionOffset:{data.TopicPartitionOffset}");
+                            logger.LogDebug($"Topic: {data.Topic} Partition: {data.Partition} Offset: {data.Offset} Data:{string.Join("",data.Value)} TopicPartitionOffset:{data.TopicPartitionOffset}");
                         }
-                        callback((data.Key, data.Value));
+                        if(key== data.Key)
+                        {
+                            callback((data.Key, data.Value));
+                        }
                     }
                     catch (ConsumeException ex)
                     {

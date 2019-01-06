@@ -1,6 +1,6 @@
 ﻿namespace GPS.PubSub.Abstractions
 {
-    public interface IPubSub
+    public interface IJT808PubSub
     {
         string TopicName { get; }
     }
