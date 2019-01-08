@@ -25,10 +25,6 @@ namespace GPS.JT808PubSubToKafka
             producer.Dispose();
         }
 
-        public void ProduceAsync(string key, byte[] data)
-        {
-            throw new NotImplementedException();
-        }
 
         public Task PublishAsync(string topicName, string value)
         {
@@ -37,6 +33,11 @@ namespace GPS.JT808PubSubToKafka
                 Value = value
             });
             return Task.CompletedTask;
+        }
+
+        public void ProduceAsync(string msgId, string terminalNo, byte[] data)
+        {
+            throw new NotImplementedException();
         }
     }
 }

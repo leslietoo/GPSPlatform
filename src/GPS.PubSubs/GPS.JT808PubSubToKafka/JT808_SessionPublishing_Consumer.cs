@@ -12,25 +12,25 @@ namespace GPS.JT808PubSubToKafka
 {
     public class JT808_SessionPublishing_Consumer : IJT808Consumer
     {
-        public string TopicName => throw new NotImplementedException();
+        public string TopicName => JT808Constants.SessionOffline;
 
         public CancellationTokenSource Cts => new CancellationTokenSource();
 
         private readonly ILogger<JT808_SessionPublishing_Consumer> logger;
 
-        private Consumer<Null, string> consumer;
+        private Consumer<Ignore, string> consumer;
 
         public JT808_SessionPublishing_Consumer(IOptions<ConsumerConfig> consumerConfigAccessor, ILoggerFactory loggerFactory)
         {
             logger = loggerFactory.CreateLogger<JT808_SessionPublishing_Consumer>();
-            consumer = new Consumer<Null, string>(consumerConfigAccessor.Value);
+            consumer = new Consumer<Ignore, string>(consumerConfigAccessor.Value);
             consumer.OnError += (_, e) =>
             {
                 logger.LogError(e.Reason);
             };
         }
 
-        public void OnMessage(string key, Action<(string Key, byte[] data)> callback)
+        public void OnMessage(string msgId, Action<(string MsgId, byte[] data)> callback)
         {
             Task.Run(() =>
             {
@@ -41,7 +41,7 @@ namespace GPS.JT808PubSubToKafka
                         var data = consumer.Consume(Cts.Token);
                         if (logger.IsEnabled(LogLevel.Debug))
                         {
-                            logger.LogDebug($"Topic: {data.Topic} Partition: {data.Partition} Offset: {data.Offset} Data:{string.Join("", data.Value)} TopicPartitionOffset:{data.TopicPartitionOffset}");
+                            logger.LogDebug($"Topic: {data.Topic} Key: {data.Key} Partition: {data.Partition} Offset: {data.Offset} Data:{string.Join("", data.Value)} TopicPartitionOffset:{data.TopicPartitionOffset}");
                         }
                         callback((null,Encoding.UTF8.GetBytes(data.Value)));
                     }

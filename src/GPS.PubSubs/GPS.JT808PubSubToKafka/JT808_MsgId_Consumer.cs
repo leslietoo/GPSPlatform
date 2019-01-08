@@ -3,8 +3,6 @@ using GPS.PubSub.Abstractions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -20,7 +18,9 @@ namespace GPS.JT808PubSubToKafka
 
         private Consumer<string, byte[]> consumer;
 
-        public JT808_MsgId_Consumer(IOptions<ConsumerConfig> consumerConfigAccessor, ILoggerFactory loggerFactory)
+        public JT808_MsgId_Consumer(
+            IOptions<ConsumerConfig> consumerConfigAccessor, 
+            ILoggerFactory loggerFactory)
         {
             logger = loggerFactory.CreateLogger<JT808_MsgId_Consumer>();
             consumer = new Consumer<string, byte[]>(consumerConfigAccessor.Value);
@@ -30,7 +30,7 @@ namespace GPS.JT808PubSubToKafka
             };
         }
 
-        public void OnMessage(string key, Action<(string Key, byte[] data)> callback)
+        public void OnMessage(string msgId, Action<(string MsgId, byte[] data)> callback)
         {
             Task.Run(() =>
             {
@@ -38,15 +38,19 @@ namespace GPS.JT808PubSubToKafka
                 {
                     try
                     {
+                        //如果不指定分区，根据kafka的机制会从多个分区中拉取数据
+                        //如果指定分区，根据kafka的机制会从相应的分区中拉取数据
+                        //consumer.Assign(new TopicPartition(TopicName,new Partition(0)));
                         var data = consumer.Consume(Cts.Token);
                         if(logger.IsEnabled(LogLevel.Debug))
                         {
-                            logger.LogDebug($"Topic: {data.Topic} Partition: {data.Partition} Offset: {data.Offset} Data:{string.Join("",data.Value)} TopicPartitionOffset:{data.TopicPartitionOffset}");
+                            logger.LogDebug($"Topic: {data.Topic} Key: {data.Key} Partition: {data.Partition} Offset: {data.Offset} Data:{string.Join("", data.Value)} TopicPartitionOffset:{data.TopicPartitionOffset}");
                         }
-                        if(key== data.Key)
-                        {
-                            callback((data.Key, data.Value));
-                        }
+                        callback((data.Key, data.Value));
+                        //if (data.Key== msgId)
+                        //{
+                        //    callback((data.Key, data.Value));
+                        //}
                     }
                     catch (ConsumeException ex)
                     {

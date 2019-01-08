@@ -26,11 +26,11 @@ namespace GPS.JT808PubSubToKafka
             producer.Dispose();
         }
 
-        public void ProduceAsync(string key, byte[] data)
+        public void ProduceAsync(string msgId, string terminalNo, byte[] data)
         {
             producer.ProduceAsync(TopicName, new Message<string, byte[]>
             {
-                Key = key,
+                Key = msgId,
                 Value = data
             });
         }

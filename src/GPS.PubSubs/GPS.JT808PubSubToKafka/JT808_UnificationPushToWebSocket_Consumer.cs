@@ -28,7 +28,7 @@ namespace GPS.JT808PubSubToKafka
             };
         }
 
-        public void OnMessage(string key,Action<(string Key, byte[] data)> callback)
+        public void OnMessage(string msgId, Action<(string MsgId, byte[] data)> callback)
         {
             Task.Run(() =>
             {
@@ -39,7 +39,7 @@ namespace GPS.JT808PubSubToKafka
                         var data = consumer.Consume(Cts.Token);
                         if (logger.IsEnabled(LogLevel.Debug))
                         {
-                            logger.LogDebug($"Topic: {data.Topic} Partition: {data.Partition} Offset: {data.Offset} Data:{string.Join("", data.Value)} TopicPartitionOffset:{data.TopicPartitionOffset}");
+                            logger.LogDebug($"Topic: {data.Topic} Key: {data.Key} Partition: {data.Partition} Offset: {data.Offset} Data:{string.Join("", data.Value)} TopicPartitionOffset:{data.TopicPartitionOffset}");
                         }
                         callback((data.Key, data.Value));
                     }
