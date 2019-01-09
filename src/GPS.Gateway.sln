@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPS.JT808PubSubToKafka", "G
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{BBBC9284-1BC3-43FC-8779-0CDDB37359EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPS.JT808PubSubToKafka.Test", "GPS.PubSubs.Tests\GPS.JT808PubSubToKafka.Test\GPS.JT808PubSubToKafka.Test.csproj", "{A56AC949-CF60-4E03-BCD0-6DF6DAF76153}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPS.JT808PubSubToKafka.Test", "GPS.PubSubs.Tests\GPS.JT808PubSubToKafka.Test\GPS.JT808PubSubToKafka.Test.csproj", "{A56AC949-CF60-4E03-BCD0-6DF6DAF76153}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPS.Abstractions", "GPS.Abstractions\GPS.Abstractions.csproj", "{65BE4F7C-A102-44CD-BAC1-47BFE2436852}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,10 @@ Global
 		{A56AC949-CF60-4E03-BCD0-6DF6DAF76153}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A56AC949-CF60-4E03-BCD0-6DF6DAF76153}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A56AC949-CF60-4E03-BCD0-6DF6DAF76153}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65BE4F7C-A102-44CD-BAC1-47BFE2436852}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65BE4F7C-A102-44CD-BAC1-47BFE2436852}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65BE4F7C-A102-44CD-BAC1-47BFE2436852}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65BE4F7C-A102-44CD-BAC1-47BFE2436852}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
