@@ -2,7 +2,6 @@
 using DotNetty.Transport.Bootstrapping;
 using DotNetty.Transport.Channels;
 using DotNetty.Transport.Channels.Sockets;
-using GPS.Dispatcher.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -15,10 +14,11 @@ using Microsoft.Extensions.Options;
 using GPS.JT808SourcePackageDispatcher.Configs;
 using System.Linq;
 using GPS.JT808SourcePackageDispatcher.Handlers;
+using JT808.DotNetty.Abstractions;
 
 namespace GPS.JT808SourcePackageDispatcher
 {
-    public class JT808SourcePackageDispatcherImpl : ISourcePackageDispatcher
+    public class JT808SourcePackageDispatcherImpl : IJT808SourcePackageDispatcher
     {
         private readonly ILogger<JT808SourcePackageDispatcherImpl> logger;
         private readonly ILoggerFactory loggerFactory;

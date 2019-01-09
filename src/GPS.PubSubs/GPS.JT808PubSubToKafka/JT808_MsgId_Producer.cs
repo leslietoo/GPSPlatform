@@ -39,7 +39,8 @@ namespace GPS.JT808PubSubToKafka
                     }
                     else
                     {
-                        throw ex.InnerException;
+                        //记录日志
+                        //throw ex.InnerException;
                     }
                 }
                 try
@@ -58,7 +59,8 @@ namespace GPS.JT808PubSubToKafka
                 }
                 catch (AggregateException ex)
                 {
-                    throw ex.InnerException;
+                    //记录日志
+                   // throw ex.InnerException;
                 }
             }
         }

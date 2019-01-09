@@ -5,15 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DotNetty.Buffers" Version="0.5.0" />
-    <PackageReference Include="DotNetty.Handlers" Version="0.5.0" />
-    <PackageReference Include="DotNetty.Transport" Version="0.5.0" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.1.1" />
-    <PackageReference Include="Polly" Version="6.1.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\GPS.Dispatcher.Abstractions\GPS.Dispatcher.Abstractions.csproj" />
+    <PackageReference Include="DotNetty.Buffers" Version="0.6.0" />
+    <PackageReference Include="DotNetty.Handlers" Version="0.6.0" />
+    <PackageReference Include="DotNetty.Transport" Version="0.6.0" />
+    <PackageReference Include="JT808.DotNetty.Abstractions" Version="1.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.2.0" />
+    <PackageReference Include="Polly" Version="6.1.2" />
   </ItemGroup>
 
 </Project>
