@@ -11,9 +11,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{BBBC9284
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPS.JT808PubSubToKafka.Test", "GPS.PubSubs.Tests\GPS.JT808PubSubToKafka.Test\GPS.JT808PubSubToKafka.Test.csproj", "{A56AC949-CF60-4E03-BCD0-6DF6DAF76153}"
 EndProject
+<<<<<<< HEAD
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPS.JT808.Gateway", "GPS.JT808.Gateway\GPS.JT808.Gateway.csproj", "{8D2456C4-5996-432D-86CF-34FABC2DA26E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GPS.JT808SourcePackageDispatcher", "GPS.Dispatchers\GPS.JT808SourcePackageDispatcher\GPS.JT808SourcePackageDispatcher.csproj", "{4ACAC253-508F-42F2-8087-09018A247706}"
+=======
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPS.Abstractions", "GPS.Abstractions\GPS.Abstractions.csproj", "{65BE4F7C-A102-44CD-BAC1-47BFE2436852}"
+>>>>>>> a83a6d39434aacebb2b29760f477cdd2dd741ea8
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,7 @@ Global
 		{A56AC949-CF60-4E03-BCD0-6DF6DAF76153}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A56AC949-CF60-4E03-BCD0-6DF6DAF76153}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A56AC949-CF60-4E03-BCD0-6DF6DAF76153}.Release|Any CPU.Build.0 = Release|Any CPU
+<<<<<<< HEAD
 		{8D2456C4-5996-432D-86CF-34FABC2DA26E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8D2456C4-5996-432D-86CF-34FABC2DA26E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8D2456C4-5996-432D-86CF-34FABC2DA26E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -41,6 +46,12 @@ Global
 		{4ACAC253-508F-42F2-8087-09018A247706}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4ACAC253-508F-42F2-8087-09018A247706}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4ACAC253-508F-42F2-8087-09018A247706}.Release|Any CPU.Build.0 = Release|Any CPU
+=======
+		{65BE4F7C-A102-44CD-BAC1-47BFE2436852}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65BE4F7C-A102-44CD-BAC1-47BFE2436852}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65BE4F7C-A102-44CD-BAC1-47BFE2436852}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65BE4F7C-A102-44CD-BAC1-47BFE2436852}.Release|Any CPU.Build.0 = Release|Any CPU
+>>>>>>> a83a6d39434aacebb2b29760f477cdd2dd741ea8
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -25,7 +25,7 @@ namespace GPS.JT808PubSubToKafka.Test
         {
             var jT808_MsgId_Consumer = ServiceProvider.GetRequiredService<JT808_MsgId_Consumer>();
  
-            jT808_MsgId_Consumer.OnMessage("512", (msg) =>
+            jT808_MsgId_Consumer.OnMessage((msg) =>
             {
 
             });

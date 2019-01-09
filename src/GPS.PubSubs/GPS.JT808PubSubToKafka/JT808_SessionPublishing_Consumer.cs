@@ -30,7 +30,7 @@ namespace GPS.JT808PubSubToKafka
             };
         }
 
-        public void OnMessage(string msgId, Action<(string MsgId, byte[] data)> callback)
+        public void OnMessage(Action<(string MsgId, byte[] data)> callback)
         {
             Task.Run(() =>
             {

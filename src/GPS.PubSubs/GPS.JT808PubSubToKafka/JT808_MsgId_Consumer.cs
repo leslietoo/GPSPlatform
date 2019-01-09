@@ -30,7 +30,7 @@ namespace GPS.JT808PubSubToKafka
             };
         }
 
-        public void OnMessage(string msgId, Action<(string MsgId, byte[] data)> callback)
+        public void OnMessage(Action<(string MsgId, byte[] data)> callback)
         {
             Task.Run(() =>
             {
@@ -47,10 +47,6 @@ namespace GPS.JT808PubSubToKafka
                             logger.LogDebug($"Topic: {data.Topic} Key: {data.Key} Partition: {data.Partition} Offset: {data.Offset} Data:{string.Join("", data.Value)} TopicPartitionOffset:{data.TopicPartitionOffset}");
                         }
                         callback((data.Key, data.Value));
-                        //if (data.Key== msgId)
-                        //{
-                        //    callback((data.Key, data.Value));
-                        //}
                     }
                     catch (ConsumeException ex)
                     {
