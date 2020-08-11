@@ -46,7 +46,7 @@ namespace GPS.JT808NettyServer.Handlers
                 Func<JT808RequestInfo, IChannelHandlerContext,IJT808Package> handlerFunc;
                 if (jT808RequestInfo.JT808Package != null)
                 {
-                    if (jT808MsgIdHandler.HandlerDict.TryGetValue(jT808RequestInfo.JT808Package.Header.MsgId, out handlerFunc))
+                    if (jT808MsgIdHandler.HandlerDict.TryGetValue((JT808.Protocol.Enums.JT808MsgId)jT808RequestInfo.JT808Package.Header.MsgId, out handlerFunc))
                     {
                         IJT808Package jT808PackageImpl = handlerFunc(jT808RequestInfo, context);
                         if (jT808PackageImpl != null)
